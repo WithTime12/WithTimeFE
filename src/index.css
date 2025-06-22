@@ -1,1 +1,97 @@
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/PretendardVariable.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 45 920;
+}
+
+@theme {
+  --color-primary-main: #7fe5c1;
+  --color-primary-green: #080c52;
+  --color-primary-yellow: #fdfa91;
+  --color-primary-lightblue: #e7f7ff;
+  --color-primary-blue: #005880;
+  --color-danger: #ff517c;
+  
+  --color-default-gray-100: #fefefe;
+  --color-default-gray-200: #fafafa;
+  --color-default-gray-300: #f4f6f8;
+  --color-default-gray-400: #e6e6e6;
+  --color-default-gray-500: #c3c3c3;
+  --color-default-gray-600: #919191;
+  --color-default-gray-700: #616161;
+  --color-default-gray-800: #212121;
+}
+
+@layer utilities {
+  .font-hero {
+    font-size: 54px;
+    font-weight: 700;
+    letter-spacing: -0.04rem;
+  }
+  
+  .font-heading1 {
+    font-size: var(--font-heading1);
+    font-weight: 700;
+    letter-spacing: -0.02rem;
+  }
+  
+  .font-heading2 {
+    font-size: var(--font-heading2);
+    font-weight: 600;
+    letter-spacing: -0.02rem;
+  }
+  
+  .font-heading3 {
+    font-size: var(--font-heading3);
+    font-weight: 600;
+    letter-spacing: -0.02rem;
+  }
+  
+  .font-body1 {
+    font-size: var(--font-body1);
+    font-weight: 700;
+    letter-spacing: -0.02rem;
+  }
+  
+  .font-body2 {
+    font-size: var(--font-body2);
+    font-weight: 600;
+    letter-spacing: -0.02rem;
+  }
+  
+  .font-caption {
+    font-size: var(--font-caption);
+    font-weight: 600;
+    letter-spacing: -0.02rem;
+  }
+}
+
+* {
+  font-family: 'Pretendard';
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+ul,
+li {
+  list-style: none;
+}

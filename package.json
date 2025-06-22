@@ -10,7 +10,7 @@
         "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
         "preview": "vite preview",
         "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,html}'",
-        "prepare": "husky"
+        "prepare": "husky install"
     },
     "dependencies": {
         "@tanstack/react-query": "^5.76.1",
@@ -34,6 +34,7 @@
         "@typescript-eslint/eslint-plugin": "^8.32.1",
         "@typescript-eslint/parser": "^8.32.1",
         "@vitejs/plugin-react-swc": "^3.9.0",
+        "autoprefixer": "^10.4.21",
         "eslint": "^9.27.0",
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-import": "^2.31.0",

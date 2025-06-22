@@ -10,7 +10,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <div>Home</div>,
+                element: <div className="font-hero text-primary-main">Home</div>,
             },
         ],
     },
