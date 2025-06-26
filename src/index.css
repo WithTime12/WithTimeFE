@@ -60,6 +60,18 @@
     font-size: 12px;
     font-weight: 600;
   }
+  
+  .rounding-16 {
+    border-radius: 16px;
+  }
+  
+  .rounding-32 {
+    border-radius: 32px;
+  }
+  
+  .shadow-default {
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+  }
 }
 
 * {
