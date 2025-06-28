@@ -1,16 +1,24 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import ModalProvider from '@/components/common/modalProvider';
+
 import Layout from '@/layout/layout';
+import Home from '@/pages/home';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout />,
+        element: (
+            <>
+                <ModalProvider />
+                <Layout />
+            </>
+        ),
         errorElement: <div>Error</div>,
         children: [
             {
                 index: true,
-                element: <div className="font-hero text-primary-500">Home</div>,
+                element: <Home />,
             },
         ],
     },
