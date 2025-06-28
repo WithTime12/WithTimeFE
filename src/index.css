@@ -1,8 +1,35 @@
 @import 'tailwindcss';
 
+* {
+  font-family: 'Pretendard';
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
 @font-face {
   font-family: 'Pretendard';
-  src: url('/fonts/PretendardVariable.woff2') format('woff2');
+  src: url('/fonts/PretendardVariable.woff2') format('font-woff2');
   font-display: swap;
   font-weight: 45 920;
 }
@@ -60,31 +87,17 @@
     font-size: 12px;
     font-weight: 600;
   }
+  
+  .rounding-16 {
+    border-radius: 16px;
+  }
+  
+  .rounding-32 {
+    border-radius: 32px;
+  }
+  
+  .shadow-default {
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+  }
 }
 
-* {
-  font-family: 'Pretendard';
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100vh;
-}
-
-button {
-  cursor: pointer;
-  border: none;
-}
-
-ul,
-li {
-  list-style: none;
-}
