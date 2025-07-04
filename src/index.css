@@ -1,90 +1,90 @@
-@import 'tailwindcss';
+@import 'tailwindcss'; /* 필수 */
 
 @font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/PretendardVariable.woff2') format('woff2');
-  font-display: swap;
-  font-weight: 45 920;
+    font-family: 'Pretendard';
+    src: url('/fonts/PretendardVariable.woff2') format('woff2');
+    font-display: swap;
+    font-weight: 45 920;
 }
 
 @theme {
-  --color-primary-100: #E7FDEC;
-  --color-primary-300: #B5F7D3;
-  --color-primary-500: #7FE4C1;
-  --color-primary-700: #3FA495;
-  --color-primary-900: #186A6D;
-  
-  --color-secondary-yello: #FDFA91;
-  --color-secondary-blue: #005880;
-  --color-warning: #ff517c;
-  
-  --color-default-gray-100: #fefefe;
-  --color-default-gray-400: #e6e6e6;
-  --color-default-gray-500: #c3c3c3;
-  --color-default-gray-700: #616161;
-  --color-default-gray-800: #212121;
+    --color-primary-100: #e7fdec;
+    --color-primary-300: #b5f7d3;
+    --color-primary-500: #7fe4c1;
+    --color-primary-700: #3fa495;
+    --color-primary-900: #186a6d;
+
+    --color-secondary-yello: #fdfa91;
+    --color-secondary-blue: #005880;
+    --color-warning: #ff517c;
+
+    --color-default-gray-100: #fefefe;
+    --color-default-gray-400: #e6e6e6;
+    --color-default-gray-500: #c3c3c3;
+    --color-default-gray-700: #616161;
+    --color-default-gray-800: #212121;
 }
 
 @layer utilities {
-  .font-hero {
-    font-size: 54px;
-    font-weight: 700;
-  }
-  
-  .font-heading1 {
-    font-size: 38px;
-    font-weight: 700;
-  }
-  
-  .font-heading2 {
-    font-size: 28px;
-    font-weight: 600;
-  }
-  
-  .font-heading3 {
-    font-size: 22px;
-    font-weight: 600;
-  }
-  
-  .font-body1 {
-    font-size: 16px;
-    font-weight: 700;
-  }
-  
-  .font-body2 {
-    font-size: 14px;
-    font-weight: 600;
-  }
-  
-  .font-caption {
-    font-size: 12px;
-    font-weight: 600;
-  }
+    .font-hero {
+        font-size: 54px;
+        font-weight: 700;
+    }
+
+    .font-heading1 {
+        font-size: 38px;
+        font-weight: 700;
+    }
+
+    .font-heading2 {
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .font-heading3 {
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .font-body1 {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .font-body2 {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .font-caption {
+        font-size: 12px;
+        font-weight: 600;
+    }
 }
 
 * {
-  font-family: 'Pretendard';
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    font-family: 'Pretendard';
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-  height: 100%;
-  overflow-x: hidden;
+    height: 100%;
+    overflow-x: hidden;
 }
 
 body {
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
 button {
-  cursor: pointer;
-  border: none;
+    cursor: pointer;
+    border: none;
 }
 
 ul,
 li {
-  list-style: none;
+    list-style: none;
 }
