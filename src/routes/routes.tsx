@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import ModalProvider from '@/components/common/modalProvider';
 
 import Layout from '@/layout/layout';
-import Home from '@/pages/home';
+import Home from '@/pages/F.O-2/homePage';
 
 const router = createBrowserRouter([
     {
