@@ -1,4 +1,5 @@
-import { createBrowserRouter } from 'react-router-dom';
+import type { PropsWithChildren } from 'react';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider';
 
@@ -14,6 +15,16 @@ import Pay from '@/pages/F.O-3/paymentPage';
 import Withdraw from '@/pages/F.O-3/withdrawPage';
 import Course from '@/pages/F.O-4/coursePage';
 
+function ProtectedRoute({ children }: PropsWithChildren) {
+    const isLoggedIn = false;
+
+    if (!isLoggedIn) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return children;
+}
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -27,7 +38,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home />,
+                element: <Login />,
             },
             {
                 path: 'find-pw',
@@ -38,32 +49,60 @@ const router = createBrowserRouter([
                 element: <Join />,
             },
             {
-                path: 'login',
-                element: <Login />,
+                path: 'home',
+                element: (
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: 'usersetting',
-                element: <User />,
+                element: (
+                    <ProtectedRoute>
+                        <User />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: 'dateTest',
-                element: <DateTest />,
+                element: (
+                    <ProtectedRoute>
+                        <DateTest />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: 'testResult',
-                element: <Result />,
+                element: (
+                    <ProtectedRoute>
+                        <Result />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: 'payment',
-                element: <Pay />,
+                element: (
+                    <ProtectedRoute>
+                        <Pay />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: 'withdraw',
-                element: <Withdraw />,
+                element: (
+                    <ProtectedRoute>
+                        <Withdraw />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: 'course',
-                element: <Course />,
+                element: (
+                    <ProtectedRoute>
+                        <Course />
+                    </ProtectedRoute>
+                ),
             },
         ],
     },
