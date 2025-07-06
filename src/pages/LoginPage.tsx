@@ -1,3 +1,9 @@
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { loginSchema } from '@/utils/validation';
+
 import CommonInput from '@/components/common/commonInput';
 
 import MainImg from '../images/test.jpeg';
@@ -7,7 +13,33 @@ import Google from '@/images/socialLogin/google.png';
 import Kakao from '@/images/socialLogin/kakao.png';
 import Naver from '@/images/socialLogin/naver.png';
 
+type TFormValues = {
+    email: string;
+    password: string;
+};
+
 export default function Login() {
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { isValid, errors },
+    } = useForm<TFormValues>({
+        mode: 'onChange',
+        resolver: zodResolver(loginSchema),
+    });
+    const watchedPassword = useWatch({
+        control,
+        name: 'password',
+    });
+    const watchedEmail = useWatch({
+        control,
+        name: 'password',
+    });
+
+    const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+        console.log(submitData.email, submitData.password);
+    };
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="hidden lg:block min-w-[200px] h-full bg-[linear-gradient(to_bottom,_white_0%,_white_40%,_#8ae7c7_50%)]">
@@ -15,17 +47,25 @@ export default function Login() {
             </div>
             <div className="flex-1 flex flex-col justify-center items-center px-[80px]">
                 <div className="min-w-[360px] flex flex-col items-center justify-center gap-[80px]">
-                    <div className="flex-col flex items-center justify-center w-full gap-[64px]">
+                    <form className="flex-col flex items-center justify-center w-full gap-[64px]" onSubmit={handleSubmit(onSubmit)}>
                         <Logo className="w-[240px] h-min" />
+
                         <div className="flex flex-col gap-[32px] w-full">
                             <CommonInput
                                 placeholder="아이디를 입력하세요"
                                 title="ID"
-                                validation={false}
-                                error={true}
-                                errorMessage="올바르지 않은 이메일이에요"
+                                error={!!errors.email?.message || watchedEmail == ''}
+                                errorMessage={errors.email?.message}
+                                {...register('email')}
                             />
-                            <CommonInput placeholder="비밀번호를 입력하세요" title="Password" type="password" />
+                            <CommonInput
+                                placeholder="비밀번호를 입력하세요"
+                                title="Password"
+                                type="password"
+                                error={!!errors.password?.message || watchedPassword == ''}
+                                errorMessage={errors.password?.message}
+                                {...register('password')}
+                            />
                             <div className="flex w-full items-center justify-between">
                                 <div className="flex gap-[8px] font-body1">
                                     <input type="checkbox" />
@@ -33,12 +73,15 @@ export default function Login() {
                                 </div>
                                 <div className="text-default-gray-700 font-caption underline hover:cursor-pointer">아이디/비밀번호를 잊어버렸어요</div>
                             </div>
-                            <div className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer">
+                            <div
+                                className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer"
+                                onClick={handleSubmit(onSubmit)}
+                            >
                                 로그인하기
                             </div>
                             {/* 공용 컴포넌트로 대체 예정 */}
                         </div>
-                    </div>
+                    </form>
                     <div className="w-full flex flex-col items-center justify-center gap-[16px]">
                         <div className="flex items-center justify-center w-full gap-[48px]">
                             <div className="flex items-center justify-center w-[65px] h-[65px] hover:cursor-pointer">
