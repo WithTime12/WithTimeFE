@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider';
 
+import AuthLayout from '@/layout/authLayout';
 import Layout from '@/layout/layout';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
@@ -31,8 +32,7 @@ const router = createBrowserRouter([
         path: '/',
         element: (
             <>
-                <ModalProvider />
-                <Layout />
+                <AuthLayout />
             </>
         ),
         errorElement: <div>Error</div>,
@@ -50,14 +50,6 @@ const router = createBrowserRouter([
                 element: <Join />,
             },
             {
-                path: 'home',
-                element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
-                ),
-            },
-            {
                 path: 'usersetting',
                 element: (
                     <ProtectedRoute>
@@ -65,47 +57,71 @@ const router = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
+        ],
+    },
+    {
+        path: '/',
+        element: (
+            <ProtectedRoute>
+                <ModalProvider />
+                <Layout />
+            </ProtectedRoute>
+        ),
+        errorElement: <div>Error</div>,
+        children: [
+            {
+                path: 'home',
+                element: <Home />,
+            },
+            {
+                path: 'question',
+                element: <div />,
+            },
+            {
+                path: 'notice',
+                element: <div />,
+            },
+            {
+                path: 'notice/:id',
+                element: <div />,
+            },
+            {
+                path: 'dateCourse',
+                element: <div />,
+            },
+            {
+                path: 'makeCourse',
+                element: <Course />,
+            },
+            {
+                path: 'makeCourse/:step',
+                element: <div />,
+            },
             {
                 path: 'dateTest',
-                element: (
-                    <ProtectedRoute>
-                        <DateTest />
-                    </ProtectedRoute>
-                ),
+                element: <DateTest />,
             },
             {
-                path: 'testResult',
-                element: (
-                    <ProtectedRoute>
-                        <Result />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: 'payment',
-                element: (
-                    <ProtectedRoute>
-                        <Pay />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: 'withdraw',
-                element: (
-                    <ProtectedRoute>
-                        <Withdraw />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: 'course',
-                element: (
-                    <ProtectedRoute>
-                        <Course />
-                    </ProtectedRoute>
-                ),
+                path: 'dateTest/:step',
+                element: <Result />,
             },
         ],
+    },
+    {
+        path: '/withdraw',
+        element: (
+            <ProtectedRoute>
+                <Withdraw />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/payment',
+        element: (
+            <ProtectedRoute>
+                <Pay />
+            </ProtectedRoute>
+        ),
     },
 ]);
 
