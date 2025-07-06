@@ -4,22 +4,23 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import ModalProvider from '@/components/common/modalProvider';
 
 import Layout from '@/layout/layout';
-import Course from '@/pages/coursePage';
+import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
 import FindPw from '@/pages/FindPw';
 import Home from '@/pages/HomePage';
 import Join from '@/pages/JoinPage';
 import Login from '@/pages/LoginPage';
-import Pay from '@/pages/paymentPage';
+import Pay from '@/pages/PaymentPage';
 import Result from '@/pages/ResultPage';
-import User from '@/pages/userSetting';
-import Withdraw from '@/pages/withdrawPage';
+import User from '@/pages/UserSetting';
+import Withdraw from '@/pages/WithdrawPage';
 
 function ProtectedRoute({ children }: PropsWithChildren) {
-    const isLoggedIn = false;
+    //추후 실제 로그인 여부로 대체 필요
+    const isLoggedIn = true;
 
     if (!isLoggedIn) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/" replace />;
     }
 
     return children;
