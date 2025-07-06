@@ -5,13 +5,19 @@ import ModalProvider from '@/components/common/modalProvider';
 
 import AuthLayout from '@/layout/authLayout';
 import Layout from '@/layout/layout';
+import Error from '@/pages/common/Error';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
 import FindPw from '@/pages/FindPw';
 import Home from '@/pages/HomePage';
 import Join from '@/pages/JoinPage';
 import Login from '@/pages/LoginPage';
+import MakeCourse from '@/pages/MakeCourse';
+import MakeCourseStep from '@/pages/MakeCourseStep';
+import Notice from '@/pages/Notice';
+import NoticeDetail from '@/pages/NoticeDetail';
 import Pay from '@/pages/PaymentPage';
+import Question from '@/pages/Question';
 import Result from '@/pages/ResultPage';
 import User from '@/pages/UserSetting';
 import Withdraw from '@/pages/WithdrawPage';
@@ -35,7 +41,7 @@ const router = createBrowserRouter([
                 <AuthLayout />
             </>
         ),
-        errorElement: <div>Error</div>,
+        errorElement: <Error />,
         children: [
             {
                 index: true,
@@ -67,7 +73,7 @@ const router = createBrowserRouter([
                 <Layout />
             </ProtectedRoute>
         ),
-        errorElement: <div>Error</div>,
+        errorElement: <Error />,
         children: [
             {
                 path: 'home',
@@ -75,27 +81,27 @@ const router = createBrowserRouter([
             },
             {
                 path: 'question',
-                element: <div />,
+                element: <Question />,
             },
             {
                 path: 'notice',
-                element: <div />,
+                element: <Notice />,
             },
             {
                 path: 'notice/:id',
-                element: <div />,
+                element: <NoticeDetail />,
             },
             {
                 path: 'dateCourse',
-                element: <div />,
-            },
-            {
-                path: 'makeCourse',
                 element: <Course />,
             },
             {
+                path: 'makeCourse',
+                element: <MakeCourse />,
+            },
+            {
                 path: 'makeCourse/:step',
-                element: <div />,
+                element: <MakeCourseStep />,
             },
             {
                 path: 'dateTest',
@@ -114,6 +120,7 @@ const router = createBrowserRouter([
                 <Withdraw />
             </ProtectedRoute>
         ),
+        errorElement: <Error />,
     },
     {
         path: '/payment',
@@ -122,6 +129,7 @@ const router = createBrowserRouter([
                 <Pay />
             </ProtectedRoute>
         ),
+        errorElement: <Error />,
     },
 ]);
 
