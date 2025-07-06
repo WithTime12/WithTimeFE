@@ -1,4 +1,7 @@
+import type { InputHTMLAttributes } from 'react';
 import React from 'react';
+
+import formatInputNumber from '@/utils/formatPhoneNumber';
 
 // import AlertCircle from '@/assets/icons/alert-circle_Fill.svg';
 
@@ -13,31 +16,62 @@ type TCommonInputProps = {
     errorMessage?: string;
     button?: boolean;
     buttonText?: string;
-};
+    buttonOnclick?: () => void;
+    short?: boolean;
+} & InputHTMLAttributes<HTMLInputElement>;
 
 const CommonInput = React.forwardRef<HTMLInputElement, TCommonInputProps>(
-    ({ type, placeholder, title, validation = false, value, errorMessage, error, button, buttonText, validationState, ...rest }: TCommonInputProps, ref) => {
+    (
+        { type, placeholder, title, validation = false, value, errorMessage, error, button, buttonText, buttonOnclick, short, ...rest }: TCommonInputProps,
+        ref,
+    ) => {
         return (
-            <div className="flex w-full relative text-default-gray-800">
+            <div className="flex w-full relative text-default-gray-800 items-center gap-[16px]">
                 <div
-                    className={`absolute bg-default-gray-100 font-body2 z-2 left-2 top-[-8px] px-[4px]
-              ${validation ? 'text-primary-500' : `${error ? 'text-warning' : 'text-default-gray-800'}`}
-              `}
+                    className={`absolute bg-default-gray-100 font-body2 z-2 left-2 top-[-8px] px-[4px] 
+                                ${error ? 'text-warning' : `${validation ? 'text-primary-500' : 'text-default-gray-800'}`}
+                    `}
                 >
                     {title}
                 </div>
                 <input
                     ref={ref}
-                    type={type}
+                    type={type === 'phoneNum' ? 'text' : type}
                     placeholder={placeholder}
                     value={value}
-                    className={`w-full bg-default-gray-100 rounded-[4px] h-[56px] pl-[16px] text-default-gray-800 focus:outline-none  focus:ring-0 
-                  ${validation ? 'border-[2px] border-primary-500' : `${error ? 'border-warning border-[2px] caret-warning' : 'border-default-gray-700 border-[1px]'}`}
-                `}
+                    className={`flex-1 bg-default-gray-100 rounded-[4px] h-[56px] pl-[16px] text-default-gray-800 focus:outline-none  focus:ring-0 
+                                ${error ? 'border-[2px] border-warning caret-warning' : `${validation ? 'border-primary-500 border-[2px] ' : 'border-default-gray-700 border-[1px]'}`}
+                    `}
+                    onChange={(e) => {
+                        const rawValue = e.target.value;
+                        const formatted = type === 'phoneNum' ? formatInputNumber(rawValue) : rawValue;
+
+                        // 외부에서 넘긴 onChange 핸들러에 적용된 값 전달
+                        if (rest.onChange) {
+                            rest.onChange({
+                                ...e,
+                                target: {
+                                    ...e.target,
+                                    value: formatted,
+                                },
+                            });
+                        }
+                    }}
                     {...rest}
                 />
-                {button && <button>{buttonText}</button>}
-                {validation && <div>{validationState}</div>}
+                {short && <div className="flex px-[16px] py-[8px] text-default-gray-100 w-[80px]" />}
+                {button && (
+                    <button
+                        className={`flex px-[16px] py-[8px] font-body2 justify-center items-center text-center h-fit rounding-16
+                        ${validation ? 'bg-primary-500 text-default-gray-100' : 'bg-default-gray-400 text-default-gray-800'}
+                    `}
+                        onClick={buttonOnclick}
+                        type="button"
+                    >
+                        {buttonText}
+                    </button>
+                )}
+                {/* {validation && <div>{validationState}</div>} */}
                 {error && <div className="absolute top-[62px] font-caption text-warning left-[16px]">{errorMessage}</div>}
                 {/* {error && <AlertCircle fill="#ff517c" />} */}
             </div>

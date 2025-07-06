@@ -1,5 +1,6 @@
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema } from '@/utils/validation';
@@ -17,6 +18,7 @@ type TFormValues = {
 };
 
 export default function Login() {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -32,14 +34,15 @@ export default function Login() {
     });
     const watchedEmail = useWatch({
         control,
-        name: 'password',
+        name: 'email',
     });
 
     const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
         console.log(submitData.email, submitData.password);
+        navigate('/home');
     };
     return (
-        <div className="min-w-[360px] flex flex-col items-center justify-center gap-[80px]">
+        <div className="min-w-[360px] max-w-[360px] h-screen flex flex-col items-center justify-center gap-[80px]">
             <form className="flex-col flex items-center justify-center w-full gap-[64px]" onSubmit={handleSubmit(onSubmit)}>
                 <Logo className="w-[240px] h-min" />
 
@@ -61,10 +64,12 @@ export default function Login() {
                     />
                     <div className="flex w-full items-center justify-between">
                         <div className="flex gap-[8px] font-body1">
-                            <input type="checkbox" />
+                            <input type="checkbox" className="accent-[#000000]" />
                             자동 로그인
                         </div>
-                        <div className="text-default-gray-700 font-caption underline hover:cursor-pointer">아이디/비밀번호를 잊어버렸어요</div>
+                        <div className="text-default-gray-700 font-caption underline hover:cursor-pointer" onClick={() => navigate('/find-pw')}>
+                            아이디/비밀번호를 잊어버렸어요
+                        </div>
                     </div>
                     <button
                         className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer"
@@ -92,7 +97,9 @@ export default function Login() {
                     <div className="border-[0.5px] w-full border-default-gray-500" />
                     <div className="z-10 absolute px-[32px] bg-default-gray-100 self-center font-body2 text-default-gray-800">또는</div>
                 </div>
-                <div className="font-body1 underline hover:cursor-pointer">이메일로 회원가입</div>
+                <div className="font-body1 underline hover:cursor-pointer" onClick={() => navigate('/Join')}>
+                    이메일로 회원가입
+                </div>
             </div>
         </div>
     );

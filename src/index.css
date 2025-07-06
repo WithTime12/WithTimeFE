@@ -56,36 +56,43 @@ li {
   .font-hero {
     font-size: 54px;
     font-weight: 700;
+    line-height: 140%;
   }
   
   .font-heading1 {
     font-size: 38px;
     font-weight: 700;
+    line-height: 130%;
   }
   
   .font-heading2 {
     font-size: 28px;
     font-weight: 600;
+    line-height: 130%;
   }
   
   .font-heading3 {
     font-size: 22px;
     font-weight: 600;
+    line-height: 130%;
   }
   
   .font-body1 {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 500;
+    line-height: 140%;
   }
   
   .font-body2 {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+    line-height: 140%;
   }
   
   .font-caption {
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
+    line-height: 130%;
   }
   
   .rounding-16 {
