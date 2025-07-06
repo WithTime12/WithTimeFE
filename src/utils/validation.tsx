@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
-const nicknamePattern = /^[a-zA-Z0-9가-힣]+$/;
+import { Gender } from '@/pages/UserSetting';
+
+const nicknamePattern = /^[a-zA-Z]+$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const birthPattern = /^(19|20)\d{2}\.(0[1-9]|1[0-2])\.(0[1-9]|[12][0-9]|3[01])$/;
+const phonePattern = /^010-(\d{4})-(\d{4})$/;
 // Zod 스키마 정의
 
 const emailSchema = z.string().nonempty('Required.').regex(emailRegex, '올바르지 않은 형식이에요');
@@ -37,5 +41,12 @@ export const loginSchema = z.object({
 });
 
 export const userSettingSchema = z.object({
-    nickname: z.string().min(1, 'Nickname is required.').max(20, 'Invalid format.').regex(nicknamePattern, 'Invalid format.'),
+    nickname: z
+        .string()
+        .max(20, '닉네임은 20글자 이내여야합니다.')
+        .regex(nicknamePattern, '닉네임은 영문만 가능합니다.')
+        .nonempty('닉네임은 필수로 입력해야합니다'),
+    birth: z.string().nonempty('생년월일은 필수로 입력해야합니다').regex(birthPattern, '올바른 생년월일을 입력해주세요'),
+    phoneNum: z.string().nonempty('전화번호는 필수로 입력해야합니다').regex(phonePattern, '올바른 전화번호를 입력해주세요'),
+    gender: z.nativeEnum(Gender),
 });
