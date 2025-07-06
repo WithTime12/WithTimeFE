@@ -66,12 +66,13 @@ export default function Login() {
                         </div>
                         <div className="text-default-gray-700 font-caption underline hover:cursor-pointer">아이디/비밀번호를 잊어버렸어요</div>
                     </div>
-                    <div
+                    <button
                         className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer"
                         onClick={handleSubmit(onSubmit)}
+                        disabled={!isValid || watchedEmail == '' || watchedPassword == ''}
                     >
                         로그인하기
-                    </div>
+                    </button>
                     {/* 공용 컴포넌트로 대체 예정 */}
                 </div>
             </form>
