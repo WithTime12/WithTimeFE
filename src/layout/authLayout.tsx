@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import MainImg from '../images/test.jpeg';
+import MainImg from '../images/main.jpeg';
 
 export default function AuthLayout() {
     return (
