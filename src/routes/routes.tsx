@@ -3,14 +3,21 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider';
 
+import AuthLayout from '@/layout/authLayout';
 import Layout from '@/layout/layout';
+import Error from '@/pages/common/Error';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
 import FindPw from '@/pages/FindPw';
 import Home from '@/pages/HomePage';
 import Join from '@/pages/JoinPage';
 import Login from '@/pages/LoginPage';
+import MakeCourse from '@/pages/MakeCourse';
+import MakeCourseStep from '@/pages/MakeCourseStep';
+import Notice from '@/pages/Notice';
+import NoticeDetail from '@/pages/NoticeDetail';
 import Pay from '@/pages/PaymentPage';
+import Question from '@/pages/Question';
 import Result from '@/pages/ResultPage';
 import User from '@/pages/UserSetting';
 import Withdraw from '@/pages/WithdrawPage';
@@ -31,11 +38,10 @@ const router = createBrowserRouter([
         path: '/',
         element: (
             <>
-                <ModalProvider />
-                <Layout />
+                <AuthLayout />
             </>
         ),
-        errorElement: <div>Error</div>,
+        errorElement: <Error />,
         children: [
             {
                 index: true,
@@ -50,14 +56,6 @@ const router = createBrowserRouter([
                 element: <Join />,
             },
             {
-                path: 'home',
-                element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
-                ),
-            },
-            {
                 path: 'usersetting',
                 element: (
                     <ProtectedRoute>
@@ -65,47 +63,73 @@ const router = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
+        ],
+    },
+    {
+        path: '/',
+        element: (
+            <ProtectedRoute>
+                <ModalProvider />
+                <Layout />
+            </ProtectedRoute>
+        ),
+        errorElement: <Error />,
+        children: [
+            {
+                path: 'home',
+                element: <Home />,
+            },
+            {
+                path: 'question',
+                element: <Question />,
+            },
+            {
+                path: 'notice',
+                element: <Notice />,
+            },
+            {
+                path: 'notice/:id',
+                element: <NoticeDetail />,
+            },
+            {
+                path: 'dateCourse',
+                element: <Course />,
+            },
+            {
+                path: 'makeCourse',
+                element: <MakeCourse />,
+            },
+            {
+                path: 'makeCourse/:step',
+                element: <MakeCourseStep />,
+            },
             {
                 path: 'dateTest',
-                element: (
-                    <ProtectedRoute>
-                        <DateTest />
-                    </ProtectedRoute>
-                ),
+                element: <DateTest />,
             },
             {
-                path: 'testResult',
-                element: (
-                    <ProtectedRoute>
-                        <Result />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: 'payment',
-                element: (
-                    <ProtectedRoute>
-                        <Pay />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: 'withdraw',
-                element: (
-                    <ProtectedRoute>
-                        <Withdraw />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: 'course',
-                element: (
-                    <ProtectedRoute>
-                        <Course />
-                    </ProtectedRoute>
-                ),
+                path: 'dateTest/:step',
+                element: <Result />,
             },
         ],
+    },
+    {
+        path: '/withdraw',
+        element: (
+            <ProtectedRoute>
+                <Withdraw />
+            </ProtectedRoute>
+        ),
+        errorElement: <Error />,
+    },
+    {
+        path: '/payment',
+        element: (
+            <ProtectedRoute>
+                <Pay />
+            </ProtectedRoute>
+        ),
+        errorElement: <Error />,
     },
 ]);
 
