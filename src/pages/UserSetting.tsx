@@ -8,7 +8,7 @@ import formatDateInput from '@/utils/formatDateInput';
 import formatInputNumber from '@/utils/formatPhoneNumber';
 import { userSettingSchema } from '@/utils/validation';
 
-import CommonInput from '@/components/common/commonInput';
+import CommonAuthInput from '@/components/common/commonAuthInput';
 
 export enum Gender {
     male = 'male',
@@ -81,7 +81,7 @@ export default function User() {
                         control={control}
                         name="birth"
                         render={({ field: { value, onChange, ref } }) => (
-                            <CommonInput
+                            <CommonAuthInput
                                 value={value ?? ''}
                                 onChange={(e) => {
                                     const formatted = formatDateInput(e.target.value);
@@ -95,7 +95,7 @@ export default function User() {
                             />
                         )}
                     />
-                    <CommonInput
+                    <CommonAuthInput
                         placeholder="닉네임 (영문 20글자 이내)"
                         title="Nickname"
                         error={!!errors.nickname?.message}
@@ -107,7 +107,7 @@ export default function User() {
                             control={control}
                             name="phoneNum"
                             render={({ field: { value, onChange, ref } }) => (
-                                <CommonInput
+                                <CommonAuthInput
                                     type="phoneNum"
                                     value={value ?? ''}
                                     onChange={(e) => {

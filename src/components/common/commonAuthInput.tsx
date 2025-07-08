@@ -5,7 +5,7 @@ import formatInputNumber from '@/utils/formatPhoneNumber';
 
 // import AlertCircle from '@/assets/icons/alert-circle_Fill.svg';
 
-type TCommonInputProps = {
+type TCommonAuthInputProps = {
     type?: string;
     placeholder?: string;
     title?: string;
@@ -20,9 +20,9 @@ type TCommonInputProps = {
     short?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const CommonInput = React.forwardRef<HTMLInputElement, TCommonInputProps>(
+const CommonAuthInput = React.forwardRef<HTMLInputElement, TCommonAuthInputProps>(
     (
-        { type, placeholder, title, validation = false, value, errorMessage, error, button, buttonText, buttonOnclick, short, ...rest }: TCommonInputProps,
+        { type, placeholder, title, validation = false, value, errorMessage, error, button, buttonText, buttonOnclick, short, ...rest }: TCommonAuthInputProps,
         ref,
     ) => {
         return (
@@ -79,4 +79,4 @@ const CommonInput = React.forwardRef<HTMLInputElement, TCommonInputProps>(
     },
 );
 
-export default CommonInput;
+export default CommonAuthInput;
