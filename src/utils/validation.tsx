@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { Gender } from '@/pages/UserSetting';
+import { Gender } from '@/types/auth';
 
 const nicknamePattern = /^[a-zA-Z]+$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -21,7 +21,7 @@ export const signupSchema = z
         email: emailSchema,
         password: passwordSchema,
         repassword: passwordSchema,
-        code: z.string().nonempty('Required'),
+        code: z.string().nonempty('인증코드를 반드시 입력해주세요'),
     })
     .refine((data) => data.password === data.repassword, {
         path: ['repassword'],
