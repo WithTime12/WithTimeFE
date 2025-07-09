@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema } from '@/utils/validation';
 
-import CommonInput from '@/components/common/commonInput';
+import CommonAuthInput from '@/components/common/commonAuthInput';
 
 import Logo from '@/assets/withTimeLogo/Korean_Logo.svg?react';
 import Google from '@/images/socialLogin/google.png';
@@ -47,14 +47,14 @@ export default function Login() {
                 <Logo className="w-[240px] h-min" />
 
                 <div className="flex flex-col gap-[32px] w-full">
-                    <CommonInput
+                    <CommonAuthInput
                         placeholder="아이디를 입력하세요"
                         title="ID"
                         error={!!errors.email?.message || watchedEmail == ''}
                         errorMessage={errors.email?.message}
                         {...register('email')}
                     />
-                    <CommonInput
+                    <CommonAuthInput
                         placeholder="비밀번호를 입력하세요"
                         title="Password"
                         type="password"

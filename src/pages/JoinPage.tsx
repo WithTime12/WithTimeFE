@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validation';
 
-import CommonInput from '@/components/common/commonInput';
+import CommonAuthInput from '@/components/common/commonAuthInput';
 
 type TFormValues = {
     email: string;
@@ -58,7 +58,7 @@ export default function Join() {
                 <div className="font-heading1">회원가입</div>
 
                 <div className="flex flex-col gap-[32px] w-full">
-                    <CommonInput
+                    <CommonAuthInput
                         placeholder="메일을 입력하세요"
                         title="Email"
                         error={!!errors.email?.message || watchedEmail == ''}
@@ -68,7 +68,7 @@ export default function Join() {
                         buttonText="인증번호"
                         {...register('email')}
                     />
-                    <CommonInput
+                    <CommonAuthInput
                         placeholder="인증번호를 입력하세요"
                         title="Verification code"
                         error={!!errors.code?.message || watchedCode == ''}
@@ -80,7 +80,7 @@ export default function Join() {
                         {...register('code')}
                     />
                     <div className="border-[0.5px] w-full border-default-gray-500" />
-                    <CommonInput
+                    <CommonAuthInput
                         placeholder="새로운 비밀번호"
                         title="New Password"
                         type="password"
@@ -90,7 +90,7 @@ export default function Join() {
                         validation={!errors.password?.message && !!watchedPassword}
                         {...register('password')}
                     />
-                    <CommonInput
+                    <CommonAuthInput
                         placeholder="새로운 비밀번호 확인"
                         title="New Password"
                         type="password"
