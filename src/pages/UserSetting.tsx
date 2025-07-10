@@ -25,6 +25,7 @@ type TFormValues = {
 };
 
 export default function User() {
+    const [error, setError] = useState('');
     const [gender, setGender] = useState(Gender.MALE);
     const [agree1, setAgree1] = useState(false);
     const [agree2, setAgree2] = useState(false);
@@ -46,22 +47,33 @@ export default function User() {
     });
     const { mutate: signupMutate, isPending } = useDefaultSignup;
     const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+        const formattedBirth = submitData.birth.replace(/\./g, '-');
         if (isValid && agree1 && agree2) {
-            signupMutate({
-                email: email,
-                password: password,
-                username: submitData.nickname,
-                gender: submitData.gender,
-                phoneNumber: submitData.phoneNum,
-                birth: submitData.birth,
-            });
+            signupMutate(
+                {
+                    email: email,
+                    password: password,
+                    username: submitData.nickname,
+                    gender: submitData.gender,
+                    phoneNumber: submitData.phoneNum,
+                    birth: formattedBirth,
+                },
+                {
+                    onSuccess: () => {
+                        navigate('/home');
+                    },
+                    onError: (err) => {
+                        setError(err.message);
+                    },
+                },
+            );
         }
     };
 
     return (
         <div className="min-w-[280px] w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-6">
             <div className="w-full flex justify-start">
-                <GraySvgButton type="backward" onClick={() => navigate('/')} />
+                <GraySvgButton type="backward" onClick={() => navigate('/Join')} />
             </div>
             <form className="flex-col flex items-center justify-center w-[367px] min-w-[280px] gap-6" onSubmit={handleSubmit(onSubmit)}>
                 <div className="font-heading1">회원가입</div>
@@ -130,14 +142,14 @@ export default function User() {
                                     ref={ref}
                                     placeholder="전화번호 (010-xxxx-xxxx)"
                                     title="Phone Number"
-                                    error={!!errors.phoneNum?.message}
-                                    errorMessage={errors.phoneNum?.message}
+                                    error={!!errors.phoneNum?.message || error != ''}
+                                    errorMessage={errors.phoneNum?.message || error}
                                 />
                             )}
                         />
                         <div
                             className={`font-caption text-default-gray-500
-                            ${errors.phoneNum?.message && 'pt-[16px]'}
+                            ${(errors.phoneNum?.message || error) && 'pt-[16px]'}
                             `}
                         >
                             전화번호는 이메일을 잊었을 때 찾기 위한 용도입니다. 정확하게 기재해주세요.

@@ -54,7 +54,8 @@ export default function Login() {
                         navigate('/home');
                     },
                     onError: (err) => {
-                        setError(err.message);
+                        console.log(err.response?.data.message);
+                        setError('잘못된 정보를 입력하였습니다.');
                     },
                 },
             );
@@ -69,7 +70,7 @@ export default function Login() {
                     <CommonAuthInput
                         placeholder="아이디를 입력하세요"
                         title="ID"
-                        error={!!errors.email?.message || watchedEmail == ''}
+                        error={!!errors.email?.message || watchedEmail == '' || error != ''}
                         errorMessage={errors.email?.message}
                         {...register('email')}
                     />
@@ -77,15 +78,11 @@ export default function Login() {
                         placeholder="비밀번호를 입력하세요"
                         title="Password"
                         type="password"
-                        error={!!errors.password?.message || watchedPassword == ''}
-                        errorMessage={errors.password?.message}
+                        error={!!errors.password?.message || watchedPassword == '' || error != ''}
+                        errorMessage={errors.password?.message || error}
                         {...register('password')}
                     />
-                    <div className="flex w-full items-center justify-between">
-                        <label className="flex gap-[8px] font-body1 cursor-pointer select-none">
-                            <input type="checkbox" className="accent-[#000000]" />
-                            자동 로그인
-                        </label>
+                    <div className="flex w-full items-center justify-center">
                         <div className="text-default-gray-700 font-caption underline hover:cursor-pointer select-none" onClick={() => navigate('/find-pw')}>
                             아이디/비밀번호를 잊어버렸어요
                         </div>
