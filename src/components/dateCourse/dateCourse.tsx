@@ -36,11 +36,18 @@ function DateCourse() {
                 <div className="w-full flex h-fit bg-default-gray-100 rounding-32 justify-center items-start self-stretch">
                     <div className="w-full px-[48px] py-[40px] gap-[48px] flex justify-between h-fit">
                         <div className="flex flex-col w-[60%]">
-                            <Timeline />
+                            <Timeline
+                                title="브리비트 성수"
+                                time="12:00"
+                                address="서울 성동구 왕십리로2길 30 1층"
+                                price="평균 5000원"
+                                tags={['감성 카페', '디저트 맛집']}
+                                menu="카라멜 밀크"
+                            />
                         </div>
                         <div className="border-[0.5px] border-default-gray-700 " />
                         <div className="flex flex-col w-[50%]">
-                            <Info />
+                            <Info cashTag={''} locationTag={''} timeTag={''} MealTag={''} keywordTags={[]} />
                         </div>
                     </div>
                 </div>

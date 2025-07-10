@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import InfoTag from './infoTag';
+import KeywordButton from './keywordButton';
 
 type TInfoElement = {
     children: ReactElement;
@@ -9,14 +9,14 @@ type TInfoElement = {
 };
 export default function InfoElement({ children, title, tags }: TInfoElement) {
     return (
-        <div className="flex w-full gap-[16px]">
+        <div className="flex w-full gap-[16px] items-start">
             <div className="flex gap-[2px] items-center w-[83px] text-default-gray-800 font-body2">
                 {children}
                 {title}
             </div>
-            <div className="flex">
+            <div className="flex flex-1 flex-wrap gap-[8px]">
                 {tags.map((tag, idx) => {
-                    return <InfoTag tag={tag} key={idx} />;
+                    return <KeywordButton tag={tag} key={idx} />;
                 })}
             </div>
         </div>
