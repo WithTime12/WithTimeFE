@@ -17,19 +17,19 @@ type TInfo = {
 export default function Info({ cashTag, locationTag, timeTag, MealTag, keywordTags }: TInfo) {
     return (
         <div className="w-full gap-[24px] flex flex-col">
-            <InfoElement title="예산" tags={['3만원 이상']}>
+            <InfoElement title="예산" tags={cashTag}>
                 <Cash stroke="#000000" />
             </InfoElement>
-            <InfoElement title="장소" tags={['서울 성수동']}>
+            <InfoElement title="장소" tags={locationTag}>
                 <Location stroke="#000000" />
             </InfoElement>
-            <InfoElement title="총 시간" tags={['3~4시간']}>
+            <InfoElement title="총 시간" tags={timeTag}>
                 <Alarm stroke="#000000" />
             </InfoElement>
-            <InfoElement title="식사 구성" tags={['점심']}>
+            <InfoElement title="식사 구성" tags={MealTag}>
                 <Spoon fill="#000000" />
             </InfoElement>
-            <InfoElement title="키워드" tags={['감성카페', '디저트 맛집', '디저트 맛집', '로컬 푸드']}>
+            <InfoElement title="키워드" tags={keywordTags}>
                 <Blub stroke="#000000" />
             </InfoElement>
         </div>

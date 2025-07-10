@@ -8,6 +8,7 @@ import Layout from '@/layout/layout';
 import Error from '@/pages/common/Error';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
+import FindDateCourse from '@/pages/FindDateCourse';
 import FindPw from '@/pages/FindPw';
 import Home from '@/pages/HomePage';
 import Join from '@/pages/JoinPage';
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
             {
                 path: 'makeCourse',
                 element: <MakeCourse />,
+            },
+            {
+                path: 'findCourse',
+                element: <FindDateCourse />,
             },
             {
                 path: 'makeCourse/:step',
