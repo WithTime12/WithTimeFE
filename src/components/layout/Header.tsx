@@ -16,7 +16,7 @@ export default function Header() {
                 </div>
 
                 {/* 그룹 */}
-                <div className="flex items-center gap-x-10 text-[color:var(--color-default-gray-800)]">
+                <div className="flex items-center gap-x-10 text-default-gray-00">
                     {/* 메뉴 */}
                     <nav>
                         <ul className="flex space-x-5 sm:space-x-10 text-sm font-medium">

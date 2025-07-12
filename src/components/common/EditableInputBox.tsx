@@ -57,13 +57,13 @@ export default function EditableInputBox({
     const sharedClassName = `w-full
     ${isNickname && isEditing ? 'h-24 pt-4 pr-20' : 'h-12 pr-16'}
     pl-4
-    border border-[var(--color-primary-500)]
+    border border-primary-500
     rounded-[16px]
     text-base font-medium
     text-black
-    caret-[var(--color-primary-500)]
+    caret-primary-500
     placeholder:text-gray-400
-    focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]
+    focus:outline-none focus:ring-2 focus:ring-primary-500
     leading-normal align-top
     transition-all duration-300
 `;
@@ -71,7 +71,7 @@ export default function EditableInputBox({
     return (
         <div className={`w-[360px] ${className}`}>
             {/* 상단 라벨 텍스트 */}
-            {label && <p className="font-body1 text-[var(--color-default-gray-700)]">{label}</p>}
+            {label && <p className="font-body1 text-default-gray-700">{label}</p>}
 
             {/* 입력 필드 */}
             <div className="relative w-full">
@@ -94,7 +94,7 @@ export default function EditableInputBox({
                 {isNickname && !isEditing && (
                     <button
                         onClick={() => setIsEditing(true)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 font-body1 px-3 py-1 rounded-full bg-[var(--color-default-gray-400)] text-[var(--color-default-gray-700)]"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 font-body1 px-3 py-1 rounded-full bg-default-gray-400 text-default-gray-700"
                     >
                         수정
                     </button>
@@ -102,7 +102,7 @@ export default function EditableInputBox({
 
                 {/* 닉네임 - 글자 수 */}
                 {isNickname && isEditing && (
-                    <span className="absolute bottom-2 right-4 font-body1 text-gray-500">
+                    <span className="absolute bottom-2 right-4 font-body1 text-default-gray-500">
                         {value.length} / {maxLength}
                     </span>
                 )}
@@ -112,9 +112,9 @@ export default function EditableInputBox({
                     <button
                         type="button"
                         onClick={onSearchClick}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 border border-[#A6EFD5] rounded-full p-1"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 border border-primary-500 rounded-full p-1"
                     >
-                        <SearchIcon className="w-5 h-5 text-[#A6EFD5]" stroke="#A6EFD5" />
+                        <SearchIcon className="w-5 h-5 text-primary-500" stroke="currentColor" />
                     </button>
                 )}
             </div>
@@ -122,16 +122,10 @@ export default function EditableInputBox({
             {/* 닉네임 - 취소/완료 버튼 */}
             {isNickname && isEditing && (
                 <div className="flex justify-end gap-2 mt-3">
-                    <button
-                        onClick={handleCancel}
-                        className="font-body1 px-4 py-1.5 rounded-full bg-[var(--color-default-gray-400)] text-[var(--color-default-gray-700)]"
-                    >
+                    <button onClick={handleCancel} className="font-body1 px-4 py-1.5 rounded-full bg-default-gray-400 text-default-gray-700">
                         취소
                     </button>
-                    <button
-                        onClick={handleSubmit}
-                        className="font-body1 px-4 py-1.5 rounded-full bg-[var(--color-default-gray-400)] text-[var(--color-default-gray-700)]"
-                    >
+                    <button onClick={handleSubmit} className="font-body1 px-4 py-1.5 rounded-full bg-default-gray-400 text-default-gray-700">
                         완료
                     </button>
                 </div>

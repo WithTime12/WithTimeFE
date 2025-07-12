@@ -11,16 +11,14 @@ export default function TestInputPage() {
     const [nickname, setNickname] = useState('');
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 gap-8 py-10">
+        <div className="flex flex-col gap-8 py-10">
             {/*  text-default 타입 테스트 */}
             <div className="flex flex-col items-start gap-2">
-                <span>1. Text Input Type</span>
                 <EditableInputBox mode="default" placeholder="텍스트 입력" value={text} onChange={(e) => setText(e.target.value)} />
             </div>
 
             {/*  search 타입 테스트 */}
             <div className="flex flex-col items-start gap-2">
-                <span>2. Search Type with Icon</span>
                 <EditableInputBox
                     mode="search"
                     placeholder="검색어 입력를 입력하세요"
