@@ -21,16 +21,16 @@ export default function Course() {
                         직접 데이트 코스 찾아보기
                     </button>
                 </div>
-                <div className="flex flex-col shadow-default rounding-16 px-[40px] py-[24px]">
-                    <div className="flex w-full justify-between py-[24px]">
-                        <div className="font-heading3">Madeleine 님만의 데이트 코스</div>
-                        <div className="flex gap-[12px]">
-                            <div className="px-[16px] py-[8px] rounding-16 flex gap-[2px] rounding-16 border-[1px] border-default-gray-700  text-default-gray-700">
+                <div className="flex flex-col shadow-default rounding-16 px-[10px] sm:px-[40px] py-[24px]">
+                    <div className="flex w-full justify-between py-[24px] gap-[12px] lg:flex-row flex-col">
+                        <div className="font-heading3 sm:w-fit w-full text-center justify-center">Madeleine 님만의 데이트 코스</div>
+                        <div className="flex gap-[12px] justify-center sm:justify-end">
+                            <div className="px-[16px] py-[8px] text-body2 rounding-16 flex gap-[2px] rounding-16 border-[1px] border-default-gray-700  text-default-gray-700">
                                 <FileTray fill="#616161" />
                                 저장된 코스 보기
                             </div>
                             <div
-                                className="px-[16px] py-[8px] rounding-16 flex rounding-16 border-[1px] border-default-gray-700  text-default-gray-700"
+                                className="px-[16px] py-[8px] text-body2 rounding-16 flex rounding-16 border-[1px] border-default-gray-700  text-default-gray-700"
                                 onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}
                             >
                                 <Filter stroke="#616161" />

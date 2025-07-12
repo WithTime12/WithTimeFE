@@ -9,8 +9,8 @@ type TInfoElement = {
 };
 export default function InfoElement({ children, title, tags }: TInfoElement) {
     return (
-        <div className="flex w-full gap-[16px] items-start h-fit">
-            <div className="flex gap-[7px] items-center w-[83px] text-default-gray-800 font-body2 mt-[4px] select-none">
+        <div className="flex w-full sm:gap-[16px] gap-[12px] flex-nowrap items-start h-fit">
+            <div className="flex gap-[7px] items-center w-[84px] text-default-gray-800 font-body2 mt-[4px] select-none">
                 {children}
                 {title}
             </div>

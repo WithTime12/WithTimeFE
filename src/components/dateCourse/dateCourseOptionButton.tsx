@@ -2,9 +2,10 @@ export default function DateCourseOptionButton({ option, isSelected, onClick }: 
     return (
         <div
             onClick={onClick}
-            className={`flex justify-center items-center px-[16px] py-[24px] hover:bg-primary-100 border-[1px] border-default-gray-500 font-heading3 text-default-gray-700
-      ${isSelected ? 'bg-primary-700 border-none text-default-gray-100' : 'bg-default-gray-100 '}
-      `}
+            className={`flex rounding-32 justify-center items-center px-[32px] py-[16px] font-body1
+            border-[1px] 
+            ${isSelected ? 'bg-primary-700 text-default-gray-100 border-transparent' : 'bg-default-gray-100 text-default-gray-700 hover:bg-primary-100 hover:text-default-gray-700 border-default-gray-500'}
+            `}
         >
             {option}
         </div>
