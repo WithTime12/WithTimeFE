@@ -1,12 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 
+import { MODAL_TYPES } from '@/components/common/modalProvider';
 import DateCourse from '@/components/dateCourse/dateCourse';
 
 import FileTray from '@/assets/icons/file_tray_empty_Fill.svg?react';
 import Filter from '@/assets/icons/filter_Blank.svg?react';
+import useModalStore from '@/store/useModalStore';
 
 export default function Course() {
     const navigate = useNavigate();
+    const { openModal } = useModalStore();
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
@@ -26,7 +29,10 @@ export default function Course() {
                                 <FileTray fill="#616161" />
                                 저장된 코스 보기
                             </div>
-                            <div className="px-[16px] py-[8px] rounding-16 flex rounding-16 border-[1px] border-default-gray-700  text-default-gray-700">
+                            <div
+                                className="px-[16px] py-[8px] rounding-16 flex rounding-16 border-[1px] border-default-gray-700  text-default-gray-700"
+                                onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}
+                            >
                                 <Filter stroke="#616161" />
                                 검색 필터
                             </div>
