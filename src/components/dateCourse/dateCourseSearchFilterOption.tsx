@@ -93,9 +93,9 @@ export default function DateCourseSearchFilterOption<T>({ options, type, state, 
                     })}
 
                 {type === 'keyword' && (
-                    <div className="flex w-full flex-col md:px-[16px] gap-[64px]">
+                    <div className="flex w-full flex-col md:px-[16px] gap-[64px] ">
                         {Object.entries(DATE_KEYWORD).map(([category, keywords]) => (
-                            <div key={category} className="flex flex-wrap gap-2 self-center min-w-[260px] shadow-default rounding-16">
+                            <div key={category} className="flex flex-wrap gap-2 self-center max-w-[90%] w-[656px] min-w-[260px] shadow-default rounding-16">
                                 <DateKeyword category={category} tags={keywords} setState={setState} state={state} />
                             </div>
                         ))}
