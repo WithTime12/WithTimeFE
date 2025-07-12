@@ -15,7 +15,7 @@ function DateCourse() {
     };
 
     return (
-        <div className="flex flex-col h-fit min-w-[250px] self-center rounding-32 border-b-[1px] border-r-[1px] border-l-[1px] border-primary-700 bg-default-gray-100">
+        <div className="flex flex-col h-fit w-full min-w-[250px] self-center rounding-32 border-b-[1px] border-r-[1px] border-l-[1px] border-primary-700 bg-default-gray-100">
             <div
                 className={`w-full rounding-32 flex border-primary-700 px-[24px] py-[16px] bg-default-gray-100 shadow-default z-2
               ${open ? 'border-[1px]' : 'border-t-[1px]'}
