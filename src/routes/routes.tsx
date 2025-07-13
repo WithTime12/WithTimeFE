@@ -9,6 +9,8 @@ import Error from '@/pages/common/Error';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
 import FindDateCourse from '@/pages/FindDateCourse';
+import DateTestResult from '@/pages/DatetestResult';
+import DateTestStep from '@/pages/DateTestStep';
 import FindPw from '@/pages/FindPw';
 import Home from '@/pages/HomePage';
 import Join from '@/pages/JoinPage';
@@ -19,7 +21,6 @@ import Notice from '@/pages/Notice';
 import NoticeDetail from '@/pages/NoticeDetail';
 import Pay from '@/pages/PaymentPage';
 import Question from '@/pages/Question';
-import Result from '@/pages/ResultPage';
 import User from '@/pages/UserSetting';
 import Withdraw from '@/pages/WithdrawPage';
 
@@ -114,7 +115,11 @@ const router = createBrowserRouter([
             },
             {
                 path: 'dateTest/:step',
-                element: <Result />,
+                element: <DateTestStep />,
+            },
+            {
+                path: 'dateTest/result',
+                element: <DateTestResult />,
             },
         ],
     },
