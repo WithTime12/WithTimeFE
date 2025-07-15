@@ -1,20 +1,26 @@
 @import 'tailwindcss';
 
 * {
-    font-family: 'Pretendard';
-    box-sizing: border-box;
+  font-family: 'Pretendard';
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 html,
 body {
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    min-height: 100dvh;
     height: 100%;
     overflow-x: hidden;
     margin: 0;
     padding: 0;
-}
-
-body {
-    min-height: 100vh;
 }
 
 button {
@@ -25,6 +31,16 @@ button {
 ul,
 li {
     list-style: none;
+}
+
+@layer utilities {
+  input:-webkit-autofill {
+    @apply bg-white text-black;
+  }
+  
+  input:-webkit-tap-highlight-color {
+    @apply bg-white;
+  }
 }
 
 @font-face {
@@ -108,8 +124,29 @@ li {
     }
 }
 
+input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:autofill,
+  input:autofill:hover,
+  input:autofill:focus,
+  input:autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px white inset !important;
     box-shadow: 0 0 0 1000px white inset !important;
     -webkit-text-fill-color: #000 !important;
 }
+

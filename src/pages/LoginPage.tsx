@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema } from '@/utils/validation';
+
+import { useAuth } from '@/hooks/auth/useAuth';
 
 import CommonAuthInput from '@/components/common/commonAuthInput';
 
@@ -19,6 +22,8 @@ type TFormValues = {
 
 export default function Login() {
     const navigate = useNavigate();
+    const { useDefaultLogin } = useAuth();
+    const [error, setError] = useState('');
     const {
         register,
         handleSubmit,
@@ -36,21 +41,36 @@ export default function Login() {
         control,
         name: 'email',
     });
-
+    const { mutate: loginMutate } = useDefaultLogin;
     const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
-        console.log(submitData.email, submitData.password);
-        navigate('/home');
+        if (isValid) {
+            loginMutate(
+                {
+                    email: submitData.email,
+                    password: submitData.password,
+                },
+                {
+                    onSuccess: () => {
+                        navigate('/home');
+                    },
+                    onError: (err) => {
+                        console.log(err.response?.data.message);
+                        setError('잘못된 정보를 입력하였습니다.');
+                    },
+                },
+            );
+        }
     };
     return (
-        <div className="min-w-[360px] max-w-[360px] h-screen flex flex-col items-center justify-center gap-[80px]">
-            <form className="flex-col flex items-center justify-center w-full gap-[64px]" onSubmit={handleSubmit(onSubmit)}>
+        <div className="min-w-[280px] w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-10">
+            <form className="flex-col flex items-center justify-center w-full gap-14" onSubmit={handleSubmit(onSubmit)}>
                 <Logo className="w-[240px] h-min" />
 
-                <div className="flex flex-col gap-[32px] w-full">
+                <div className="flex flex-col gap-[32px] w-[367px] min-w-[280px]">
                     <CommonAuthInput
                         placeholder="아이디를 입력하세요"
                         title="ID"
-                        error={!!errors.email?.message || watchedEmail == ''}
+                        error={!!errors.email?.message || watchedEmail == '' || error != ''}
                         errorMessage={errors.email?.message}
                         {...register('email')}
                     />
@@ -58,16 +78,12 @@ export default function Login() {
                         placeholder="비밀번호를 입력하세요"
                         title="Password"
                         type="password"
-                        error={!!errors.password?.message || watchedPassword == ''}
-                        errorMessage={errors.password?.message}
+                        error={!!errors.password?.message || watchedPassword == '' || error != ''}
+                        errorMessage={errors.password?.message || error}
                         {...register('password')}
                     />
-                    <div className="flex w-full items-center justify-between">
-                        <div className="flex gap-[8px] font-body1">
-                            <input type="checkbox" className="accent-[#000000]" />
-                            자동 로그인
-                        </div>
-                        <div className="text-default-gray-700 font-caption underline hover:cursor-pointer" onClick={() => navigate('/find-pw')}>
+                    <div className="flex w-full items-center justify-center">
+                        <div className="text-default-gray-700 font-caption underline hover:cursor-pointer select-none" onClick={() => navigate('/find-pw')}>
                             아이디/비밀번호를 잊어버렸어요
                         </div>
                     </div>
@@ -95,9 +111,9 @@ export default function Login() {
                 </div>
                 <div className="flex items-center justify-center w-full relative mt-[8px] ">
                     <div className="border-[0.5px] w-full border-default-gray-500" />
-                    <div className="z-10 absolute px-[32px] bg-default-gray-100 self-center font-body2 text-default-gray-800">또는</div>
+                    <div className="z-10 absolute px-[32px] bg-default-gray-100 self-center font-body2 text-default-gray-800 select-none">또는</div>
                 </div>
-                <div className="font-body1 underline hover:cursor-pointer" onClick={() => navigate('/Join')}>
+                <div className="font-body1 underline hover:cursor-pointer select-none" onClick={() => navigate('/Join')}>
                     이메일로 회원가입
                 </div>
             </div>
