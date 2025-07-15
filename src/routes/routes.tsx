@@ -8,8 +8,8 @@ import Layout from '@/layout/layout';
 import Error from '@/pages/common/Error';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
-import DateTestResult from '@/pages/DatetestResult';
-import DateTestStep from '@/pages/DateTestStep';
+// import DateTestResult from '@/pages/DatetestResult';
+// import DateTestStep from '@/pages/DateTestStep';
 import FindPw from '@/pages/FindPw';
 import Home from '@/pages/HomePage';
 import Join from '@/pages/JoinPage';
@@ -108,14 +108,14 @@ const router = createBrowserRouter([
                 path: 'dateTest',
                 element: <DateTest />,
             },
-            {
-                path: 'dateTest/:step',
-                element: <DateTestStep />,
-            },
-            {
-                path: 'dateTest/result',
-                element: <DateTestResult />,
-            },
+            // {
+            //     path: 'dateTest/:step',
+            //     element: <DateTestStep />,
+            // },
+            // {
+            //     path: 'dateTest/result',
+            //     element: <DateTestResult />,
+            // },
         ],
     },
     {

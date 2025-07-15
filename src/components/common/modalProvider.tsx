@@ -9,6 +9,7 @@ import useModalStore from '@/store/useModalStore';
 // 에러 모달은 있을 지는 모르겠지만 사용법을 알려드리기 위해 임시로 넣어둔 것이고, 추후 삭제 혹은 수정될 예정입니다.
 export const MODAL_TYPES = {
     ErrorModal: 'ErrorModal',
+    SettingsModal: 'SettingsModal',
 };
 
 export const MODAL_COMPONENTS = {
