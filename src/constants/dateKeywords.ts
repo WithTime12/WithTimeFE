@@ -1,0 +1,48 @@
+const DATE_KEYWORD = {
+    '분위기': [
+        { id: 1, code: 'mood_warm', label: '감성적인' },
+        { id: 2, code: 'mood_chill', label: '잔잔한' },
+        { id: 3, code: 'mood_lively', label: '활기찬' },
+        { id: 4, code: 'mood_vibrant', label: '감각적인' },
+        { id: 5, code: 'mood_nostalgic', label: '레트로 감성' },
+    ],
+    '활동량': [
+        { id: 6, code: 'act_walk', label: '산책 중심' },
+        { id: 7, code: 'act_chill', label: '느긋하게 쉬기' },
+        { id: 8, code: 'act_move', label: '활발한 활동' },
+        { id: 9, code: 'act_explore', label: '탐험 중심' },
+        { id: 10, code: 'act_photo', label: '사진 중심' },
+        { id: 11, code: 'act_pair', label: '같이 하는 체험' },
+    ],
+    '장소 스타일/장르': [
+        { id: 12, code: 'place_rooftop', label: '루프탑 카페' },
+        { id: 13, code: 'place_view', label: '전망 좋은 곳' },
+        { id: 14, code: 'place_river', label: '한강 뷰' },
+        { id: 15, code: 'place_market', label: '로컬 마켓' },
+        { id: 16, code: 'place_nature', label: '자연 가까운 곳' },
+        { id: 17, code: 'place_exhibit', label: '전시 공간' },
+        { id: 18, code: 'place_craft', label: '수공예 체험 공간' },
+        { id: 19, code: 'place_library', label: '북카페/책방' },
+        { id: 20, code: 'place_izakaya', label: '이자카야/펍' },
+        { id: 21, code: 'place_fusion', label: '퓨전 음식점' },
+        { id: 22, code: 'place_brunch', label: '브런치 카페' },
+        { id: 23, code: 'place_dessert', label: '디저트 카페' },
+        { id: 24, code: 'place_western', label: '양식' },
+        { id: 25, code: 'place_korean', label: '한식' },
+        { id: 26, code: 'place_Chinese', label: '중식' },
+        { id: 27, code: 'place_vintage', label: '레트로 골목' },
+        { id: 28, code: 'place_mall', label: '복합 공간 (몰)' },
+    ],
+    '상황별 데이트': [
+        { id: 29, code: 'time_brunch', label: '브런치 데이트' },
+        { id: 30, code: 'time_sunset', label: '노을 보기 좋은' },
+        { id: 31, code: 'time_evening', label: '저녁 데이트' },
+        { id: 32, code: 'weather_hot', label: '더운 날 추천' },
+        { id: 33, code: 'weather_rainy', label: '비 오는 날 추천' },
+        { id: 34, code: 'weather_cold', label: '추운 날 추천' },
+        { id: 35, code: 'mood_anniversary', label: '기념일 데이트' },
+        { id: 36, code: 'mood_first', label: '첫 데이트 추천' },
+    ],
+};
+
+export default DATE_KEYWORD;
