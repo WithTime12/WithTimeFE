@@ -13,7 +13,7 @@ export default function MakeCourse() {
     return (
         <div className="flex w-full h-full justify-center items-center py-[16px]">
             <div className="flex w-[967px] max-w-[80vw] flex-col gap-[40px]">
-                <GraySvgButton type="backward" onClick={() => navigate('/dateCourse')} />
+                <GraySvgButton type="backward" size="small" onClick={() => navigate('/dateCourse')} />
                 <img src={DateCourseImg} alt="" />
                 <div className="flex w-full text-center font-heading3 items-center justify-center">
                     WithTime은 당신의 데이트 스타일과 상황을 분석해,
