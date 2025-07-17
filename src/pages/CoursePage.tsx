@@ -28,12 +28,12 @@ export default function Course() {
                     <div className="flex w-full justify-between py-[24px] gap-[12px] lg:flex-row flex-col">
                         <div className="font-heading3 sm:w-fit w-full text-center justify-center">Madeleine 님만의 데이트 코스</div>
                         <div className="flex gap-[12px] justify-center items-center sm:justify-end flex-col sm:flex-row">
-                            <div className="px-[16px] py-[8px] text-body2 rounding-16 flex gap-[4px] w-fit rounding-16 border-[1px] border-default-gray-700  text-default-gray-700">
+                            <div className="hover:cursor-pointer px-[16px] py-[8px] text-body2 rounding-16 flex gap-[4px] w-fit rounding-16 border-[1px] border-default-gray-700  text-default-gray-700">
                                 <FileTray fill="#616161" />
                                 저장된 코스 보기
                             </div>
                             <div
-                                className="px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
+                                className="hover:cursor-pointer px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
                                 onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}
                             >
                                 <Filter stroke="#616161" />

@@ -151,7 +151,9 @@ export default function MakeCourseStep() {
                         onClick={handleNext}
                         variant="mint"
                         size="big-16"
-                        disabled={(currentAnswer === null && currentStep !== 4) || (Array.isArray(currentAnswer) && currentAnswer.length === 0)}
+                        disabled={
+                            (currentAnswer === null && currentStep !== 4) || (Array.isArray(currentAnswer) && currentAnswer.length === 0 && currentStep !== 4)
+                        }
                     >
                         {currentStep === TOTAL_QUESTIONS ? '결과 보기' : '다음'}
                     </Button>

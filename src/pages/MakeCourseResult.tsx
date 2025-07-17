@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import DateCourse from '@/components/dateCourse/dateCourse';
 import DateCourseLoading from '@/components/dateCourse/dateCourseLoading';
 
@@ -7,6 +9,7 @@ import Reload from '@/assets/icons/arrow_spin.svg?react';
 import Logo from '@/assets/withTimeLogo//logo_Blank.svg?react';
 
 export default function MakeCourseResult() {
+    const navigate = useNavigate();
     const isLoading = false;
     if (isLoading) {
         return <DateCourseLoading />;
@@ -24,7 +27,9 @@ export default function MakeCourseResult() {
                 <Button size="big-16" variant="mint" className="flex mt-[40px] self-center px-[32px] items-center gap-[8px]">
                     <Reload />
                     <div className="flex flex-col items-center justify-center">
-                        <div className="font-heading3 select-none">다시 만들기</div>
+                        <div className="font-heading3 select-none" onClick={() => navigate('/makeCourse')}>
+                            다시 만들기
+                        </div>
                         <div className="font-body1 select-none">3회 가능</div>
                     </div>
                 </Button>
