@@ -8,14 +8,15 @@ import Layout from '@/layout/layout';
 import Error from '@/pages/common/Error';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
-import FindDateCourse from '@/pages/FindDateCourse';
 import DateTestResult from '@/pages/DatetestResult';
 import DateTestStep from '@/pages/DateTestStep';
+import FindDateCourse from '@/pages/FindDateCourse';
 import FindPw from '@/pages/FindPw';
 import Home from '@/pages/HomePage';
 import Join from '@/pages/JoinPage';
 import Login from '@/pages/LoginPage';
 import MakeCourse from '@/pages/MakeCourse';
+import MakeCourseResult from '@/pages/MakeCourseResult';
 import MakeCourseStep from '@/pages/MakeCourseStep';
 import Notice from '@/pages/Notice';
 import NoticeDetail from '@/pages/NoticeDetail';
@@ -108,6 +109,10 @@ const router = createBrowserRouter([
             {
                 path: 'makeCourse/:step',
                 element: <MakeCourseStep />,
+            },
+            {
+                path: 'makeCourse/result',
+                element: <MakeCourseResult />,
             },
             {
                 path: 'dateTest',
