@@ -17,10 +17,10 @@ interface IQuestion {
     type: 'choice' | 'search' | 'time' | 'choices' | 'keyword';
 }
 
-const TOTAL_QUESTIONS = 7;
+const TOTAL_QUESTIONS = 8;
 
 const Questions: IQuestion[] = Array.isArray(DateCourseQuestion)
-    ? DateCourseQuestion.slice(0, TOTAL_QUESTIONS).map((q) => ({
+    ? DateCourseQuestion.slice(0, TOTAL_QUESTIONS - 1).map((q) => ({
           ...q,
           type: q.type as IQuestion['type'],
       }))
@@ -44,7 +44,8 @@ export default function MakeCourseStep() {
     const question = Questions[currentStep - 1];
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        document.documentElement.scrollTo({ top: 0 }); // <html>
+        document.body.scrollTo({ top: 0 }); // <body>
     }, [currentStep]);
 
     const handlePrev = () => {
@@ -61,7 +62,7 @@ export default function MakeCourseStep() {
 
         if (!isValid) return;
 
-        if (currentStep < TOTAL_QUESTIONS) {
+        if (currentStep < TOTAL_QUESTIONS - 1) {
             navigate(`/makeCourse/${currentStep + 1}`);
         } else {
             navigate('/makeCourse/result');
@@ -100,7 +101,7 @@ export default function MakeCourseStep() {
                     value={answers[currentStep - 1]}
                     onChange={setAnswer}
                 />
-                <div className="mt-[160px] flex w-full items-center justify-center">
+                <div className="mt-[120px] flex w-full items-center justify-center">
                     <Button
                         className="w-fit px-[100px] items-center self-center"
                         onClick={handleNext}

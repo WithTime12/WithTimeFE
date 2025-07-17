@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider';
+import Navigator from '@/components/common/navigator';
 import DateCourse from '@/components/dateCourse/dateCourse';
 
 import FileTray from '@/assets/icons/file_tray_empty_Fill.svg?react';
@@ -10,6 +12,7 @@ import useModalStore from '@/store/useModalStore';
 export default function Course() {
     const navigate = useNavigate();
     const { openModal } = useModalStore();
+    const [current, setCurrent] = useState(1);
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
@@ -45,6 +48,7 @@ export default function Course() {
                         <DateCourse />
                         <DateCourse />
                     </div>
+                    <Navigator current={current} end={14} onClick={setCurrent} />
                 </div>
             </div>
         </div>

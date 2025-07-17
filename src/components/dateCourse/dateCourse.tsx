@@ -7,8 +7,8 @@ import BookmarkBlank from '@/assets/icons/Bookmark_Blank.svg?react';
 import KeyboardArrowDown from '@/assets/icons/keyboard_arrow_down_False.svg?react';
 import More from '@/assets/icons/more_False.svg?react';
 
-function DateCourse() {
-    const [open, setOpen] = useState(false);
+function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
+    const [open, setOpen] = useState(defaultOpen || false);
 
     const clickBookmark = () => {
         console.log('북마크 해제');

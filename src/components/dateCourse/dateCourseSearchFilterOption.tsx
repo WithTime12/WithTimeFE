@@ -122,8 +122,8 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
 
                 {type === 'time' && (
                     <div className="flex flex-col gap-4 justify-center items-center w-full">
-                        <div className="flex gap-8 items-center w-fit flex-wrap sm:flex-nowrap rounding-32 border-[2px] border-primary-500 py-[16px] px-[32px]">
-                            <div className="relative flex" onClick={handleDateClick}>
+                        <div className="flex gap-3 items-center w-fit flex-nowrap sm:flex-nowrap rounding-32 border-[2px] border-primary-500 py-[16px] px-[32px]">
+                            <div className="relative flex gap-[4px]" onClick={handleDateClick}>
                                 <Calendar stroke="#000000" />
                                 <div className="cursor-pointer font-heading3 text-default-gray-800">{date}</div>
 
