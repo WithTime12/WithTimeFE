@@ -15,6 +15,8 @@ import { useAuth } from '@/hooks/auth/useAuth';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
+import Button from '../components/common/Button';
+
 import useAuthStore from '@/store/useAuthStore';
 
 type TFormValues = {
@@ -79,28 +81,26 @@ export default function User() {
                 <div className="font-heading1">회원가입</div>
                 <div className="flex flex-col gap-[32px] w-full">
                     <div className="flex w-full gap-[16px] justify-center items-center">
-                        <div
+                        <Button
                             onClick={() => {
                                 setValue('gender', Gender.MALE);
                                 setGender(Gender.MALE);
                             }}
-                            className={`px-[32px] py-[16px] rounding-32
-                            ${gender == Gender.MALE ? 'bg-primary-500 text-default-gray-100' : 'bg-default-gray-400 text-default-gray-800'}
-                            `}
-                        >
-                            남자
-                        </div>
-                        <div
+                            children={'남자'}
+                            size="big-32"
+                            variant={`${gender == Gender.MALE ? 'mint' : 'white'}`}
+                            className="px-[32px] !py-[16px]"
+                        />
+                        <Button
                             onClick={() => {
                                 setValue('gender', Gender.FEMALE);
                                 setGender(Gender.FEMALE);
                             }}
-                            className={`px-[32px] py-[16px] rounding-32
-                            ${gender == Gender.FEMALE ? 'bg-primary-500 text-default-gray-100' : 'bg-default-gray-400 text-default-gray-800'}
-                            `}
-                        >
-                            여자
-                        </div>
+                            children={'여자'}
+                            size="big-32"
+                            variant={`${gender == Gender.FEMALE ? 'mint' : 'white'}`}
+                            className="px-[32px] !py-[16px]"
+                        />
                     </div>
                     <Controller
                         control={control}
@@ -167,14 +167,14 @@ export default function User() {
                         이용약관 동의
                     </div>
                 </div>
-                <button
-                    className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer disabled:bg-default-gray-500"
+                <Button
+                    children={'회원가입 완료'}
+                    size="big-16"
+                    variant="mint"
                     onClick={handleSubmit(onSubmit)}
-                    type="submit"
                     disabled={!isValid || !agree1 || !agree2 || isPending}
-                >
-                    회원가입 완료
-                </button>
+                    className="w-full"
+                />
             </form>
         </div>
     );
