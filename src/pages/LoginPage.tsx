@@ -8,6 +8,7 @@ import { loginSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import Button from '@/components/common/Button';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 
 import Logo from '@/assets/withTimeLogo/Korean_Logo.svg?react';
@@ -87,14 +88,13 @@ export default function Login() {
                             아이디/비밀번호를 잊어버렸어요
                         </div>
                     </div>
-                    <button
-                        className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer"
-                        onClick={handleSubmit(onSubmit)}
+                    <Button
+                        size="big-16"
+                        variant={'mint'}
+                        children={'로그인하기'}
                         disabled={!isValid || watchedEmail == '' || watchedPassword == ''}
-                    >
-                        로그인하기
-                    </button>
-                    {/* 공용 컴포넌트로 대체 예정 */}
+                        onClick={handleSubmit(onSubmit)}
+                    />
                 </div>
             </form>
             <div className="w-full flex flex-col items-center justify-center gap-[16px]">
