@@ -90,6 +90,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
 
                                     setInputValue('');
                                 }}
+                                placeholder="ex: 서울시 강남구"
                                 className="w-full"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
