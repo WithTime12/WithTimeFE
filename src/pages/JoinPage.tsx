@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validation';
 
+import Button from '@/components/common/Button';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
@@ -118,13 +119,13 @@ export default function Join() {
                             {...register('repassword')}
                         />
                     </div>
-                    <button
-                        className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer"
-                        onClick={handleSubmit(onSubmit)}
+                    <Button
+                        size="big-16"
+                        variant={'mint'}
+                        children={'다음으로'}
                         disabled={!isValid || watchedEmail == '' || watchedPassword == ''}
-                    >
-                        다음으로
-                    </button>
+                        onClick={handleSubmit(onSubmit)}
+                    />
                 </form>
             </div>
         </div>
