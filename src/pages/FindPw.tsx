@@ -132,7 +132,7 @@ export default function FindPw() {
                         size="big-16"
                         variant={'mint'}
                         children={'로그인하기'}
-                        disabled={!isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify}
+                        disabled={watchedPassword !== watchedRepassword || !isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify}
                         onClick={handleSubmit(onSubmit)}
                         className="w-full"
                     />
