@@ -1,6 +1,6 @@
 export const timeMap: Record<string, number> = {
-    '1~2시간': 1.5,
-    '3~4시간': 3.5,
+    '1-2시간': 1.5,
+    '3-4시간': 3.5,
     '반나절': 5.0,
     '하루종일': 8.0,
 };
@@ -20,36 +20,50 @@ export const mealKeyword = ['양식', '한식', '중식', '이자카야/펍', '�
 
 export function MealTimeValidation({ meal, time, totalTime }: { meal: string[]; time: string; totalTime: string }): string | null {
     if (!time || meal.length === 0 || !totalTime) return null;
-
     const toMinutes = (t: string) => {
         const [h, m] = t.split(':').map(Number);
         return h * 60 + m;
     };
 
     const timeStr = time.split(' ')[1]; // 'HH:mm'
-    const current = toMinutes(timeStr);
-    const duration = timeMap[totalTime];
-    const end = current + duration * 60;
+    const start = toMinutes(timeStr); // 데이트 시작 시간
+    const duration = timeMap[totalTime]; // 소요 시간(시간 단위)
+    const end = start + duration * 60; // 종료 시간 (분)
 
-    // 식사 순서
-    const priority = ['아침', '점심', '저녁'];
-    const firstMeal = priority.find((m) => meal.includes(m));
-    if (!firstMeal) return null;
+    const isOverlapping = (start1: number, end1: number, start2: number, end2: number) => {
+        if (start1 < start2) {
+            // 데이트 시작시간이 식사 시작시간보다 빠를 경우
+            if (end1 > start2) return true; // 데이트 끝나는 시간이 식사 시작시간보다 느려야함
+            return false;
+        } else if (start1 >= start2) {
+            // 데이트 시작시간이 식사 시작시간 보다 느릴 경우
+            if (start1 <= end2)
+                // 데이트 시작 시간이 식사 마감시간보다 빠르면 됨
+                return true;
+            return false;
+        }
+    };
 
-    const [startStr, endStr] = mealTimeRanges[firstMeal];
-    const mealStart = toMinutes(startStr);
-    const mealEnd = toMinutes(endStr);
+    // 선택한 식사 중 하나라도 겹치면 통과
+    for (const m of meal) {
+        const mealRange = mealTimeRanges[m];
 
-    const isWithinRange = (min: number, max: number, target: number) => target >= min && target <= max;
+        if (!mealRange) continue; // 존재하지 않으면 skip
 
-    if (isWithinRange(mealStart, mealEnd, current) || isWithinRange(mealStart, mealEnd, end)) {
-        return null;
+        const [mealStartStr, mealEndStr] = mealRange;
+        const mealStart = toMinutes(mealStartStr);
+        const mealEnd = toMinutes(mealEndStr);
+        if (isOverlapping(start, end, mealStart, mealEnd)) {
+            return null;
+        }
     }
 
-    return `선택하신 시간(${timeStr} ~ ${Math.floor(end / 60)
-        .toString()
-        .padStart(2, '0')}:${(end % 60).toString().padStart(2, '0')})에는 ${firstMeal} 식사를 하기 어려워요. (가능 시간: ${startStr}~${endStr})`;
+    // 아무것도 안겹치면 첫 번째 식사를 기준으로 안내
+    const first = meal[0];
+    const [mealStartStr, mealEndStr] = mealTimeRanges[first];
+    return `선택하신 시간에는 ${first} 식사를 하기 어려워요. (가능 시간: ${mealStartStr}~${mealEndStr})`;
 }
+
 type TDateTimeStartValidationInput = {
     totalTime: string;
     time: string; // e.g. '2025-07-18 22:30'
