@@ -7,31 +7,33 @@ interface IButtonProps {
     disabled?: boolean;
     onClick?: () => void;
     className?: string;
+    type?: 'button' | 'submit' | 'reset';
     children: React.ReactNode;
 }
 
-export default function Button({ size, variant, disabled = false, onClick, className, children }: IButtonProps) {
+export default function Button({ size, variant, disabled = false, onClick, className, type = 'button', children }: IButtonProps) {
     const sizeClasses = {
-        'big-32': 'rounded-[32px] py-[24px]',
-        'big-16': 'rounded-[16px] py-[16px]',
-        'small': 'rounded-[16px] py-[8px]',
+        'big-32': 'rounding-32 py-6 font-heading3',
+        'big-16': 'rounding-16 py-4 font-heading3',
+        'small': 'rounding-32 py-2 font-body2',
     };
 
     const variantClasses = {
-        mint: disabled ? 'bg-primary-300 text-white' : 'bg-primary-300 text-white hover:bg-primary-900',
-        white: disabled ? 'bg-gray-400 text-black' : 'bg-gray-400 text-black hover:bg-gray-500',
+        mint: 'bg-primary-500 text-white hover:text-primary-900',
+        white: 'bg-default-gray-400 text-black hover:bg-default-gray-500',
     };
 
     return (
         <button
+            type={type}
             className={cx(
-                'px-4 font-medium transition-colors duration-200',
+                'px-4 transition-colors duration-200',
                 sizeClasses[size],
                 variantClasses[variant],
-                disabled && 'opacity-50 cursor-not-allowed',
+                disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
                 className,
             )}
-            onClick={disabled ? undefined : onClick}
+            onClick={onClick}
             disabled={disabled}
         >
             {children}
