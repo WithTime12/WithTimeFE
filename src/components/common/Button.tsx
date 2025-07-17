@@ -7,14 +7,15 @@ interface IButtonProps {
     disabled?: boolean;
     onClick?: () => void;
     className?: string;
+    type?: 'button' | 'submit' | 'reset';
     children: React.ReactNode;
 }
 
-export default function Button({ size, variant, disabled = false, onClick, className, children }: IButtonProps) {
+export default function Button({ size, variant, disabled = false, onClick, className, type = 'button', children }: IButtonProps) {
     const sizeClasses = {
-        'big-32': 'rounding-32 py-6',
-        'big-16': 'rounding-16 py-4',
-        'small': 'rounding-32 py-2',
+        'big-32': 'rounding-32 py-6 font-heading3',
+        'big-16': 'rounding-16 py-4 font-heading3',
+        'small': 'rounding-32 py-2 font-body2',
     };
 
     const variantClasses = {
@@ -24,8 +25,9 @@ export default function Button({ size, variant, disabled = false, onClick, class
 
     return (
         <button
+            type={type}
             className={cx(
-                'px-4 font-medium transition-colors duration-200',
+                'px-4 transition-colors duration-200',
                 sizeClasses[size],
                 variantClasses[variant],
                 disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
