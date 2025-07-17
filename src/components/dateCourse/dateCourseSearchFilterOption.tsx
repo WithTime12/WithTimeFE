@@ -16,9 +16,10 @@ type TDateCourseSearchFilterOption = {
     title: string;
     subTitle?: string | null;
     type: 'choice' | 'search' | 'time' | 'choices' | 'keyword';
+    errorMessage: string | null;
 };
 
-export default function DateCourseSearchFilterOption({ options, type, value, onChange, title, subTitle }: TDateCourseSearchFilterOption) {
+export default function DateCourseSearchFilterOption({ options, type, value, onChange, title, subTitle, errorMessage }: TDateCourseSearchFilterOption) {
     const [inputValue, setInputValue] = useState('');
     const now = new Date();
     const defaultDate = now.toISOString().split('T')[0]; // '2025-07-17'
@@ -29,7 +30,8 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
     const [time, setTime] = useState(defaultTime);
 
     useEffect(() => {
-        onChange(`${defaultDate} ${defaultTime}`);
+        onChange(`${date} ${time}`);
+        console.log(date, time);
     }, []);
 
     const handleDateClick = () => {
@@ -54,6 +56,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                 <div className="flex flex-nowrap">{title}</div>
                 <span className="text-default-gray-700 font-heading3 flex">{subTitle}</span>
             </div>
+            <div className="font-body3 text-warning">{errorMessage}</div>
             <div className="flex w-full gap-[16px] flex-wrap sm:justify-start justify-center">
                 {type === 'choice' &&
                     options?.map((option, idx) => (
