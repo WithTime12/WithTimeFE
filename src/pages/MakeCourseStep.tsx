@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
 import {
+    BudgetTimeValidation,
     DateTimeStartValidation,
     KeywordGroupOverValidation,
     KeywordMealValidation,
@@ -81,6 +82,9 @@ export default function MakeCourseStep() {
     };
 
     const checkError = () => {
+        if (currentStep === 3) {
+            setErrorMessage(BudgetTimeValidation({ budget: answers[0] as string, totalTime: answers[2] as string }));
+        }
         if (currentStep === 4) {
             setErrorMessage(TotalTimeMealValidation({ totalTime: answers[2] as string, meal: Array.isArray(answers[3]) ? answers[3] : [] }));
         }

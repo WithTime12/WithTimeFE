@@ -2,7 +2,7 @@ export const timeMap: Record<string, number> = {
     '1-2시간': 1.5,
     '3-4시간': 3.5,
     '반나절': 5.0,
-    '하루종일': 8.0,
+    '하루 종일': 8.0,
 };
 export const mealTimeRanges: Record<string, [string, string]> = {
     아침: ['05:00', '10:00'],
@@ -121,6 +121,20 @@ export function KeywordGroupOverValidation({ keywords }: { keywords: string[] })
     }
     return null;
 }
-// 유효성 검사 4
-// 유효성 검사 8
-// 유효성 검사 9
+
+export function BudgetTimeValidation({ budget, totalTime }: { budget: string; totalTime: string }): string | null {
+    const warningTable: Record<string, string[]> = {
+        '3-4시간': ['1만원 이하'],
+        '반나절': ['1만원 이하', '1-2만원'],
+        '하루 종일': ['1만원 이하', '1-2만원', '2-3만원'],
+    };
+
+    const warnings = warningTable[totalTime];
+    if (warnings && warnings.includes(budget)) {
+        return '시간에 비해 예산이 낮아 추천이 제한될 수 있습니다.';
+    }
+
+    return null;
+}
+
+// 유효성 검사 9 -> 추후 API 나오면 제작 예정
