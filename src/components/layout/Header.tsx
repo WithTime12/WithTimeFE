@@ -31,7 +31,7 @@ export default function Header() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/course" className="font-body1">
+                                <Link to="/dateCourse" className="font-body1">
                                     데이트 코스
                                 </Link>
                             </li>
