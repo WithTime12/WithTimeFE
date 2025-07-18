@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { findingSchema } from '@/utils/validation';
 
+import { useAuth } from '@/hooks/auth/useAuth';
+
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
@@ -31,6 +33,11 @@ export default function FindPw() {
         mode: 'onChange',
         resolver: zodResolver(findingSchema),
     });
+
+    const { useSendCode, useCheckCode } = useAuth();
+    const { mutate: sendCodeMutation } = useSendCode;
+    const { mutate: checkCodeMutation } = useCheckCode;
+
     const watchedPassword = useWatch({
         control,
         name: 'password',
@@ -49,15 +56,46 @@ export default function FindPw() {
     });
 
     const checkCode = () => {
-        if (watchedCode != '' && watchedCode != undefined) {
-            setCodeVerify(true);
+        if (watchedCode != '' && watchedCode != undefined && sendCode) {
+            checkCodeMutation(
+                {
+                    email: watchedEmail,
+                    code: watchedCode,
+                },
+                {
+                    onSuccess: (data) => {
+                        if (data.isSuccess === false) {
+                            setCodeVerify(true);
+                        } else {
+                            setCodeVerify(false);
+                        }
+                    },
+                    onError: () => {
+                        setCodeVerify(false);
+                    },
+                },
+            );
         }
     };
 
     const postSendCode = () => {
+        setCodeVerify(false);
         if (watchedEmail != '' && !errors.email?.message) {
-            setSendCode(true);
-            console.log('이메일 발송');
+            sendCodeMutation(
+                {
+                    email: watchedEmail,
+                },
+                {
+                    onSuccess: () => {
+                        setSendCode(true);
+                    },
+                    onError: (err) => {
+                        setSendCode(false);
+                        console.error(err);
+                        alert('인증코드 발송 중 에러가 발생하였습니다.');
+                    },
+                },
+            );
         }
     };
 
