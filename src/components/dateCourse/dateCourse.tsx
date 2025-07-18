@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Info from './info';
+import MoreOption from './more';
 import Timeline from './timeline';
 
 import BookmarkBlank from '@/assets/icons/Bookmark_Blank.svg?react';
@@ -9,15 +10,27 @@ import More from '@/assets/icons/more_False.svg?react';
 
 function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
     const [open, setOpen] = useState(defaultOpen || false);
-
+    const [openEdit, setOpenEdit] = useState(false);
+    const moreRef = useRef<HTMLDivElement>(null);
     const clickBookmark = () => {
         console.log('북마크 해제');
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (openEdit && moreRef.current && !moreRef.current.contains(event.target as Node)) {
+                setOpenEdit(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [openEdit]);
+
     return (
         <div className="flex flex-col h-fit w-full min-w-[250px] self-center rounding-32 border-b-[1px] border-r-[1px] border-l-[1px] border-primary-700 bg-default-gray-100">
             <div
-                className={`w-full rounding-32 flex border-primary-700 px-[24px] py-[16px] bg-default-gray-100 shadow-default z-2
+                className={`w-full rounding-32 flex border-primary-700 px-[24px] py-[16px] bg-default-gray-100 shadow-default 
               ${open ? 'border-[1px]' : 'border-t-[1px]'}
               `}
             >
@@ -29,9 +42,12 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                             <span>2025.06.01</span> <span>데이트코스</span>
                         </div>
                     </div>
-                    <div className="flex ">
+                    <div className="flex">
                         <BookmarkBlank stroke="#212121" className="hover:cursor-pointer" onClick={clickBookmark} />
-                        <More className="rotate-90 hover:cursor-pointer" fill="#212121" />
+                        <div className="relative" ref={moreRef}>
+                            <More className="rotate-90 hover:cursor-pointer relative" fill="#212121" onClick={() => setOpenEdit(!openEdit)} />
+                            {openEdit && <MoreOption className="absolute z-[9999]" />}
+                        </div>
                     </div>
                 </div>
             </div>
