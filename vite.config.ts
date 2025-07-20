@@ -5,7 +5,10 @@ import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
     plugins: [react(), svgr({ include: '**/*.svg?react' }), tailwindcss()],
-
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+    },
     resolve: {
         alias: {
             '@': '/src',

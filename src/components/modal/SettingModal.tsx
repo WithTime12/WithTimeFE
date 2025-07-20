@@ -65,3 +65,4 @@ export default function SettingsModal({ onClose, defaultTab = '알람' }: ISetti
         </div>
     );
 }
+

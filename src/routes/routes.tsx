@@ -103,6 +103,10 @@ const router = createBrowserRouter([
                 element: <MakeCourse />,
             },
             {
+                path: 'findCourse',
+                element: <FindDateCourse />,
+            },
+            {
                 path: 'makeCourse/:step',
                 element: <MakeCourseStep />,
             },
