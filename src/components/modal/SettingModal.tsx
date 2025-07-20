@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import AlarmSetting from '@/components/settingTab/AlarmSetting';
 import InfoSetting from '@/components/settingTab/InfoSetting';
@@ -8,8 +8,17 @@ import GraySvgButton from '../common/graySvgButton';
 
 import LogoutSvg from '@/assets/icons/Logout_Blank.svg?react';
 
-export default function SettingsModal({ onClose }: { onClose: () => void }) {
-    const [activeTab, setActiveTab] = useState<'알람' | '멤버십' | '정보'>('알람'); // 활성 탭 상태
+interface ISettingsModalProps {
+    onClose: () => void;
+    defaultTab?: '알람' | '멤버십' | '정보';
+}
+
+export default function SettingsModal({ onClose, defaultTab = '알람' }: ISettingsModalProps) {
+    const [activeTab, setActiveTab] = useState<'알람' | '멤버십' | '정보'>(defaultTab);
+
+    useEffect(() => {
+        setActiveTab(defaultTab);
+    }, [defaultTab]);
 
     return (
         <div className="fixed top-0 left-0 z-[1000] w-screen h-screen bg-black/20 flex items-center justify-center">
@@ -23,17 +32,15 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
                 {/* 좌측 탭 메뉴 */}
                 <div className="w-[170px] flex flex-col justify-between pr-6">
                     <div>
-                        {/* 타이틀 */}
                         <p className="font-heading2 text-default-gray-800 mb-6">설정</p>
 
-                        {/* 탭 목록 */}
                         <div className="flex flex-col space-y-3">
                             {['알람', '멤버십', '정보'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab as '알람' | '멤버십' | '정보')}
                                     className={`w-full h-[35px] px-4 rounding-16 font-body1 text-left transition 
-          ${activeTab === tab ? 'bg-primary-500 text-white' : 'bg-default-gray-400 text-default-gray-700'}`}
+                                    ${activeTab === tab ? 'bg-primary-500 text-white' : 'bg-default-gray-400 text-default-gray-700'}`}
                                 >
                                     {tab} 설정
                                 </button>

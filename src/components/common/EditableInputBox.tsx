@@ -1,10 +1,11 @@
+//setting - common input box
 import React, { useState } from 'react';
 
 import SearchIcon from '@/assets/icons/Search_Blank.svg?react';
 
 interface IEditableInputBoxProps {
-    mode?: 'nickname' | 'password' | 'search' | 'default';
-    type?: 'text' | 'password';
+    mode?: 'nickname' | 'search' | 'default';
+    type?: 'text';
     label?: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -32,7 +33,6 @@ export default function EditableInputBox({
     const [isEditing, setIsEditing] = useState(false);
 
     const isNickname = mode === 'nickname';
-    const isPassword = mode === 'password';
     const isSearch = mode === 'search';
 
     const handleCancel = () => {
@@ -51,7 +51,6 @@ export default function EditableInputBox({
         }
     };
 
-    // 공통 스타일
     const sharedClassName = `w-full
         ${isNickname && isEditing ? 'h-24 pt-4 pr-20' : 'h-12 pr-16'}
         pl-4
@@ -73,19 +72,13 @@ export default function EditableInputBox({
             <div className="relative w-full">
                 {/* 닉네임 - 수정 중일 때 textarea */}
                 {isNickname && isEditing ? (
-                    <textarea
-                        value={value}
-                        onChange={onChange}
-                        placeholder={placeholder}
-                        maxLength={maxLength}
-                        className={`${sharedClassName} resize-none`} // textarea 크기 조절 불가
-                    />
+                    <textarea value={value} onChange={onChange} placeholder={placeholder} maxLength={maxLength} className={`${sharedClassName} resize-none`} />
                 ) : (
                     <input
-                        type={type}
+                        type="text"
                         value={value}
                         onChange={onChange}
-                        readOnly={isNickname || isPassword ? !isEditing : false}
+                        readOnly={isNickname ? !isEditing : false}
                         placeholder={placeholder}
                         maxLength={maxLength}
                         onKeyDown={handleKeyDown}
@@ -94,7 +87,7 @@ export default function EditableInputBox({
                 )}
 
                 {/* 수정 버튼 */}
-                {(isNickname || isPassword) && !isEditing && (
+                {isNickname && !isEditing && (
                     <button
                         onClick={() => setIsEditing(true)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 font-body1 px-3 py-1 rounded-full bg-default-gray-400 text-default-gray-700"
@@ -104,7 +97,7 @@ export default function EditableInputBox({
                 )}
 
                 {/* 글자 수 표시 */}
-                {(isNickname || isPassword) && isEditing && (
+                {isNickname && isEditing && (
                     <span className="absolute bottom-2 right-4 font-body1 text-default-gray-500">
                         {value.length} / {maxLength}
                     </span>
@@ -123,7 +116,7 @@ export default function EditableInputBox({
             </div>
 
             {/* 취소, 완료 버튼 */}
-            {(isNickname || isPassword) && isEditing && (
+            {isNickname && isEditing && (
                 <div className="flex justify-end gap-2 mt-3">
                     <button onClick={handleCancel} className="font-body1 px-4 py-1.5 rounded-full bg-default-gray-400 text-default-gray-700">
                         취소

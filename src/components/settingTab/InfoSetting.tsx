@@ -57,8 +57,7 @@ export default function InfoSetting() {
                     <ChevronForward width={20} height={20} fill="#000000" />
                 </button>
 
-                {/* 탈퇴하기 - 라우터 추가 필요?? 페이지로 해야하나 */}
-                <Link to="/delete-account" className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
+                <Link to="/deleteAccount" className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
                     탈퇴하기
                     <ChevronForward width={20} height={20} fill="#000000" />
                 </Link>

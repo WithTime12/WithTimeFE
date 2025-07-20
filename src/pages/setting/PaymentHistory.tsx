@@ -1,5 +1,8 @@
+// 결제 내역 확인
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import Header from '@/components/layout/Header';
 import PaymentRow from '@/components/payment/PaymentRow';
 
 import ArrowLeftCircle from '@/assets/icons/Arrow_left_circle.svg?react';
@@ -29,14 +32,20 @@ const dummyData = [
     },
 ];
 
-export default function Payment() {
+export default function PaymentHistory() {
     const [currentPage, setCurrentPage] = useState(1);
+    const navigate = useNavigate();
 
     return (
-        <div className="w-full min-h-screen">
-            <div className="max-w-[960px] mx-auto px-4 font-body1 text-default-gray-800">
+        <div>
+            {/* 헤더 - 로고만 */}
+            <Header mode="minimal" />
+
+            <div className="max-w-[960px] mx-auto font-body1 text-default-gray-800">
                 {/* 뒤로가기 버튼 */}
-                <ArrowLeftCircle className=" fill-current text-default-gray-500 mb-5" />
+                <button onClick={() => navigate('/setting', { state: { openSettingTab: '멤버십' } })}>
+                    <ArrowLeftCircle className=" fill-current text-default-gray-500 mb-5" />
+                </button>
 
                 {/* 제목 */}
                 <h1 className="mb-10 font-heading2">결제 내역 확인</h1>
@@ -76,6 +85,7 @@ export default function Payment() {
                             {page}
                         </button>
                     ))}
+
                     {/* 다음 페이지 아이콘*/}
                     <Forward className=" fill-current text-default-gray-500" />
                 </div>

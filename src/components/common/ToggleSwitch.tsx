@@ -1,4 +1,4 @@
-//ON, OFF Toggle Switch
+//setting - ON, OFF Toggle Switch
 import { useEffect, useState } from 'react';
 
 // Props 정의
