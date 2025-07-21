@@ -1,10 +1,11 @@
+//setting - common input box
 import React, { useState } from 'react';
 
 import SearchIcon from '@/assets/icons/Search_Blank.svg?react';
 
-// props 타입 정의
 interface IEditableInputBoxProps {
     mode?: 'nickname' | 'search' | 'default';
+    type?: 'text';
     label?: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -16,9 +17,9 @@ interface IEditableInputBoxProps {
     placeholder?: string;
 }
 
-// 구조 분해 할당
 export default function EditableInputBox({
     mode = 'default',
+    type = 'text',
     label = '',
     value,
     onChange,
@@ -34,47 +35,42 @@ export default function EditableInputBox({
     const isNickname = mode === 'nickname';
     const isSearch = mode === 'search';
 
-    // 닉네임 - 취소
     const handleCancel = () => {
         setIsEditing(false);
         onCancel?.();
     };
 
-    // 닉네임 - 완료
     const handleSubmit = () => {
         setIsEditing(false);
         onSubmit?.();
     };
 
-    // 검색 - Enter 검색
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && isSearch) {
             onSearchClick?.();
         }
     };
 
-    // 공통 클래스
     const sharedClassName = `w-full
-    ${isNickname && isEditing ? 'h-24 pt-4 pr-20' : 'h-12 pr-16'}
-    pl-4
-    border border-primary-500
-    rounded-[16px]
-    text-base font-medium
-    text-black
-    caret-primary-500
-    placeholder:text-gray-400
-    focus:outline-none focus:ring-2 focus:ring-primary-500
-    leading-normal align-top
-    transition-all duration-300
-`;
+        ${isNickname && isEditing ? 'h-24 pt-4 pr-20' : 'h-12 pr-16'}
+        pl-4
+        border border-primary-500
+        rounding-16
+        text-base font-medium
+        text-black
+        caret-primary-500
+        placeholder:text-gray-400
+        focus:outline-none focus:ring-2 focus:ring-primary-500
+        leading-normal 
+        transition-all duration-300
+    `;
 
     return (
         <div className={`w-[360px] ${className}`}>
-            {/* 상단 라벨 텍스트 */}
-            {label && <p className="font-body1 text-default-gray-700">{label}</p>}
+            {label && <p className="font-body1 text-default-gray-700 mb-1">{label}</p>}
 
-            {/* 입력 필드 */}
             <div className="relative w-full">
+                {/* 닉네임 - 수정 중일 때 textarea */}
                 {isNickname && isEditing ? (
                     <textarea value={value} onChange={onChange} placeholder={placeholder} maxLength={maxLength} className={`${sharedClassName} resize-none`} />
                 ) : (
@@ -82,15 +78,15 @@ export default function EditableInputBox({
                         type="text"
                         value={value}
                         onChange={onChange}
-                        readOnly={isNickname && !isEditing}
-                        maxLength={maxLength}
+                        readOnly={isNickname ? !isEditing : false}
                         placeholder={placeholder}
+                        maxLength={maxLength}
                         onKeyDown={handleKeyDown}
                         className={sharedClassName}
                     />
                 )}
 
-                {/* 닉네임 - 수정 버튼 */}
+                {/* 수정 버튼 */}
                 {isNickname && !isEditing && (
                     <button
                         onClick={() => setIsEditing(true)}
@@ -100,14 +96,14 @@ export default function EditableInputBox({
                     </button>
                 )}
 
-                {/* 닉네임 - 글자 수 */}
+                {/* 글자 수 표시 */}
                 {isNickname && isEditing && (
                     <span className="absolute bottom-2 right-4 font-body1 text-default-gray-500">
                         {value.length} / {maxLength}
                     </span>
                 )}
 
-                {/* 검색 아이콘 */}
+                {/* 검색 버튼 */}
                 {isSearch && (
                     <button
                         type="button"
@@ -119,7 +115,7 @@ export default function EditableInputBox({
                 )}
             </div>
 
-            {/* 닉네임 - 취소/완료 버튼 */}
+            {/* 취소, 완료 버튼 */}
             {isNickname && isEditing && (
                 <div className="flex justify-end gap-2 mt-3">
                     <button onClick={handleCancel} className="font-body1 px-4 py-1.5 rounded-full bg-default-gray-400 text-default-gray-700">
@@ -133,3 +129,4 @@ export default function EditableInputBox({
         </div>
     );
 }
+

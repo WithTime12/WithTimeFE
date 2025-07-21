@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validation';
-
 import { useAuth } from '@/hooks/auth/useAuth';
 
 import Button from '@/components/common/Button';
@@ -96,6 +95,13 @@ export default function Join() {
                     },
                 },
             );
+        }
+    };
+
+    const postSendCode = () => {
+        if (watchedEmail != '' && !errors.email?.message) {
+            setSendCode(true);
+            console.log('이메일 발송');
         }
     };
 

@@ -20,10 +20,9 @@ type TDateKeyword<T> = {
 export default function DateKeyword<T>({ category, tags, setState, state }: TDateKeyword<T>) {
     const toggleItem = (item: string) => {
         if (setState) {
-            setState((prev) => {
-                const list: string[] = Array.isArray(prev) ? prev : [];
-                return list.includes(item) ? (list.filter((v) => v !== item) as T) : ([...list, item] as T);
-            });
+            const list: string[] = Array.isArray(state) ? state : [];
+            const newState = list.includes(item) ? list.filter((v) => v !== item) : [...list, item];
+            setState(newState as T);
         }
     };
     return (

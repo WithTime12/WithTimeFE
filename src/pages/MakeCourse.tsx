@@ -2,6 +2,10 @@
 
 import { useNavigate } from 'react-router-dom';
 
+import GraySvgButton from '@/components/common/graySvgButton';
+
+import Button from '../components/common/Button';
+
 import DateCourseImg from '@/images/dateCourseTest.png';
 
 export default function MakeCourse() {
@@ -9,7 +13,7 @@ export default function MakeCourse() {
     return (
         <div className="flex w-full h-full justify-center items-center py-[16px]">
             <div className="flex w-[967px] max-w-[80vw] flex-col gap-[40px]">
-                {/* <GraySvgButton /> 추가 예정*/}
+                <GraySvgButton type="backward" size="small" onClick={() => navigate('/dateCourse')} />
                 <img src={DateCourseImg} alt="" />
                 <div className="flex w-full text-center font-heading3 items-center justify-center">
                     WithTime은 당신의 데이트 스타일과 상황을 분석해,
@@ -22,7 +26,7 @@ export default function MakeCourse() {
                     계획은 필요 없어요 – 지금부터 데이트에만 집중하세요.
                 </div>
                 {/* 추후 공용컴포넌트 추가 예정 */}
-                <button onClick={() => navigate('/makeCourse/1')}>데이트 코스 만들러가기</button>
+                <Button size="big-16" variant="mint" className="w-full" onClick={() => navigate('/makeCourse/1')} children={'데이트 코스 만들러가기'} />
             </div>
         </div>
     );
