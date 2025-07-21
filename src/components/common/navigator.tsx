@@ -28,7 +28,7 @@ export default function Navigator({ current, end, onClick }: TNavigatorProps) {
                 <button
                     key={page}
                     onClick={() => onClick(page)}
-                    className={`px-3 py-1 rounded ${current === page ? 'text-default-gray-800' : 'text-default-gray-500'}`}
+                    className={`px-3 py-1 select-none rounded ${current === page ? 'text-default-gray-800' : 'text-default-gray-500'}`}
                 >
                     {page}
                 </button>

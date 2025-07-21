@@ -5,6 +5,7 @@ import ModalProvider from '@/components/common/modalProvider';
 
 import AuthLayout from '@/layout/authLayout';
 import Layout from '@/layout/layout';
+import BookmarkedDateCourse from '@/pages/BookmarkedDateCourse';
 import Error from '@/pages/common/Error';
 import Course from '@/pages/CoursePage';
 import DateTest from '@/pages/dateTest';
@@ -117,6 +118,10 @@ const router = createBrowserRouter([
             {
                 path: 'makeCourse/result',
                 element: <MakeCourseResult />,
+            },
+            {
+                path: 'bookmarkedCourse',
+                element: <BookmarkedDateCourse />,
             },
             {
                 path: 'dateTest',

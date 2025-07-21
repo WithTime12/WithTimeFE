@@ -18,8 +18,8 @@ export default function MakeCourseResult() {
         <div className="flex w-full justify-center items-center min-h-[66vh] p-[40px]">
             <div className="flex-col flex h-fit max-w-[95vw] w-[1000px] shadow-default rounding-16 px-[10px] sm:px-[40px] py-[24px] shadow-default">
                 <div className="flex w-full justify-between items-center py-[24px] gap-[12px] lg:flex-row ">
-                    <div className="font-heading3 sm:w-fit w-full text-center justify-center">Madeleine 님만의 데이트 코스</div>
-                    <Logo className="w-[41px] h-[36px]" />
+                    <div className="font-heading3 flex-nowrap sm:w-fit w-full text-center justify-center">Madeleine 님만의 데이트 코스</div>
+                    <Logo className="w-[41px] h-[36px] sm:flex hidden" />
                 </div>
                 <div className="flex flex-col gap-[24px] ">
                     <DateCourse defaultOpen={true} />

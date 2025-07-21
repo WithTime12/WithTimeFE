@@ -25,7 +25,6 @@ export default function MakeCourse() {
                     <br />
                     계획은 필요 없어요 – 지금부터 데이트에만 집중하세요.
                 </div>
-                {/* 추후 공용컴포넌트 추가 예정 */}
                 <Button size="big-16" variant="mint" className="w-full" onClick={() => navigate('/makeCourse/1')} children={'데이트 코스 만들러가기'} />
             </div>
         </div>

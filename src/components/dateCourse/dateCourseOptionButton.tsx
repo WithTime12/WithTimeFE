@@ -1,4 +1,6 @@
-export default function DateCourseOptionButton({ option, isSelected, onClick }: { option: string; isSelected: boolean; onClick: () => void }) {
+import type { TDateCourseOptionButtonProps } from '@/types/dateCourse';
+
+export default function DateCourseOptionButton({ option, isSelected, onClick }: TDateCourseOptionButtonProps) {
     return (
         <div
             onClick={onClick}
