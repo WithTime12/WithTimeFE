@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-export default function DateTestStep() {
-    return <div />;
-=======
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -120,5 +116,4 @@ export default function DateTestStep() {
             </button>
         </div>
     );
->>>>>>> d7735bcae1ac483e63871820348305af24f3615d
 }

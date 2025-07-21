@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-export default function DatetestResult() {
-    return <div />;
-=======
 import { useNavigate } from 'react-router-dom';
 
 // 결과 이미지 한번에 넣으려면 이렇게 해야한다고 합니다!! -> 랜딩 페이지에서 사용한 방식과 같은 방식입니다
@@ -213,5 +209,4 @@ export default function DateTestResultPage() {
             </button>
         </div>
     );
->>>>>>> d7735bcae1ac483e63871820348305af24f3615d
 }
