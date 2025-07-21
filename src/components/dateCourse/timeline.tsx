@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import type { TTimeline } from '@/types/dateCourse';
+
 import KeywordButton from './keywordButton';
 
 import ArrowDown from '@/assets/icons/Arrow-Down_Blank.svg?react';
@@ -8,20 +10,11 @@ import Cash from '@/assets/icons/cash_Blank.svg?react';
 import CheckSuccess from '@/assets/icons/Check-Success-Blank.svg?react';
 import Location from '@/assets/icons/Location_Blank.svg?react';
 
-type TTimeline = {
-    end?: boolean;
-    title?: string;
-    time: string;
-    address?: string;
-    price?: string;
-    tags?: string[];
-    menu?: string;
-};
 function Timeline({ end = false, title, time, address, price, tags, menu }: TTimeline) {
     const [open, setOpen] = useState(false);
     return (
         <div className="flex w-full gap-2 flex-col">
-            <div className="flex justify-center gap-2 items-center" onClick={() => (end ? undefined : setOpen(!open))}>
+            <div className={`${!end && 'hover:cursor-pointer'} flex justify-center gap-2 items-center`} onClick={() => (end ? undefined : setOpen(!open))}>
                 <div className="flex items-center h-full font-body2  select-none">{time}</div>
                 <div className="flex flex-1 h-full justify-center items-center">
                     <div className="rounded-full w-[5px] h-[5px] bg-default-gray-700" />

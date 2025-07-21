@@ -1,9 +1,4 @@
-type TKeywordButtonProps = {
-    tag: string;
-    selected?: boolean;
-    onClick?: () => void;
-    isButton?: boolean;
-};
+import type { TKeywordButtonProps } from '@/types/dateCourse';
 
 export default function KeywordButton({ tag, selected = false, onClick, isButton }: TKeywordButtonProps) {
     return (

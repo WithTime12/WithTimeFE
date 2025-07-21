@@ -33,3 +33,10 @@ export type TRefreshResponse = TCommonResponse<{
 export type TLogoutResponse = TCommonResponse<{
     result: string;
 }>;
+
+export type TEmailVerfications = TCommonResponse<{
+    result: string;
+}>;
+export type TCheckEmailVerifications = TCommonResponse<{
+    result: string;
+}>;

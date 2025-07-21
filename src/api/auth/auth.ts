@@ -1,4 +1,13 @@
-import type { TLoginResponse, TLoginValues, TLogoutResponse, TRefreshResponse, TSignupResponse, TSignupValues } from '@/types/auth';
+import type {
+    TCheckEmailVerifications,
+    TEmailVerfications,
+    TLoginResponse,
+    TLoginValues,
+    TLogoutResponse,
+    TRefreshResponse,
+    TSignupResponse,
+    TSignupValues,
+} from '@/types/auth';
 
 import { axiosInstance } from '../axiosInstance';
 
@@ -19,5 +28,14 @@ export const refresh = async (): Promise<TRefreshResponse> => {
 
 export const logout = async (): Promise<TLogoutResponse> => {
     const { data } = await axiosInstance.post('/auth/logout');
+    return data;
+};
+
+export const emailVerifications = async ({ email }: { email: string }): Promise<TEmailVerfications> => {
+    const { data } = await axiosInstance.post('/auth/email-verifications', { email });
+    return data;
+};
+export const checkEmailVerifications = async ({ email, code }: { email: string; code: string }): Promise<TCheckEmailVerifications> => {
+    const { data } = await axiosInstance.post('/auth/email-verifications', { email, code });
     return data;
 };

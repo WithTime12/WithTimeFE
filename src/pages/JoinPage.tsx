@@ -6,6 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validation';
 
+import { useAuth } from '@/hooks/auth/useAuth';
+
+import Button from '@/components/common/Button';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
@@ -21,7 +24,11 @@ type TFormValues = {
 export default function Join() {
     const { setEmail, setPassword } = useAuthStore();
     const [codeVerify, setCodeVerify] = useState(false);
+    const [sendCode, setSendCode] = useState(false);
     const navigate = useNavigate();
+    const { useSendCode, useCheckCode } = useAuth();
+    const { mutate: sendCodeMutation } = useSendCode;
+    const { mutate: checkCodeMutation } = useCheckCode;
     const {
         register,
         handleSubmit,
@@ -49,9 +56,46 @@ export default function Join() {
     });
 
     const checkCode = () => {
-        if (watchedCode != '' && watchedCode != undefined) {
-            console.log(watchedCode);
-            setCodeVerify(true);
+        if (watchedCode != '' && watchedCode != undefined && sendCode) {
+            checkCodeMutation(
+                {
+                    email: watchedEmail,
+                    code: watchedCode,
+                },
+                {
+                    onSuccess: (data) => {
+                        if (data.isSuccess === false) {
+                            setCodeVerify(true);
+                        } else {
+                            setCodeVerify(false);
+                        }
+                    },
+                    onError: () => {
+                        setCodeVerify(false);
+                    },
+                },
+            );
+        }
+    };
+
+    const postSendCode = () => {
+        setCodeVerify(false);
+        if (watchedEmail != '' && !errors.email?.message) {
+            sendCodeMutation(
+                {
+                    email: watchedEmail,
+                },
+                {
+                    onSuccess: () => {
+                        setSendCode(true);
+                    },
+                    onError: (err) => {
+                        setSendCode(false);
+                        console.error(err);
+                        alert('인증코드 발송 중 에러가 발생하였습니다.');
+                    },
+                },
+            );
         }
     };
 
@@ -64,6 +108,9 @@ export default function Join() {
     useEffect(() => {
         setCodeVerify(false);
     }, [watchedCode, watchedEmail]);
+    useEffect(() => {
+        setSendCode(false);
+    }, [watchedEmail]);
 
     return (
         <div className="w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-10">
@@ -82,6 +129,7 @@ export default function Join() {
                             errorMessage={errors.email?.message}
                             validation={!errors.email?.message && !!watchedEmail}
                             button={true}
+                            buttonOnclick={postSendCode}
                             buttonText="인증번호"
                             {...register('email')}
                         />
@@ -90,7 +138,7 @@ export default function Join() {
                             title="Verification code"
                             error={!!errors.code?.message || watchedCode == ''}
                             errorMessage={errors.code?.message}
-                            validation={codeVerify}
+                            validation={sendCode && codeVerify}
                             button={true}
                             buttonOnclick={checkCode}
                             buttonText={codeVerify ? '인증완료' : '인증하기'}
@@ -118,13 +166,14 @@ export default function Join() {
                             {...register('repassword')}
                         />
                     </div>
-                    <button
-                        className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer"
-                        onClick={handleSubmit(onSubmit)}
+                    <Button
+                        size="big-16"
+                        variant={'mint'}
+                        children={'다음으로'}
                         disabled={!isValid || watchedEmail == '' || watchedPassword == ''}
-                    >
-                        다음으로
-                    </button>
+                        onClick={handleSubmit(onSubmit)}
+                        className="w-full"
+                    />
                 </form>
             </div>
         </div>

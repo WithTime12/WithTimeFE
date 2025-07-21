@@ -6,7 +6,7 @@ import Header from '@/components/layout/Header';
 function Layout() {
     return (
         <div>
-            <Header />
+            <Header mode="full" />
             <Outlet />
             <Footer />
         </div>
