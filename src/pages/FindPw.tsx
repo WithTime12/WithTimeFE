@@ -99,13 +99,6 @@ export default function FindPw() {
         }
     };
 
-    const postSendCode = () => {
-        if (watchedEmail != '' && !errors.email?.message) {
-            setSendCode(true);
-            console.log('이메일 발송');
-        }
-    };
-
     useEffect(() => {
         setCodeVerify(false);
     }, [watchedCode, watchedEmail]);

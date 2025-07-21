@@ -1,91 +1,91 @@
 @import 'tailwindcss';
 
 * {
-    font-family: 'Pretendard';
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: 'Pretendard';
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 html,
 body {
-    height: 100dvh;
-    overflow-x: hidden;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    min-height: 100dvh;
-    height: 100%;
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
+  min-height: 100dvh;
+  height: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 button {
-    cursor: pointer;
-    /* border: none; */
+  cursor: pointer;
+  /* border: none; */
 }
 
 @font-face {
-    font-family: 'Pretendard';
-    src: url('/fonts/PretendardVariable.woff2') format('font-woff2');
-    font-display: swap;
-    font-weight: 45 920;
+  font-family: 'Pretendard';
+  src: url('/fonts/PretendardVariable.woff2') format('font-woff2');
+  font-display: swap;
+  font-weight: 45 920;
 }
 
 @theme {
-    --color-primary-100: #e7fdec;
-    --color-primary-300: #b5f7d3;
-    --color-primary-500: #7fe4c1;
-    --color-primary-700: #3fa495;
-    --color-primary-900: #186a6d;
-
-    --color-secondary-yellow: #fdfa91;
-    --color-secondary-blue: #005880;
-    --color-warning: #ff517c;
-
-    --color-default-gray-100: #fefefe;
-    --color-default-gray-400: #e6e6e6;
-    --color-default-gray-500: #c3c3c3;
-    --color-default-gray-700: #616161;
-    --color-default-gray-800: #212121;
+  --color-primary-100: #e7fdec;
+  --color-primary-300: #b5f7d3;
+  --color-primary-500: #7fe4c1;
+  --color-primary-700: #3fa495;
+  --color-primary-900: #186a6d;
+  
+  --color-secondary-yellow: #fdfa91;
+  --color-secondary-blue: #005880;
+  --color-warning: #ff517c;
+  
+  --color-default-gray-100: #fefefe;
+  --color-default-gray-400: #e6e6e6;
+  --color-default-gray-500: #c3c3c3;
+  --color-default-gray-700: #616161;
+  --color-default-gray-800: #212121;
 }
 
 @layer utilities {
-    input:-webkit-autofill {
-        @apply bg-white text-black;
-    }
-
-    input:-webkit-tap-highlight-color {
-        @apply bg-white;
-    }
+  input:-webkit-autofill {
+    @apply bg-white text-black;
+  }
+  
+  input:-webkit-tap-highlight-color {
+    @apply bg-white;
+  }
 }
 
 @font-face {
-    font-family: 'Pretendard';
-    src: url('/fonts/PretendardVariable.woff2') format('font-woff2');
-    font-display: swap;
-    font-weight: 45 920;
+  font-family: 'Pretendard';
+  src: url('/fonts/PretendardVariable.woff2') format('font-woff2');
+  font-display: swap;
+  font-weight: 45 920;
 }
 
 @theme {
-    --color-primary-100: #e7fdec;
-    --color-primary-300: #b5f7d3;
-    --color-primary-500: #7fe4c1;
-    --color-primary-700: #3fa495;
-    --color-primary-900: #186a6d;
-
-    --color-secondary-yellow: #fdfa91;
-    --color-secondary-blue: #005880;
-    --color-warning: #ff517c;
-
-    --color-default-gray-100: #fefefe;
-    --color-default-gray-400: #e6e6e6;
-    --color-default-gray-500: #c3c3c3;
-    --color-default-gray-700: #616161;
-    --color-default-gray-800: #212121;
+  --color-primary-100: #e7fdec;
+  --color-primary-300: #b5f7d3;
+  --color-primary-500: #7fe4c1;
+  --color-primary-700: #3fa495;
+  --color-primary-900: #186a6d;
+  
+  --color-secondary-yellow: #fdfa91;
+  --color-secondary-blue: #005880;
+  --color-warning: #ff517c;
+  
+  --color-default-gray-100: #fefefe;
+  --color-default-gray-400: #e6e6e6;
+  --color-default-gray-500: #c3c3c3;
+  --color-default-gray-700: #616161;
+  --color-default-gray-800: #212121;
 }
 
 @layer utilities {
@@ -156,36 +156,36 @@ button {
   50% {
     opacity: 1;
   }
-
+}
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-text-fill-color: #000;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-    box-shadow: 0 0 0px 1000px #fff inset;
-    transition: background-color 5000s ease-in-out 0s;
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 input:autofill,
-input:autofill:hover,
-input:autofill:focus,
-input:autofill:active {
-    -webkit-text-fill-color: #000;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-    box-shadow: 0 0 0px 1000px #fff inset;
-    transition: background-color 5000s ease-in-out 0s;
+  input:autofill:hover,
+  input:autofill:focus,
+  input:autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px white inset !important;
-    box-shadow: 0 0 0 1000px white inset !important;
-    -webkit-text-fill-color: #000 !important;
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
 }
 
 .modal-root {
-    min-height: 100vh;
-    min-width: 100vw;
-    overflow-y: auto;
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow-y: auto;
 }
