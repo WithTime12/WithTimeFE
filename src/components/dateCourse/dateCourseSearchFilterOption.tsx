@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
+import type { TDateCourseSearchFilterOption } from '@/types/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
 
 import DateCourseOptionButton from './dateCourseOptionButton';
@@ -8,16 +9,6 @@ import PlaceButton from './placeButton';
 import EditableInputBox from '../common/EditableInputBox';
 
 import Calendar from '@/assets/icons/calendar_Blank.svg?react';
-
-type TDateCourseSearchFilterOption = {
-    options?: string[] | null;
-    value: string | string[] | null;
-    onChange: (value: string | string[]) => void;
-    title: string;
-    subTitle?: string | null;
-    type: 'choice' | 'search' | 'time' | 'choices' | 'keyword';
-    errorMessage: string | null;
-};
 
 export default function DateCourseSearchFilterOption({ options, type, value, onChange, title, subTitle, errorMessage }: TDateCourseSearchFilterOption) {
     const [inputValue, setInputValue] = useState('');

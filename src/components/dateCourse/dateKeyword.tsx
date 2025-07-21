@@ -1,21 +1,6 @@
-import type { Dispatch, SetStateAction } from 'react';
+import type { TDateKeyword } from '@/types/dateCourse';
 
 import KeywordButton from './keywordButton';
-
-type TTag = {
-    id: number;
-    label: string;
-    code: string;
-};
-
-type TTags = TTag[];
-
-type TDateKeyword<T> = {
-    state?: T;
-    setState?: Dispatch<SetStateAction<T>>;
-    category: string;
-    tags: TTags;
-};
 
 export default function DateKeyword<T>({ category, tags, setState, state }: TDateKeyword<T>) {
     const toggleItem = (item: string) => {

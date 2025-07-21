@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import type { IQuestion } from '@/types/dateCourse';
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
 import {
@@ -16,15 +17,6 @@ import {
 import Button from '@/components/common/Button';
 import GraySvgButton from '@/components/common/graySvgButton';
 import DateCourseSearchFilterOption from '@/components/dateCourse/dateCourseSearchFilterOption';
-
-interface IQuestion {
-    id: number;
-    title: string;
-    options: string[] | null;
-    keyword: string | null;
-    subTitle: string | null;
-    type: 'choice' | 'search' | 'time' | 'choices' | 'keyword';
-}
 
 const TOTAL_QUESTIONS = 8;
 

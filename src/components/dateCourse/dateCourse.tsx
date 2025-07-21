@@ -5,15 +5,18 @@ import MoreOption from './more';
 import Timeline from './timeline';
 
 import BookmarkBlank from '@/assets/icons/Bookmark_Blank.svg?react';
+import BookmarkFill from '@/assets/icons/Bookmark_Fill.svg?react';
 import KeyboardArrowDown from '@/assets/icons/keyboard_arrow_down_False.svg?react';
 import More from '@/assets/icons/more_False.svg?react';
 
 function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
     const [open, setOpen] = useState(defaultOpen || false);
     const [openEdit, setOpenEdit] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(false);
     const moreRef = useRef<HTMLDivElement>(null);
     const clickBookmark = () => {
-        console.log('북마크 해제');
+        // console.log('북마크 해제');
+        setIsBookmarked(!isBookmarked);
     };
 
     useEffect(() => {
@@ -31,11 +34,11 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
         <div className="flex flex-col h-fit w-full min-w-[250px] self-center rounding-32 border-b-[1px] border-r-[1px] border-l-[1px] border-primary-700 bg-default-gray-100">
             <div
                 className={`w-full rounding-32 flex border-primary-700 px-[24px] py-[16px] bg-default-gray-100 shadow-default 
-              ${open ? 'border-[1px]' : 'border-t-[1px]'}
-              `}
+                    ${open ? 'border-[1px]' : 'border-t-[1px]'}
+                `}
             >
-                <div className="flex w-full justify-between items-center">
-                    <div className="flex hover:cursor-pointer items-center" onClick={() => setOpen(!open)}>
+                <div className="flex w-full justify-between items-center hover:cursor-pointer" onClick={() => setOpen(!open)}>
+                    <div className="flex hover:cursor-pointer items-center">
                         {open ? <KeyboardArrowDown /> : <KeyboardArrowDown className="rotate-270" />}
 
                         <div className="text-default-gray-800 gap-[4px] select-none flex flex-col sm:flex-row pl-[4px]">
@@ -43,7 +46,12 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                         </div>
                     </div>
                     <div className="flex">
-                        <BookmarkBlank stroke="#212121" className="hover:cursor-pointer" onClick={clickBookmark} />
+                        {isBookmarked ? (
+                            <BookmarkFill fill="#4b4b4b" className="hover:cursor-pointer" onClick={clickBookmark} />
+                        ) : (
+                            <BookmarkBlank stroke="#212121" className="hover:cursor-pointer" onClick={clickBookmark} />
+                        )}
+
                         <div className="relative" ref={moreRef}>
                             <More className="rotate-90 hover:cursor-pointer relative" fill="#212121" onClick={() => setOpenEdit(!openEdit)} />
                             {openEdit && <MoreOption className="absolute z-[9999]" />}

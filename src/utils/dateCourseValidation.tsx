@@ -116,7 +116,7 @@ export function KeywordGroupOverValidation({ keywords }: { keywords: string[] })
     for (const [groupName, groupKeywords] of Object.entries(keywordGroups)) {
         const count = keywords.filter((kw) => groupKeywords.includes(kw)).length;
         if (count >= 3) {
-            return `‘${groupName}’ 관련 키워드를 너무 많이 선택했어요! (${count}개 선택됨)`;
+            return `‘${groupName}’ 관련 키워드를 너무 많이 선택했어요!`;
         }
     }
     return null;
