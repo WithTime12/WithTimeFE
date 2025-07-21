@@ -22,17 +22,14 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
 
     useEffect(() => {
         onChange(`${date} ${time}`);
-        console.log(date, time);
     }, []);
 
     const handleDateClick = () => {
         dateInputRef.current?.showPicker?.();
-        dateInputRef.current?.click();
     };
 
     const handleTimeClick = () => {
         timeInputRef.current?.showPicker?.();
-        timeInputRef.current?.click();
     };
 
     const handleDeletePlaceOption = (val: string) => {
