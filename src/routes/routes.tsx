@@ -22,6 +22,10 @@ import Notice from '@/pages/Notice';
 import NoticeDetail from '@/pages/NoticeDetail';
 import Pay from '@/pages/PaymentPage';
 import Question from '@/pages/Question';
+import DeleteConfirmPage from '@/pages/setting/DeleteConfirmPage';
+import DeleteReasonPage from '@/pages/setting/DeleteReasonPage.tsx';
+import PaymentHistory from '@/pages/setting/PaymentHistory';
+import SettingEntryPage from '@/pages/setting/SettingEntryPage';
 import User from '@/pages/UserSetting';
 import Withdraw from '@/pages/WithdrawPage';
 
@@ -118,15 +122,25 @@ const router = createBrowserRouter([
                 path: 'dateTest',
                 element: <DateTest />,
             },
-            {
-                path: 'dateTest/:step',
-                element: <DateTestStep />,
-            },
-            {
-                path: 'dateTest/result',
-                element: <DateTestResult />,
-            },
         ],
+    },
+
+    // Setting page 연결
+    {
+        path: '/setting',
+        element: <SettingEntryPage />,
+    },
+    {
+        path: '/paymentHistory',
+        element: <PaymentHistory />, // 결제 내역 확인
+    },
+    {
+        path: '/deleteAccount',
+        element: <DeleteReasonPage />, // 탈퇴 사유 선택
+    },
+    {
+        path: '/deleteAccount/confirm',
+        element: <DeleteConfirmPage />, // 탈퇴 확정
     },
     {
         path: '/withdraw',
