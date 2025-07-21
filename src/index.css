@@ -89,60 +89,74 @@ button {
 }
 
 @layer utilities {
-    .font-hero {
-        font-size: 54px;
-        font-weight: 700;
-        line-height: 140%;
-    }
-
-    .font-heading1 {
-        font-size: 38px;
-        font-weight: 700;
-        line-height: 130%;
-    }
-
-    .font-heading2 {
-        font-size: 28px;
-        font-weight: 600;
-        line-height: 130%;
-    }
-
-    .font-heading3 {
-        font-size: 22px;
-        font-weight: 600;
-        line-height: 130%;
-    }
-
-    .font-body1 {
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 140%;
-    }
-
-    .font-body2 {
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 140%;
-    }
-
-    .font-caption {
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 130%;
-    }
-
-    .rounding-16 {
-        border-radius: 16px;
-    }
-
-    .rounding-32 {
-        border-radius: 32px;
-    }
-
-    .shadow-default {
-        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
-    }
+  .font-hero {
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 140%;
+  }
+  
+  .font-heading1 {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 130%;
+  }
+  
+  .font-heading2 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 130%;
+  }
+  
+  .font-heading3 {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 130%;
+  }
+  
+  .font-body1 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 140%;
+  }
+  
+  .font-body2 {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
+  }
+  
+  .font-caption {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 130%;
+  }
+  
+  .rounding-16 {
+    border-radius: 16px;
+  }
+  
+  .rounding-32 {
+    border-radius: 32px;
+  }
+  
+  .shadow-default {
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+  }
+  
+  .animate-blink {
+    animation: blink 1.5s ease-in-out infinite;
+  }
 }
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  
+  50% {
+    opacity: 1;
+  }
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 import { MODAL_TYPES } from '@/components/common/modalProvider';
+import Navigator from '@/components/common/navigator';
 import DateCourse from '@/components/dateCourse/dateCourse';
 
 import Filter from '@/assets/icons/filter_Blank.svg?react';
@@ -6,9 +9,10 @@ import useModalStore from '@/store/useModalStore';
 
 function FindDateCourse() {
     const { openModal } = useModalStore();
+    const [current, setCurrent] = useState(1);
 
     return (
-        <div className="w-full flex justify-center items-center flex-col h-[100%]">
+        <div className="w-full flex justify-center items-center flex-col h-fit">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
                 <div className="flex flex-col shadow-default rounding-16 px-[40px] py-[24px]">
                     <div className="flex w-full gap-[16px] flex-col items-center py-[24px] sm:flex-row sm:justify-between sm:items-center">
@@ -28,6 +32,7 @@ function FindDateCourse() {
                         <DateCourse />
                         <DateCourse />
                     </div>
+                    <Navigator current={current} end={14} onClick={setCurrent} />
                 </div>
             </div>
         </div>

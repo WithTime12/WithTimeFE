@@ -3,6 +3,8 @@ import React from 'react';
 
 import formatInputNumber from '@/utils/formatPhoneNumber';
 
+import Button from './Button';
+
 import AlertCircle from '@/assets/icons/alert-circle_Fill.svg?react';
 
 type TCommonAuthInputProps = {
@@ -75,24 +77,23 @@ const CommonAuthInput = React.forwardRef<HTMLInputElement, TCommonAuthInputProps
                 />
                 {short && <div className="flex px-[16px] py-[8px] text-default-gray-100 w-[90px]" />}
                 {button && (
-                    <button
-                        className={`flex px-[16px] py-[8px] font-body2 justify-center items-center text-center h-fit rounding-16 flex-nowrap min-w-[90px]
-                        ${validation ? 'bg-primary-500 text-default-gray-100' : 'bg-default-gray-400 text-default-gray-800'}
-                    `}
+                    <Button
+                        size="small"
+                        variant={`${validation ? 'mint' : 'white'}`}
+                        children={buttonText}
+                        disabled={error}
                         onClick={buttonOnclick}
-                        type="button"
-                    >
-                        {buttonText}
-                    </button>
+                        // type="button"
+                    />
                 )}
                 {validationState && (
-                    <div
-                        className={`flex px-[16px] py-[8px] font-body2 justify-center items-center text-center h-fit rounding-16 flex-nowrap min-w-[90px] select-none
-                        ${validation ? 'bg-primary-500 text-default-gray-100' : 'bg-default-gray-400 text-default-gray-800'}
-                    `}
-                    >
-                        {validationState}
-                    </div>
+                    <Button
+                        size="small"
+                        variant={validation ? 'mint' : 'white'}
+                        children={validationState}
+                        disabled={!validation}
+                        className={`hover:!cursor-default ${validation ? 'hover:!bg-primary-500' : 'hover:!bg-default-gray-400'}`}
+                    />
                 )}
                 {error && <div className="absolute top-[62px] font-caption text-warning left-[16px] select-none">{errorMessage}</div>}
                 {error && <AlertCircle fill="#ff517c" className={`absolute ${button || short || validationState ? 'right-30' : ' right-3'}`} />}

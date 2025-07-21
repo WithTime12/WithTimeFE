@@ -9,6 +9,8 @@ import { findingSchema } from '@/utils/validation';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
+import Button from '../components/common/Button';
+
 type TFormValues = {
     email: string;
     password: string;
@@ -19,6 +21,7 @@ type TFormValues = {
 export default function FindPw() {
     const navigate = useNavigate();
     const [codeVerify, setCodeVerify] = useState(false);
+    const [sendCode, setSendCode] = useState(false);
     const {
         register,
         handleSubmit,
@@ -51,9 +54,19 @@ export default function FindPw() {
         }
     };
 
+    const postSendCode = () => {
+        if (watchedEmail != '' && !errors.email?.message) {
+            setSendCode(true);
+            console.log('이메일 발송');
+        }
+    };
+
     useEffect(() => {
         setCodeVerify(false);
     }, [watchedCode, watchedEmail]);
+    useEffect(() => {
+        setSendCode(false);
+    }, [watchedEmail]);
 
     const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
         if (isValid) {
@@ -78,6 +91,7 @@ export default function FindPw() {
                             errorMessage={errors.email?.message}
                             validation={!errors.email?.message && !!watchedEmail}
                             button={true}
+                            buttonOnclick={postSendCode}
                             buttonText="인증번호"
                             {...register('email')}
                         />
@@ -86,7 +100,7 @@ export default function FindPw() {
                             title="Verification code"
                             error={!!errors.code?.message || watchedCode == ''}
                             errorMessage={errors.code?.message}
-                            validation={codeVerify}
+                            validation={sendCode && codeVerify}
                             button={true}
                             buttonOnclick={checkCode}
                             buttonText={codeVerify ? '인증완료' : '인증하기'}
@@ -114,13 +128,14 @@ export default function FindPw() {
                             {...register('repassword')}
                         />
                     </div>
-                    <button
-                        className="w-full bg-primary-500 rounding-16 h-[56px] text-center flex justify-center items-center text-default-gray-100 font-heading3 hover:cursor-pointer"
+                    <Button
+                        size="big-16"
+                        variant={'mint'}
+                        children={'로그인하기'}
+                        disabled={!isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify}
                         onClick={handleSubmit(onSubmit)}
-                        // disabled={!isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify}
-                    >
-                        로그인하기
-                    </button>
+                        className="w-full"
+                    />
                 </form>
             </div>
         </div>
