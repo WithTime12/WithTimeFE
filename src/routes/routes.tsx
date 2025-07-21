@@ -122,6 +122,14 @@ const router = createBrowserRouter([
                 path: 'dateTest',
                 element: <DateTest />,
             },
+            {
+                path: 'dateTest/:step',
+                element: <DateTestStep />,
+            },
+            {
+                path: 'dateTest/result',
+                element: <DateTestResult />,
+            },
         ],
     },
 

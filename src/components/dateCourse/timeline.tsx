@@ -54,7 +54,7 @@ function Timeline({ end = false, title, time, address, price, tags, menu }: TTim
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 lg:items-start">
                             <Blub stroke="#000000" className="min-w-[24px] pt-[4px]" />
                             <div className="flex gap-[16px] flex-wrap items-center">
-                                {tags!.map((tag, idx) => {
+                                {tags?.map((tag, idx) => {
                                     return <KeywordButton key={idx} tag={tag} />;
                                 })}
                             </div>
