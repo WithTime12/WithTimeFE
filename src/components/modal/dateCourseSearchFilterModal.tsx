@@ -8,7 +8,6 @@ import DateCourseSearchFilterOption from '../dateCourse/dateCourseSearchFilterOp
 
 type TDateCourseSearchFilterModalProps = {
     onClose: () => void;
-    filterType: 'mine' | 'find';
 };
 
 interface IQuestion {
@@ -29,13 +28,13 @@ const Questions: IQuestion[] = Array.isArray(DateCourseQuestion)
       }))
     : [];
 
-export default function DateCourseSearchFilterModal({ onClose, filterType }: TDateCourseSearchFilterModalProps) {
+export default function DateCourseSearchFilterModal({ onClose }: TDateCourseSearchFilterModalProps) {
     const [answers, setAnswers] = useState<(string | string[] | null)[]>(Array(7).fill(null));
     const num = 5325; // 예시용
 
     const handleSearch = () => {
         console.log('선택된 필터:', answers);
-        console.log('필터 유형:', filterType);
+
         onClose();
     };
 
@@ -59,6 +58,7 @@ export default function DateCourseSearchFilterModal({ onClose, filterType }: TDa
                                     });
                                 }}
                                 type={question.type}
+                                errorMessage={''}
                             />
                         ),
                 )}

@@ -1,22 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Info from './info';
-import MoreOption from './more';
 import Timeline from './timeline';
+import DeleteBookmarkModal from '../modal/deleteBookmarkModal';
 
 import BookmarkBlank from '@/assets/icons/Bookmark_Blank.svg?react';
 import BookmarkFill from '@/assets/icons/Bookmark_Fill.svg?react';
 import KeyboardArrowDown from '@/assets/icons/keyboard_arrow_down_False.svg?react';
-import More from '@/assets/icons/more_False.svg?react';
 
 function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
     const [open, setOpen] = useState(defaultOpen || false);
     const [openEdit, setOpenEdit] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const moreRef = useRef<HTMLDivElement>(null);
     const clickBookmark = () => {
+        if (isBookmarked) {
+            setOpenModal(true);
+        } else {
+            setIsBookmarked(!isBookmarked);
+        }
         // console.log('북마크 해제');
-        setIsBookmarked(!isBookmarked);
     };
 
     useEffect(() => {
@@ -37,8 +41,8 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                     ${open ? 'border-[1px]' : 'border-t-[1px]'}
                 `}
             >
-                <div className="flex w-full justify-between items-center hover:cursor-pointer" onClick={() => setOpen(!open)}>
-                    <div className="flex hover:cursor-pointer items-center">
+                <div className="flex w-full justify-between items-center">
+                    <div className="flex items-center hover:cursor-pointer" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowDown /> : <KeyboardArrowDown className="rotate-270" />}
 
                         <div className="text-default-gray-800 gap-[4px] select-none flex flex-col sm:flex-row pl-[4px]">
@@ -51,14 +55,10 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                         ) : (
                             <BookmarkBlank stroke="#212121" className="hover:cursor-pointer" onClick={clickBookmark} />
                         )}
-
-                        <div className="relative" ref={moreRef}>
-                            <More className="rotate-90 hover:cursor-pointer relative" fill="#212121" onClick={() => setOpenEdit(!openEdit)} />
-                            {openEdit && <MoreOption className="absolute z-[9999]" />}
-                        </div>
                     </div>
                 </div>
             </div>
+
             {open && (
                 <div className="w-full flex h-fit bg-default-gray-100 rounding-32 justify-center items-start self-stretch">
                     <div className="w-full lg:px-[48px] px-[24px] py-[40px] gap-[48px] flex justify-between h-fit lg:flex-row flex-col">
@@ -106,6 +106,17 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                         </div>
                     </div>
                 </div>
+            )}
+            {openModal && (
+                <DeleteBookmarkModal
+                    onClose={() => {
+                        setOpenModal(false);
+                    }}
+                    changeState={(state: boolean) => {
+                        setIsBookmarked(state);
+                    }}
+                    isOpen={openModal}
+                />
             )}
         </div>
     );
