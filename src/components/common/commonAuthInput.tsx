@@ -83,7 +83,7 @@ const CommonAuthInput = React.forwardRef<HTMLInputElement, TCommonAuthInputProps
                         children={buttonText}
                         disabled={error}
                         onClick={buttonOnclick}
-                        // type="button"
+                        type="button"
                     />
                 )}
                 {validationState && (
@@ -92,7 +92,7 @@ const CommonAuthInput = React.forwardRef<HTMLInputElement, TCommonAuthInputProps
                         variant={validation ? 'mint' : 'white'}
                         children={validationState}
                         disabled={!validation}
-                        className={`hover:!cursor-default ${validation ? 'hover:!bg-primary-500' : 'hover:!bg-default-gray-400'}`}
+                        className={`hover:!cursor-default ${validation ? 'hover:!bg-primary-500 hover:!text-[#ffffff]' : 'hover:!bg-default-gray-400'}`}
                     />
                 )}
                 {error && <div className="absolute top-[62px] font-caption text-warning left-[16px] select-none">{errorMessage}</div>}

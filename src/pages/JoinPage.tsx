@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validation';
+import { useAuth } from '@/hooks/auth/useAuth';
 
 import Button from '@/components/common/Button';
 import CommonAuthInput from '@/components/common/commonAuthInput';
@@ -24,6 +25,9 @@ export default function Join() {
     const [codeVerify, setCodeVerify] = useState(false);
     const [sendCode, setSendCode] = useState(false);
     const navigate = useNavigate();
+    const { useSendCode, useCheckCode } = useAuth();
+    const { mutate: sendCodeMutation } = useSendCode;
+    const { mutate: checkCodeMutation } = useCheckCode;
     const {
         register,
         handleSubmit,
@@ -52,8 +56,45 @@ export default function Join() {
 
     const checkCode = () => {
         if (watchedCode != '' && watchedCode != undefined && sendCode) {
-            console.log(watchedCode);
-            setCodeVerify(true);
+            checkCodeMutation(
+                {
+                    email: watchedEmail,
+                    code: watchedCode,
+                },
+                {
+                    onSuccess: (data) => {
+                        if (data.isSuccess === false) {
+                            setCodeVerify(true);
+                        } else {
+                            setCodeVerify(false);
+                        }
+                    },
+                    onError: () => {
+                        setCodeVerify(false);
+                    },
+                },
+            );
+        }
+    };
+
+    const postSendCode = () => {
+        setCodeVerify(false);
+        if (watchedEmail != '' && !errors.email?.message) {
+            sendCodeMutation(
+                {
+                    email: watchedEmail,
+                },
+                {
+                    onSuccess: () => {
+                        setSendCode(true);
+                    },
+                    onError: (err) => {
+                        setSendCode(false);
+                        console.error(err);
+                        alert('인증코드 발송 중 에러가 발생하였습니다.');
+                    },
+                },
+            );
         }
     };
 
