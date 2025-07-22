@@ -12,7 +12,7 @@ export default function DateTest() {
 
     useEffect(() => {
         //Vite에서 제공하는 자동 import 방식 이라고 합니다
-        const modules = import.meta.glob('../images/animals/*.png', {
+        const modules = import.meta.glob('../../images/animals/*.png', {
             eager: true,
             import: 'default',
         }) as Record<string, string>;

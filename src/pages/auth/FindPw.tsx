@@ -8,10 +8,9 @@ import { findingSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import Button from '@/components/common/Button';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
-
-import Button from '../components/common/Button';
 
 type TFormValues = {
     email: string;
