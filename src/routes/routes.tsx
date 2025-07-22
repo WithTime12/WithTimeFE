@@ -8,6 +8,7 @@ import Layout from '@/layout/layout';
 import FindPw from '@/pages/auth/FindPw';
 import Join from '@/pages/auth/JoinPage';
 import Login from '@/pages/auth/LoginPage';
+import LoginRedirect from '@/pages/auth/RedirectPage';
 import User from '@/pages/auth/UserSetting';
 import Withdraw from '@/pages/auth/WithdrawPage';
 import Error from '@/pages/common/Error';
