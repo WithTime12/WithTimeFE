@@ -62,6 +62,12 @@ export default function Login() {
             );
         }
     };
+
+    const handleSocialLogin = (platform: string) => {
+        const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/${platform}`;
+        // const queryParam = addAccount ? '?addSocial=true' : '';
+        window.location.href = `${baseUrl}`;
+    };
     return (
         <div className="min-w-[280px] w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-10">
             <form className="flex-col flex items-center justify-center w-full gap-14" onSubmit={handleSubmit(onSubmit)}>
@@ -99,14 +105,17 @@ export default function Login() {
             </form>
             <div className="w-full flex flex-col items-center justify-center gap-[16px]">
                 <div className="flex items-center justify-center w-full gap-[48px]">
-                    <div className="flex items-center justify-center w-[65px] h-[65px] hover:cursor-pointer">
-                        <img src={Kakao} alt="" />
+                    <div onClick={() => handleSocialLogin('kakao')} className="flex items-center justify-center w-[65px] h-[65px] hover:cursor-pointer">
+                        <img src={Kakao} alt="카카오 로그인" />
                     </div>
-                    <div className="flex items-center justify-center w-[65px] h-[65px] hover:cursor-pointer">
-                        <img src={Naver} alt="" />
+                    <div onClick={() => handleSocialLogin('naver')} className="flex items-center justify-center w-[65px] h-[65px] hover:cursor-pointer">
+                        <img src={Naver} alt="네이버 로그인" />
                     </div>
-                    <div className="flex items-center justify-center w-[65px] h-[65px] hover:cursor-pointer roudned-full">
-                        <img src={Google} alt="" />
+                    <div
+                        onClick={() => handleSocialLogin('google')}
+                        className="flex items-center justify-center w-[65px] h-[65px] hover:cursor-pointer roudned-full"
+                    >
+                        <img src={Google} alt="구글 로그인" />
                     </div>
                 </div>
                 <div className="flex items-center justify-center w-full relative mt-[8px] ">
