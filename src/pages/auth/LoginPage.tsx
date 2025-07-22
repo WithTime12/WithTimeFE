@@ -122,7 +122,7 @@ export default function Login() {
                     <div className="border-[0.5px] w-full border-default-gray-500" />
                     <div className="z-10 absolute px-[32px] bg-default-gray-100 self-center font-body2 text-default-gray-800 select-none">또는</div>
                 </div>
-                <div className="font-body1 underline hover:cursor-pointer select-none" onClick={() => navigate('/Join')}>
+                <div className="font-body1 underline hover:cursor-pointer select-none" onClick={() => navigate('/join')}>
                     이메일로 회원가입
                 </div>
             </div>
