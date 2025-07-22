@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/auth/useAuth';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
-import Button from '../components/common/Button';
+import Button from '../../components/common/Button';
 
 import useAuthStore from '@/store/useAuthStore';
 

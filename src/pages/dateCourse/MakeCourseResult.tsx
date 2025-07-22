@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DateCourse from '@/components/dateCourse/dateCourse';
 import DateCourseLoading from '@/components/dateCourse/dateCourseLoading';
 
-import Button from '../components/common/Button';
+import Button from '../../components/common/Button';
 
 import Reload from '@/assets/icons/arrow_spin.svg?react';
 import Logo from '@/assets/withTimeLogo//logo_Blank.svg?react';

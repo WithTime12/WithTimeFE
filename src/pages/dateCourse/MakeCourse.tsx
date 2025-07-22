@@ -2,9 +2,8 @@
 
 import { useNavigate } from 'react-router-dom';
 
+import Button from '@/components/common/Button';
 import GraySvgButton from '@/components/common/graySvgButton';
-
-import Button from '../components/common/Button';
 
 import DateCourseImg from '@/images/dateCourseTest.png';
 
