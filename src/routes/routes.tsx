@@ -25,7 +25,6 @@ import Home from '@/pages/home/HomePage';
 import Notice from '@/pages/notice/Notice';
 import NoticeDetail from '@/pages/notice/NoticeDetail';
 import Question from '@/pages/question/Question';
-import LoginRedirect from '@/pages/RedirectPage';
 import DeleteConfirmPage from '@/pages/setting/DeleteConfirmPage';
 import DeleteReasonPage from '@/pages/setting/DeleteReasonPage.tsx';
 import PaymentHistory from '@/pages/setting/PaymentHistory';
