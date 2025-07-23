@@ -19,7 +19,6 @@ interface IEditableInputBoxProps {
 
 export default function EditableInputBox({
     mode = 'default',
-    type = 'text',
     label = '',
     value,
     onChange,
@@ -105,11 +104,7 @@ export default function EditableInputBox({
 
                 {/* 검색 버튼 */}
                 {isSearch && (
-                    <button
-                        type="button"
-                        onClick={onSearchClick}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 border border-primary-500 rounded-full p-1"
-                    >
+                    <button type="button" onClick={onSearchClick} className="absolute right-3 top-1/2 -translate-y-1/2 p-1">
                         <SearchIcon className="w-5 h-5 text-primary-500" stroke="currentColor" />
                     </button>
                 )}
@@ -129,4 +124,3 @@ export default function EditableInputBox({
         </div>
     );
 }
-
