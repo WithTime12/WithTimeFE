@@ -31,7 +31,7 @@ export default function User() {
     const [gender, setGender] = useState(Gender.MALE);
     const [agree1, setAgree1] = useState(false);
     const [agree2, setAgree2] = useState(false);
-    const { email, password, socialId } = useAuthStore();
+    const { email, password, socialId, setSocialId } = useAuthStore();
     const { useDefaultSignup } = useAuth();
 
     const navigate = useNavigate();
@@ -64,7 +64,7 @@ export default function User() {
                 },
                 {
                     onSuccess: () => {
-                        localStorage.removeItem('socialId');
+                        setSocialId(-1);
                         navigate('/home');
                     },
                     onError: (err) => {
