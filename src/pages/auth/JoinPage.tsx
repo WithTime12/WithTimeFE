@@ -102,7 +102,6 @@ export default function Join() {
     };
 
     const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
-        console.log('회원가입 데이터:', submitData);
         setEmail(submitData.email);
         setPassword(submitData.password);
         navigate('/usersetting');
