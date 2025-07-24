@@ -67,6 +67,7 @@ export default function Login() {
         const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/${platform}`;
         window.location.href = `${baseUrl}`;
     };
+
     return (
         <div className="min-w-[280px] w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-10">
             <form className="flex-col flex items-center justify-center w-full gap-14" onSubmit={handleSubmit(onSubmit)}>

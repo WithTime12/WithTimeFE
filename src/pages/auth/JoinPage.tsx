@@ -29,6 +29,7 @@ export default function Join() {
     const { useSendCode, useCheckCode } = useAuth();
     const { mutate: sendCodeMutation } = useSendCode;
     const { mutate: checkCodeMutation } = useCheckCode;
+
     const socialId = localStorage.getItem('socialId') || '';
 
     const {
@@ -135,6 +136,7 @@ export default function Join() {
                             buttonText="인증번호"
                             {...register('email')}
                         />
+
                         {socialId !== '' && !socialId && (
                             <CommonAuthInput
                                 placeholder="인증번호를 입력하세요"
@@ -148,7 +150,6 @@ export default function Join() {
                                 {...register('code')}
                             />
                         )}
-
                         <div className="border-[0.5px] w-full border-default-gray-500" />
                         <CommonAuthInput
                             placeholder="새로운 비밀번호"
