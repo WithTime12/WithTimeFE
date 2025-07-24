@@ -53,9 +53,10 @@ function LoginRedirect() {
     }, []);
 
     return (
-        <div className="relative flex justify-center w-full h-[300px]">
+        <div className="relative flex justify-center h-[300px] min-w-[280px] w-[450px] max-w-[96vw]">
             <Logo className="self-center absolute animate-blink" width={263} height={231} />
             <LoadingLogo className="self-center" width={263} height={231} />
+            <div className="absolute top-80 text-[20px] text-gray-500">로그인 중...</div>
         </div>
     );
 }
