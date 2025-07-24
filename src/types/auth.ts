@@ -5,9 +5,9 @@ export enum Gender {
     FEMALE = 'FEMALE',
 }
 export type TSignupValues = {
-    email?: string;
+    email: string;
     username: string;
-    password?: string;
+    password?: string | null;
     gender: Gender;
     phoneNumber: string;
     birth: string;

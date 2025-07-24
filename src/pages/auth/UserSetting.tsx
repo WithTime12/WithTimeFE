@@ -31,9 +31,9 @@ export default function User() {
     const [gender, setGender] = useState(Gender.MALE);
     const [agree1, setAgree1] = useState(false);
     const [agree2, setAgree2] = useState(false);
-    const { email, password } = useAuthStore();
+    const { email, password, socialId } = useAuthStore();
     const { useDefaultSignup } = useAuth();
-    const socialId = localStorage.getItem('socialId') || '';
+
     const navigate = useNavigate();
     const {
         register,
@@ -55,12 +55,12 @@ export default function User() {
             signupMutate(
                 {
                     email: email,
-                    password: password,
+                    password: password !== '' ? password : null,
                     username: submitData.nickname,
                     gender: submitData.gender,
                     phoneNumber: submitData.phoneNum,
                     birth: formattedBirth,
-                    socialId: socialId ? Number(socialId) : undefined,
+                    socialId: socialId !== -1 ? Number(socialId) : undefined,
                 },
                 {
                     onSuccess: () => {

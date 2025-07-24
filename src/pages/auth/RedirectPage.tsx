@@ -20,7 +20,7 @@ function LoginRedirect() {
 
     const { useSocialLogin } = useAuth();
     const { mutate: socialLoginMutate } = useSocialLogin;
-    const { setEmail } = useAuthStore();
+    const { setEmail, setSocialId } = useAuthStore();
     useEffect(() => {
         if (code) {
             socialLoginMutate(
@@ -31,7 +31,7 @@ function LoginRedirect() {
                 {
                     onSuccess: (data) => {
                         if (data.result.isFirst) {
-                            localStorage.setItem('socialId', data.result.socialId.toString());
+                            setSocialId(data.result.socialId);
                             setEmail(data.result.email);
                             navigate('/userSetting');
                         } else {
@@ -39,15 +39,15 @@ function LoginRedirect() {
                         }
                     },
                     onError: (err) => {
-                        console.error('소셜 로그인 실패:', err);
                         if (err.response?.data.message === '사용자 정보를 가져오는 데 실패했습니다.') navigate('/Join');
-                        else navigate('/error');
+                        else {
+                            navigate('/error');
+                            console.error('소셜 로그인 실패:', err);
+                        }
                     },
                 },
             );
-            // 로그인 성공 후 홈으로 리다이렉트
         } else {
-            // 로그인 실패 시 에러 페이지로 리다이렉트
             navigate('/error');
         }
     }, []);
