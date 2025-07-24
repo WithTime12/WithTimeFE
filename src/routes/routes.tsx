@@ -8,6 +8,7 @@ import Layout from '@/layout/layout';
 import FindPw from '@/pages/auth/FindPw';
 import Join from '@/pages/auth/JoinPage';
 import Login from '@/pages/auth/LoginPage';
+import LoginRedirect from '@/pages/auth/RedirectPage';
 import User from '@/pages/auth/UserSetting';
 import Withdraw from '@/pages/auth/WithdrawPage';
 import Error from '@/pages/common/Error';
@@ -64,11 +65,11 @@ const router = createBrowserRouter([
             },
             {
                 path: 'usersetting',
-                element: (
-                    <ProtectedRoute>
-                        <User />
-                    </ProtectedRoute>
-                ),
+                element: <User />,
+            },
+            {
+                path: '/api/v1/oauth2/callback/:platform',
+                element: <LoginRedirect />,
             },
         ],
     },

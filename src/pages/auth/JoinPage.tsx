@@ -29,6 +29,9 @@ export default function Join() {
     const { useSendCode, useCheckCode } = useAuth();
     const { mutate: sendCodeMutation } = useSendCode;
     const { mutate: checkCodeMutation } = useCheckCode;
+
+    const socialId = localStorage.getItem('socialId') || '';
+
     const {
         register,
         handleSubmit,
@@ -128,22 +131,25 @@ export default function Join() {
                             error={!!errors.email?.message || watchedEmail == ''}
                             errorMessage={errors.email?.message}
                             validation={!errors.email?.message && !!watchedEmail}
-                            button={true}
+                            button={socialId !== '' && !socialId ? true : false}
                             buttonOnclick={postSendCode}
                             buttonText="인증번호"
                             {...register('email')}
                         />
-                        <CommonAuthInput
-                            placeholder="인증번호를 입력하세요"
-                            title="Verification code"
-                            error={!!errors.code?.message || watchedCode == ''}
-                            errorMessage={errors.code?.message}
-                            validation={sendCode && codeVerify}
-                            button={true}
-                            buttonOnclick={checkCode}
-                            buttonText={codeVerify ? '인증완료' : '인증하기'}
-                            {...register('code')}
-                        />
+
+                        {socialId !== '' && !socialId && (
+                            <CommonAuthInput
+                                placeholder="인증번호를 입력하세요"
+                                title="Verification code"
+                                error={!!errors.code?.message || watchedCode == ''}
+                                errorMessage={errors.code?.message}
+                                validation={sendCode && codeVerify}
+                                button={true}
+                                buttonOnclick={checkCode}
+                                buttonText={codeVerify ? '인증완료' : '인증하기'}
+                                {...register('code')}
+                            />
+                        )}
                         <div className="border-[0.5px] w-full border-default-gray-500" />
                         <CommonAuthInput
                             placeholder="새로운 비밀번호"
@@ -170,8 +176,12 @@ export default function Join() {
                         size="big-16"
                         variant={'mint'}
                         children={'다음으로'}
-                        disabled={!isValid || watchedEmail == '' || watchedPassword == ''}
-                        onClick={handleSubmit(onSubmit)}
+                        disabled={socialId ? watchedEmail === '' || watchedPassword === '' : !isValid || watchedEmail === '' || watchedPassword === ''}
+                        onClick={() => {
+                            setEmail(watchedEmail);
+                            setPassword(watchedPassword);
+                            navigate('/usersetting');
+                        }}
                         className="w-full"
                     />
                 </form>

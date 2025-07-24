@@ -5,12 +5,13 @@ export enum Gender {
     FEMALE = 'FEMALE',
 }
 export type TSignupValues = {
-    email: string;
+    email?: string;
     username: string;
-    password: string;
+    password?: string;
     gender: Gender;
     phoneNumber: string;
     birth: string;
+    socialId?: number;
 };
 
 export type TSignupResponse = TCommonResponse<{
@@ -40,3 +41,17 @@ export type TEmailVerfications = TCommonResponse<{
 export type TCheckEmailVerifications = TCommonResponse<{
     result: string;
 }>;
+export type TSocialLoginResponse = TCommonResponse<{
+    email: string;
+    socialId: number;
+    isFirst: boolean;
+}>;
+export enum TSocialLoginPlatform {
+    kakao = 'kakao',
+    naver = 'naver',
+    google = 'google',
+}
+export type TSocialLoginValues = {
+    platform: TSocialLoginPlatform;
+    code: string;
+};
