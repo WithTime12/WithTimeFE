@@ -30,7 +30,7 @@ export default function Header({ mode = 'full' }: IHeaderProps) {
 
                 {/* Nav 그룹 */}
                 {showNav && (
-                    <div className="flex items-center gap-x-10 text-default-gray-00">
+                    <div className="hidden lg:flex items-center gap-x-10 text-default-gray-00">
                         {/* 메뉴 */}
                         <nav>
                             <ul className="flex space-x-5 sm:space-x-10 text-sm font-medium">
