@@ -2,14 +2,13 @@
 import { useState } from 'react';
 
 import EditableInputBox from '@/components/common/EditableInputBox';
+import Navigator from '@/components/common/navigator';
 import FAQItem from '@/components/faq/FAQItem';
-
-import Forward from '@/assets/icons/default_arrows/arrow_forward.svg?react';
 
 // 질문 카테고리
 const categories = ['서비스 이용 방법', '추천 알고리즘 관련', '기능 및 사용성', '예약/일정 관리', '기타/문의 및 오류신고', '계정 및 개인정보'];
 
-// 임시 질문 + 답변 데이터
+// 임시 질문 데이터 넣음
 const allQuestions = [
     {
         category: '서비스 이용 방법',
@@ -48,7 +47,7 @@ export default function Question() {
     const [currentPage, setCurrentPage] = useState(1);
     const [openedIndex, setOpenedIndex] = useState<number | null>(null);
 
-    const itemsPerPage = 10;
+    const itemsPerPage = 10; // 페이지당 항목 수
 
     const filteredQuestions = allQuestions.filter((q) => q.category === activeCategory && q.question.toLowerCase().includes(searchValue.toLowerCase()));
 
@@ -100,33 +99,15 @@ export default function Question() {
             </ul>
 
             {/* 페이지네이션 */}
-            {totalPages >= 1 && (
-                <div className="flex items-center justify-center gap-4 mt-8">
-                    {Array.from({ length: totalPages }, (_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => {
-                                setCurrentPage(i + 1);
-                                setOpenedIndex(null);
-                            }}
-                            className={`w-6 h-6 text-sm font-semibold text-center ${currentPage === i + 1 ? 'text-black' : 'text-gray-400'}`}
-                        >
-                            {i + 1}
-                        </button>
-                    ))}
-
-                    {currentPage < totalPages && (
-                        <button
-                            onClick={() => {
-                                setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-                                setOpenedIndex(null);
-                            }}
-                            className="w-6 h-6 text-center text-black"
-                        >
-                            <Forward className="w-4 h-4 fill-current text-default-gray-500" />
-                        </button>
-                    )}
-                </div>
+            {totalPages > 1 && (
+                <Navigator
+                    current={currentPage}
+                    end={totalPages}
+                    onClick={(page) => {
+                        setCurrentPage(page);
+                        setOpenedIndex(null); // 페이지 전환할 때 펼친 질문 초기화
+                    }}
+                />
             )}
         </div>
     );

@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import EditableInputBox from '@/components/common/EditableInputBox';
-
-import Forward from '@/assets/icons/default_arrows/arrow_forward.svg?react';
+import Navigator from '@/components/common/navigator';
 
 const categories = ['서비스 안내', '시스템 안내'];
 
@@ -118,23 +117,14 @@ export default function Notice() {
             </ul>
 
             {/* 페이지네이션 */}
-            {totalPages >= 1 && (
-                <div className="flex items-center justify-center gap-4 mt-8">
-                    {[...Array(totalPages)].map((_, i) => (
-                        <button
-                            key={i + 1}
-                            onClick={() => setCurrentPage(i + 1)}
-                            className={`w-6 h-6 text-sm font-semibold text-center ${currentPage === i + 1 ? 'text-black' : 'text-gray-400'}`}
-                        >
-                            {i + 1}
-                        </button>
-                    ))}
-                    {currentPage < totalPages && (
-                        <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} className="w-6 h-6 text-center text-black">
-                            <Forward className="w-4 h-4 fill-current text-default-gray-500" />
-                        </button>
-                    )}
-                </div>
+            {totalPages > 1 && (
+                <Navigator
+                    current={currentPage}
+                    end={totalPages}
+                    onClick={(page) => {
+                        setCurrentPage(page);
+                    }}
+                />
             )}
         </div>
     );
