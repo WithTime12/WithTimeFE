@@ -44,7 +44,7 @@ export default function PaymentHistory() {
             <div className="max-w-[960px] mx-auto font-body1 text-default-gray-800">
                 {/* 뒤로가기 버튼 */}
                 <button onClick={() => navigate('/setting', { state: { openSettingTab: '멤버십' } })}>
-                    <ArrowLeftCircle className=" fill-current text-default-gray-500 mb-5" />
+                    <ArrowLeftCircle className="fill-current text-default-gray-500 mb-5" />
                 </button>
 
                 {/* 제목 */}
