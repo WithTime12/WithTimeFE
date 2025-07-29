@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/auth/useAuth';
 import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
-import Button from '../components/common/Button';
+import Button from '../../components/common/Button';
 
 import useAuthStore from '@/store/useAuthStore';
 
@@ -33,6 +33,7 @@ export default function User() {
     const [agree2, setAgree2] = useState(false);
     const { email, password } = useAuthStore();
     const { useDefaultSignup } = useAuth();
+    const socialId = localStorage.getItem('socialId') || '';
     const navigate = useNavigate();
     const {
         register,
@@ -59,9 +60,11 @@ export default function User() {
                     gender: submitData.gender,
                     phoneNumber: submitData.phoneNum,
                     birth: formattedBirth,
+                    socialId: socialId ? Number(socialId) : undefined,
                 },
                 {
                     onSuccess: () => {
+                        localStorage.removeItem('socialId');
                         navigate('/home');
                     },
                     onError: (err) => {

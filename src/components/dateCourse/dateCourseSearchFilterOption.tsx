@@ -121,12 +121,12 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                 <input
                                     ref={dateInputRef}
                                     type="date"
-                                    className="absolute top-full left-0 opacity-0 w-0 h-0 pointer-events-none"
                                     onChange={(e) => {
                                         const val = e.target.value;
                                         setDate(val);
                                         if (time) onChange(`${val} ${time}`);
                                     }}
+                                    className="absolute top-0 left-0 w-full h-full opacity-0"
                                 />
                             </div>
                             <div className="w-[1px] h-full border-[1px] border-default-gray-500" />
@@ -141,7 +141,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                         setTime(val);
                                         if (date) onChange(`${date} ${val}`);
                                     }}
-                                    className="absolute top-full left-0 opacity-0 w-0 h-0 pointer-events-none"
+                                    className="absolute top-0 left-0 w-full h-full opacity-0"
                                 />
                             </div>
                         </div>

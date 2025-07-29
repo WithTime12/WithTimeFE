@@ -5,30 +5,30 @@ import ModalProvider from '@/components/common/modalProvider';
 
 import AuthLayout from '@/layout/authLayout';
 import Layout from '@/layout/layout';
-import BookmarkedDateCourse from '@/pages/BookmarkedDateCourse';
+import FindPw from '@/pages/auth/FindPw';
+import Join from '@/pages/auth/JoinPage';
+import Login from '@/pages/auth/LoginPage';
+import LoginRedirect from '@/pages/auth/RedirectPage';
+import User from '@/pages/auth/UserSetting';
+import Withdraw from '@/pages/auth/WithdrawPage';
 import Error from '@/pages/common/Error';
-import Course from '@/pages/CoursePage';
-import DateTest from '@/pages/dateTest';
-import DateTestResult from '@/pages/DatetestResult';
-import DateTestStep from '@/pages/DateTestStep';
-import FindDateCourse from '@/pages/FindDateCourse';
-import FindPw from '@/pages/FindPw';
-import Home from '@/pages/HomePage';
-import Join from '@/pages/JoinPage';
-import Login from '@/pages/LoginPage';
-import MakeCourse from '@/pages/MakeCourse';
-import MakeCourseResult from '@/pages/MakeCourseResult';
-import MakeCourseStep from '@/pages/MakeCourseStep';
-import Notice from '@/pages/Notice';
-import NoticeDetail from '@/pages/NoticeDetail';
-import Pay from '@/pages/PaymentPage';
-import Question from '@/pages/Question';
+import BookmarkedDateCourse from '@/pages/dateCourse/BookmarkedDateCourse';
+import Course from '@/pages/dateCourse/CoursePage';
+import FindDateCourse from '@/pages/dateCourse/FindDateCourse';
+import MakeCourse from '@/pages/dateCourse/MakeCourse';
+import MakeCourseResult from '@/pages/dateCourse/MakeCourseResult';
+import MakeCourseStep from '@/pages/dateCourse/MakeCourseStep';
+import DateTest from '@/pages/dateTest/dateTest';
+import DateTestResult from '@/pages/dateTest/DatetestResult';
+import DateTestStep from '@/pages/dateTest/DateTestStep';
+import Home from '@/pages/home/HomePage';
+import Notice from '@/pages/notice/Notice';
+import NoticeDetail from '@/pages/notice/NoticeDetail';
+import Question from '@/pages/question/Question';
 import DeleteConfirmPage from '@/pages/setting/DeleteConfirmPage';
 import DeleteReasonPage from '@/pages/setting/DeleteReasonPage.tsx';
 import PaymentHistory from '@/pages/setting/PaymentHistory';
 import SettingEntryPage from '@/pages/setting/SettingEntryPage';
-import User from '@/pages/UserSetting';
-import Withdraw from '@/pages/WithdrawPage';
 
 function ProtectedRoute({ children }: PropsWithChildren) {
     //추후 실제 로그인 여부로 대체 필요
@@ -65,11 +65,11 @@ const router = createBrowserRouter([
             },
             {
                 path: 'usersetting',
-                element: (
-                    <ProtectedRoute>
-                        <User />
-                    </ProtectedRoute>
-                ),
+                element: <User />,
+            },
+            {
+                path: '/api/v1/oauth2/callback/:platform',
+                element: <LoginRedirect />,
             },
         ],
     },
@@ -160,15 +160,6 @@ const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <Withdraw />
-            </ProtectedRoute>
-        ),
-        errorElement: <Error />,
-    },
-    {
-        path: '/payment',
-        element: (
-            <ProtectedRoute>
-                <Pay />
             </ProtectedRoute>
         ),
         errorElement: <Error />,

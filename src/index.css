@@ -28,13 +28,6 @@ button {
   /* border: none; */
 }
 
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/PretendardVariable.woff2') format('font-woff2');
-  font-display: swap;
-  font-weight: 45 920;
-}
-
 @theme {
   --color-primary-100: #e7fdec;
   --color-primary-300: #b5f7d3;

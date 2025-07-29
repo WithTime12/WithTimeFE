@@ -11,6 +11,7 @@ interface IAuthState {
 const useAuthStore = create<IAuthState>((set) => ({
     email: '',
     password: '',
+    socialId: '',
     setEmail: (email) => set({ email }),
     setPassword: (password) => set({ password }),
     resetAuth: () => set({ email: '', password: '' }),

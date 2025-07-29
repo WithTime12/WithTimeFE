@@ -75,7 +75,7 @@ const CommonAuthInput = React.forwardRef<HTMLInputElement, TCommonAuthInputProps
                     }}
                     {...rest}
                 />
-                {short && <div className="flex px-[16px] py-[8px] text-default-gray-100 w-[90px]" />}
+                {short && <div className="flex px-[16px] py-[8px] text-default-gray-100 w-[80px]" />}
                 {button && (
                     <Button
                         size="small"

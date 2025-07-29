@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
 // 결과 이미지 한번에 넣으려면 이렇게 해야한다고 합니다!! -> 랜딩 페이지에서 사용한 방식과 같은 방식입니다
-const resultImages = import.meta.glob('../images/testResults/*.png', {
+const resultImages = import.meta.glob('../../images/testResults/*.png', {
     eager: true,
     import: 'default',
 }) as Record<string, string>;
 
-const componentImages = import.meta.glob('../images/testResults/*_Component.png', {
+const componentImages = import.meta.glob('../../images/testResults/*_Component.png', {
     eager: true,
     import: 'default',
 }) as Record<string, string>;
@@ -67,7 +67,7 @@ const resultData = {
 export default function DateTestResultPage() {
     const navigate = useNavigate();
 
-    const imageSrc = resultImages[`../images/testResults/${resultData.code}.png`] ?? resultImages['../images/testResults/default.png'];
+    const imageSrc = resultImages[`../../images/testResults/${resultData.code}.png`] ?? resultImages['../../images/testResults/default.png'];
     const bgColor = resultColors[resultData.code] ?? resultColors.default;
 
     return (
@@ -168,7 +168,7 @@ export default function DateTestResultPage() {
                         }}
                     >
                         <img
-                            src={componentImages[`../images/testResults/${resultData.match}_Component.png`] ?? ''}
+                            src={componentImages[`../../images/testResults/${resultData.match}_Component.png`] ?? ''}
                             alt={`${resultData.match} 유형 이미지`}
                             className="max-h-[200px] w-auto object-contain"
                         />
@@ -188,7 +188,7 @@ export default function DateTestResultPage() {
                         }}
                     >
                         <img
-                            src={componentImages[`../images/testResults/${resultData.mismatch}_Component.png`] ?? ''}
+                            src={componentImages[`../../images/testResults/${resultData.mismatch}_Component.png`] ?? ''}
                             alt={`${resultData.mismatch} 유형 이미지`}
                             className="max-h-[200px] w-auto object-contain"
                         />
