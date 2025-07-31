@@ -4,36 +4,36 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TLoginFormValues } from '@/types/auth';
+
 import { loginSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Button from '@/components/common/Button';
-import CommonAuthInput from '@/components/common/commonAuthInput';
 
 import Logo from '@/assets/withTimeLogo/Korean_Logo.svg?react';
 import Google from '@/images/socialLogin/google.png';
 import Kakao from '@/images/socialLogin/kakao.png';
 import Naver from '@/images/socialLogin/naver.png';
 
-type TFormValues = {
-    email: string;
-    password: string;
-};
-
 export default function Login() {
     const navigate = useNavigate();
-    const { useDefaultLogin } = useAuth();
     const [error, setError] = useState('');
+    const { useDefaultLogin } = useAuth();
+    const { mutate: loginMutate } = useDefaultLogin;
+
     const {
         register,
         handleSubmit,
         control,
         formState: { isValid, errors },
-    } = useForm<TFormValues>({
+    } = useForm<TLoginFormValues>({
         mode: 'onChange',
         resolver: zodResolver(loginSchema),
     });
+
     const watchedPassword = useWatch({
         control,
         name: 'password',
@@ -42,8 +42,8 @@ export default function Login() {
         control,
         name: 'email',
     });
-    const { mutate: loginMutate } = useDefaultLogin;
-    const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+
+    const onSubmit: SubmitHandler<TLoginFormValues> = async (submitData) => {
         if (isValid) {
             loginMutate(
                 {

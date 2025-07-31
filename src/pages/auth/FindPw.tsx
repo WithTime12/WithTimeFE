@@ -4,25 +4,28 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TFormValues } from '@/types/auth';
+
 import { findingSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Button from '@/components/common/Button';
-import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
-
-type TFormValues = {
-    email: string;
-    password: string;
-    repassword: string;
-    code: string;
-};
 
 export default function FindPw() {
     const navigate = useNavigate();
+
     const [codeVerify, setCodeVerify] = useState(false);
     const [sendCode, setSendCode] = useState(false);
+    const [codeError, setCodeError] = useState('');
+    const [error, setError] = useState('');
+    const { useSendCode, useCheckCode, useFindPassword } = useAuth();
+    const { mutate: sendCodeMutation, isPending: sendCodePending } = useSendCode;
+    const { mutate: checkCodeMutation, isPending: checkCodePending } = useCheckCode;
+    const { mutate: findPasswordMutation } = useFindPassword;
+
     const {
         register,
         handleSubmit,
@@ -32,10 +35,6 @@ export default function FindPw() {
         mode: 'onChange',
         resolver: zodResolver(findingSchema),
     });
-
-    const { useSendCode, useCheckCode } = useAuth();
-    const { mutate: sendCodeMutation } = useSendCode;
-    const { mutate: checkCodeMutation } = useCheckCode;
 
     const watchedPassword = useWatch({
         control,
@@ -63,13 +62,14 @@ export default function FindPw() {
                 },
                 {
                     onSuccess: (data) => {
-                        if (data.isSuccess === false) {
+                        if (data.isSuccess === true) {
                             setCodeVerify(true);
                         } else {
                             setCodeVerify(false);
                         }
                     },
                     onError: () => {
+                        setCodeError('인증번호가 일치하지 않습니다.');
                         setCodeVerify(false);
                     },
                 },
@@ -98,19 +98,43 @@ export default function FindPw() {
         }
     };
 
+    const onSubmit: SubmitHandler<TFormValues> = async () => {
+        if (isValid) {
+            findPasswordMutation(
+                {
+                    email: watchedEmail,
+                    newPassword: watchedPassword,
+                },
+                {
+                    onSuccess: (data) => {
+                        if (data.isSuccess === true) {
+                            alert('비밀번호가 성공적으로 변경되었습니다.');
+                            navigate('/');
+                        } else {
+                            alert('비밀번호 변경에 실패하였습니다. 다시 시도해주세요.');
+                        }
+                    },
+                    onError: (err) => {
+                        setError(err.response?.data.message || '비밀번호 변경 중 에러가 발생하였습니다.');
+                    },
+                },
+            );
+        }
+    };
+
     useEffect(() => {
         setCodeVerify(false);
+        setCodeError('');
     }, [watchedCode, watchedEmail]);
+
     useEffect(() => {
         setSendCode(false);
     }, [watchedEmail]);
 
-    const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
-        if (isValid) {
-            console.log('폼 제출');
-            console.log(submitData);
-        }
-    };
+    useEffect(() => {
+        setError('');
+    }, [watchedPassword, watchedRepassword]);
+
     return (
         <div className="min-w-[280px] w-[450px] max-w-[96vw] flex flex-col items-center justify-center gap-2 overflow-hidden">
             <div className="w-full flex justify-start">
@@ -126,7 +150,7 @@ export default function FindPw() {
                             title="Email"
                             error={!!errors.email?.message || watchedEmail == ''}
                             errorMessage={errors.email?.message}
-                            validation={!errors.email?.message && !!watchedEmail}
+                            validation={!errors.email?.message && !!watchedEmail && !sendCodePending}
                             button={true}
                             buttonOnclick={postSendCode}
                             buttonText="인증번호"
@@ -135,11 +159,12 @@ export default function FindPw() {
                         <CommonAuthInput
                             placeholder="인증번호를 입력하세요"
                             title="Verification code"
-                            error={!!errors.code?.message || watchedCode == ''}
-                            errorMessage={errors.code?.message}
-                            validation={sendCode && codeVerify}
+                            error={!!errors.code?.message || watchedCode == '' || codeError !== ''}
+                            errorMessage={errors.code?.message || codeError}
+                            validation={sendCode && codeVerify && !checkCodePending}
                             button={true}
                             buttonOnclick={checkCode}
+                            type="code"
                             buttonText={codeVerify ? '인증완료' : '인증하기'}
                             {...register('code')}
                         />
@@ -148,8 +173,8 @@ export default function FindPw() {
                             placeholder="새로운 비밀번호"
                             title="New Password"
                             type="password"
-                            error={!!errors.password?.message || watchedPassword == ''}
-                            errorMessage={errors.password?.message}
+                            error={!!errors.password?.message || watchedPassword == '' || error != ''}
+                            errorMessage={errors.password?.message || error}
                             short={true}
                             validation={!errors.password?.message && !!watchedPassword}
                             {...register('password')}
@@ -158,10 +183,10 @@ export default function FindPw() {
                             placeholder="새로운 비밀번호 확인"
                             title="New Password"
                             type="password"
-                            error={!!errors.repassword?.message || watchedRepassword == ''}
+                            error={!!errors.repassword?.message || watchedRepassword == '' || error != ''}
                             errorMessage={errors.repassword?.message}
                             validationState={watchedPassword === watchedRepassword && !!watchedRepassword ? '확인완료' : '확인필요'}
-                            validation={watchedPassword === watchedRepassword && !!watchedRepassword}
+                            validation={watchedPassword === watchedRepassword && !!watchedRepassword && !error}
                             {...register('repassword')}
                         />
                     </div>
@@ -169,7 +194,9 @@ export default function FindPw() {
                         size="big-16"
                         variant={'mint'}
                         children={'로그인하기'}
-                        disabled={watchedPassword !== watchedRepassword || !isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify}
+                        disabled={
+                            watchedPassword !== watchedRepassword || !isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify || error !== ''
+                        }
                         onClick={handleSubmit(onSubmit)}
                         className="w-full"
                     />

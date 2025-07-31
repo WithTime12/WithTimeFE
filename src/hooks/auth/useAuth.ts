@@ -2,7 +2,7 @@
 
 import { useCoreMutation } from '../customQuery';
 
-import { checkEmailVerifications, defaultLogin, defaultSignup, emailVerifications, logout, socialLogin } from '@/api/auth/auth';
+import { checkEmailVerifications, defaultLogin, defaultSignup, emailVerifications, findPassword, logout, socialLogin } from '@/api/auth/auth';
 
 export function useAuth() {
     // const navigate = useNavigate();
@@ -13,5 +13,6 @@ export function useAuth() {
     const useSendCode = useCoreMutation(emailVerifications);
     const useCheckCode = useCoreMutation(checkEmailVerifications);
     const useSocialLogin = useCoreMutation(socialLogin);
-    return { useLogout, useSocialLogin, useCheckCode, useDefaultLogin, useDefaultSignup, useSendCode };
+    const useFindPassword = useCoreMutation(findPassword);
+    return { useLogout, useFindPassword, useSocialLogin, useCheckCode, useDefaultLogin, useDefaultSignup, useSendCode };
 }
