@@ -8,11 +8,11 @@
 
 html,
 body {
-    height: 100dvh;
-    overflow-x: hidden;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -47,13 +47,13 @@ button {
 }
 
 @layer utilities {
-    input:-webkit-autofill {
-        @apply bg-white text-black;
-    }
-
-    input:-webkit-tap-highlight-color {
-        @apply bg-white;
-    }
+  input:-webkit-autofill {
+    @apply bg-white text-black;
+  }
+  
+  input:-webkit-tap-highlight-color {
+    @apply bg-white;
+  }
 }
 
 @font-face {
@@ -151,50 +151,49 @@ button {
   }
 }
 
-    .animate-blink {
-        animation: blink 1.5s ease-in-out infinite;
-    }
+.animate-blink {
+  animation: blink 1.5s ease-in-out infinite;
 }
 
 @keyframes blink {
-    0%,
-    100% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
+  0%,
+  100% {
+    opacity: 0;
+  }
+  
+  50% {
+    opacity: 1;
+  }
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-text-fill-color: #000;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-    box-shadow: 0 0 0px 1000px #fff inset;
-    transition: background-color 5000s ease-in-out 0s;
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 input:autofill,
-input:autofill:hover,
-input:autofill:focus,
-input:autofill:active {
-    -webkit-text-fill-color: #000;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-    box-shadow: 0 0 0px 1000px #fff inset;
-    transition: background-color 5000s ease-in-out 0s;
+  input:autofill:hover,
+  input:autofill:focus,
+  input:autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px white inset !important;
-    box-shadow: 0 0 0 1000px white inset !important;
-    -webkit-text-fill-color: #000 !important;
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
 }
 
 .modal-root {
-    min-height: 100vh;
-    min-width: 100vw;
-    overflow-y: auto;
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow-y: auto;
 }
