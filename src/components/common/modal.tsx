@@ -9,9 +9,10 @@ type TModalprops = {
     title?: string;
     children: ReactNode;
     onClose: () => void;
+    position?: 'default' | 'main';
 };
 
-export default function Modal({ isOpen = true, title, children, onClose }: TModalprops) {
+export default function Modal({ isOpen = true, title, children, onClose, position }: TModalprops) {
     const [isVisible, setIsVisible] = useState(isOpen);
 
     useEffect(() => {
@@ -20,8 +21,13 @@ export default function Modal({ isOpen = true, title, children, onClose }: TModa
 
     return createPortal(
         isVisible && (
-            <div className="z-[1000] fixed top-0 left-0 w-[100vw] h-[100vh] bg-black/30 flex items-center justify-center ">
-                <div className="relative bg-white p-[30px] flex flex-col rounding-16 shadow-default w-[400px] ">
+            <div
+                className={`z-[1000] fixed w-[100vw] h-[100vh] bg-black/30 flex items-center justify-center
+            ${position === 'default' && 'inset-0'}
+            ${position === 'main' && 'top-[115px] right-[95px]'}
+            `}
+            >
+                <div className="relative bg-white p-[30px] flex flex-col rounding-16 shadow-default w-fit max-h-[90vh] overflow-y-auto">
                     <div className="w-full flex items-center justify-between mb-2">
                         <div className="text-[38px] font-bold">{title}</div>
                         <div className="flex justify-end p-[5px]" onClick={onClose}>
