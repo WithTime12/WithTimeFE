@@ -20,7 +20,7 @@ export default function FindPw() {
     const [codeVerify, setCodeVerify] = useState(false);
     const [sendCode, setSendCode] = useState(false);
     const [codeError, setCodeError] = useState('');
-
+    const [error, setError] = useState('');
     const { useSendCode, useCheckCode, useFindPassword } = useAuth();
     const { mutate: sendCodeMutation, isPending: sendCodePending } = useSendCode;
     const { mutate: checkCodeMutation, isPending: checkCodePending } = useCheckCode;
@@ -114,8 +114,8 @@ export default function FindPw() {
                             alert('비밀번호 변경에 실패하였습니다. 다시 시도해주세요.');
                         }
                     },
-                    onError: () => {
-                        alert('비밀번호 변경 중 에러가 발생하였습니다.');
+                    onError: (err) => {
+                        setError(err.response?.data.message || '비밀번호 변경 중 에러가 발생하였습니다.');
                     },
                 },
             );
@@ -130,6 +130,10 @@ export default function FindPw() {
     useEffect(() => {
         setSendCode(false);
     }, [watchedEmail]);
+
+    useEffect(() => {
+        setError('');
+    }, [watchedPassword, watchedRepassword]);
 
     return (
         <div className="min-w-[280px] w-[450px] max-w-[96vw] flex flex-col items-center justify-center gap-2 overflow-hidden">
@@ -169,8 +173,8 @@ export default function FindPw() {
                             placeholder="새로운 비밀번호"
                             title="New Password"
                             type="password"
-                            error={!!errors.password?.message || watchedPassword == ''}
-                            errorMessage={errors.password?.message}
+                            error={!!errors.password?.message || watchedPassword == '' || error != ''}
+                            errorMessage={errors.password?.message || error}
                             short={true}
                             validation={!errors.password?.message && !!watchedPassword}
                             {...register('password')}
@@ -179,10 +183,10 @@ export default function FindPw() {
                             placeholder="새로운 비밀번호 확인"
                             title="New Password"
                             type="password"
-                            error={!!errors.repassword?.message || watchedRepassword == ''}
+                            error={!!errors.repassword?.message || watchedRepassword == '' || error != ''}
                             errorMessage={errors.repassword?.message}
                             validationState={watchedPassword === watchedRepassword && !!watchedRepassword ? '확인완료' : '확인필요'}
-                            validation={watchedPassword === watchedRepassword && !!watchedRepassword}
+                            validation={watchedPassword === watchedRepassword && !!watchedRepassword && !error}
                             {...register('repassword')}
                         />
                     </div>
@@ -190,7 +194,9 @@ export default function FindPw() {
                         size="big-16"
                         variant={'mint'}
                         children={'로그인하기'}
-                        disabled={watchedPassword !== watchedRepassword || !isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify}
+                        disabled={
+                            watchedPassword !== watchedRepassword || !isValid || watchedEmail == '' || watchedPassword == '' || !codeVerify || error !== ''
+                        }
                         onClick={handleSubmit(onSubmit)}
                         className="w-full"
                     />

@@ -62,7 +62,8 @@ export default function User() {
                         navigate('/home');
                     },
                     onError: (err) => {
-                        setError(err.message);
+                        console.log(err);
+                        setError(err.response?.data.message!);
                     },
                 },
             );
@@ -139,8 +140,6 @@ export default function User() {
                                     ref={ref}
                                     placeholder="전화번호 (010-xxxx-xxxx)"
                                     title="Phone Number"
-                                    error={!!errors.phoneNum?.message || error != ''}
-                                    errorMessage={errors.phoneNum?.message || error}
                                 />
                             )}
                         />
@@ -164,12 +163,13 @@ export default function User() {
                         이용약관 동의
                     </div>
                 </div>
+                <div className="flex text-warning font-body1">{error}</div>
                 <Button
                     children={'회원가입 완료'}
                     size="big-16"
                     variant="mint"
                     onClick={handleSubmit(onSubmit)}
-                    disabled={!isValid || !agree1 || !agree2 || isPending}
+                    disabled={!isValid || !agree1 || !agree2 || isPending || error !== ''}
                     className="w-full"
                 />
             </form>
