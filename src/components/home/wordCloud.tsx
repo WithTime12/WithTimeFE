@@ -112,7 +112,7 @@ export default function WordCloudCard() {
     return (
         <div className="bg-white shadow-black rounded-2xl p-8 flex flex-col items-center h-full">
             <div className="text-xl font-bold text-gray-700 mb-6">이번주 인기 데이트 키워드 현황</div>
-            <div className="relative w-full h-64 overflow-hidden bg-gray-50 rounded-lg flex items-center justify-center">
+            <div className="relative w-full h-64 overflow-hidden rounded-lg flex items-center justify-center">
                 {positionedKeywords.map((keyword, index) => (
                     <span key={index} className={keyword.className} style={keyword.style}>
                         {keyword.text}

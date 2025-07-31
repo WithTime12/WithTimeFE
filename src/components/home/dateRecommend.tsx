@@ -4,45 +4,47 @@ import MainCard from '@/components/home/mainCard';
 import Sun from '@/assets/icons/weather/sun.svg?react';
 
 function DateRecommend() {
+    const rainData = [
+        { day: '7월 9일', percent: 10 },
+        { day: '7월 10일', percent: 30 },
+        { day: '7월 11일', percent: 10 },
+        { day: '7월 12일', percent: 45 },
+        { day: '7월 13일', percent: 70 },
+        { day: '7월 14일', percent: 45 },
+        { day: '7월 15일', percent: 90 },
+    ];
+
     return (
         <MainCard>
-            <div className="flex flex-col px-[56px] py-[40px] justifty-center h-full gap-[30px]">
+            <div className="flex flex-col px-[56px] py-[40px] justify-center h-full gap-[30px]">
+                {/* 상단 텍스트 */}
                 <div className="flex items-center justify-between">
                     <div className="text-2xl font-bold">이번 주 강남구 데이트 추천</div>
                     <button className="mt-1 text-sm text-black underline">장소 변경하기</button>
                 </div>
+
                 {/* 날짜 버튼 */}
                 <div className="flex gap-1">
-                    <Button size="small" variant="white" className="bg-primary-500 text-white font-bold text-xs">
-                        7월 9일
-                    </Button>
-                    <Button size="small" variant="white" className="bg-default-gray-200 text-default-gray-700 text-xs">
-                        7월 10일
-                    </Button>
-                    <Button size="small" variant="white" className="bg-default-gray-200 text-default-gray-700 text-xs">
-                        7월 11일
-                    </Button>
-                    <Button size="small" variant="white" className="bg-default-gray-200 text-default-gray-700 text-xs">
-                        7월 12일
-                    </Button>
-                    <Button size="small" variant="white" className="bg-default-gray-200 text-default-gray-700 text-xs">
-                        7월 13일
-                    </Button>
-                    <Button size="small" variant="white" className="bg-default-gray-200 text-default-gray-700 text-xs">
-                        7월 14일
-                    </Button>
-                    <Button size="small" variant="white" className="bg-default-gray-200 text-default-gray-700 text-xs">
-                        7월 15일
-                    </Button>
+                    {rainData.map((data, idx) => (
+                        <Button
+                            key={data.day}
+                            size="small"
+                            variant="white"
+                            className={`text-xs ${idx === 0 ? 'bg-primary-500 text-white' : 'bg-default-gray-200 text-default-gray-700'}`}
+                        >
+                            {data.day}
+                        </Button>
+                    ))}
                 </div>
-                {/* 날씨/해시태그/설명 */}
+
+                {/* 날씨 설명 */}
                 <div className="flex items-center gap-8">
                     <div className="flex flex-col items-center">
                         <div className="flex flex-row items-center mb-4">
-                            <Sun fill="#616161" className="w-10 h-10 mb-3" />
-                            <span className="text-[#616161] font-semibold mb-3 ml-3 text-[20px]">맑고 무더운 날</span>
+                            <Sun fill="#616161" className="w-12 h-12 mb-1" />
+                            <span className="text-[#616161] font-medium mb-1 ml-3 text-[25px]">맑고 무더운 날</span>
                         </div>
-                        <div className="flex gap-2 ml-9 ">
+                        <div className="flex gap-2 ml-9 whitespace-nowrap">
                             <span className="bg-default-gray-200 text-default-gray-700 rounded-full px-2 py-1 text-xs border border-[#616161]">#실내추천</span>
                             <span className="bg-default-gray-200 text-default-gray-700 rounded-full px-2 py-1 text-xs border border-[#616161]">
                                 #카페데이트
@@ -52,30 +54,66 @@ function DateRecommend() {
                             </span>
                         </div>
                     </div>
-                    <div className="flex-1 text-m text-default-gray-700 items-center ml-9 mt-5">
-                        <span className="text-primary-700 font-bold">맑은 하늘</span>과 <span className="text-primary-700 font-bold">무더운 날씨</span>
-                        가 기승을 부려요.
+
+                    <div className="w-[1px] h-[149px] border-[0.5px] border-default-gray-400" />
+
+                    <div className="flex-1 text-m text-default-gray-700 items-center ml-2 whitespace-nowrap">
+                        <span className="text-primary-700 font-bold">맑은 하늘</span>과 <span className="text-primary-700 font-bold">무더운 날씨</span>가 기승을
+                        부려요.
                         <br />
                         우산 없이도 걱정 없어요.
                         <br />
                         시원한 음료와 함께 실내 데이트가 좋아요.
                     </div>
                 </div>
-                {/* 그래프 (임시) */}
-                <div className="flex flex-col">
-                    <div className="text-sm font-medium text-[#616161] mt-7 ml-15">이번주 강수확률 (%)</div>
-                    <div className="mb-8 w-full h-32 bg-default-gray-200 rounded-xl flex items-end gap-2 px-4">
-                        <div className="w-1/7 h-1/5 bg-primary-300 rounded-t" />
-                        <div className="w-1/7 h-2/5 bg-primary-500 rounded-t" />
-                        <div className="w-1/7 h-1/4 bg-primary-700 rounded-t" />
-                        <div className="w-1/7 h-3/5 bg-primary-300 rounded-t" />
-                        <div className="w-1/7 h-4/5 bg-primary-500 rounded-t" />
-                        <div className="w-1/7 h-1/2 bg-primary-700 rounded-t" />
-                        <div className="w-1/7 h-5/5 bg-primary-300 rounded-t" />
+                <div className="mt-10">
+                    <div className="text-base font-semibold text-[#616161] mb-4">이번주 강수확률 (%)</div>
+                    <div className="relative w-[600px] h-40">
+                        {' '}
+                        {/* 부모 div에 고정 넓이 지정 */}
+                        <svg viewBox="0 0 300 100" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                            {/* 점 */}
+                            {rainData.map((point, idx) => {
+                                const x = (idx / (rainData.length - 1)) * 300;
+                                const y = 100 - point.percent;
+                                return <circle key={idx} cx={x} cy={y} r="1.5" fill="#14B8A6" />;
+                            })}
+
+                            {/* 선 */}
+                            <polyline
+                                fill="none"
+                                stroke="#14B8A6"
+                                strokeWidth="1"
+                                points={rainData
+                                    .map((point, idx) => {
+                                        const x = (idx / (rainData.length - 1)) * 300;
+                                        const y = 100 - point.percent;
+                                        return `${x},${y}`;
+                                    })
+                                    .join(' ')}
+                            />
+
+                            {/* 텍스트 */}
+                            {rainData.map((point, idx) => {
+                                const x = (idx / (rainData.length - 1)) * 300;
+                                const y = 100 - point.percent;
+                                return (
+                                    <g key={idx}>
+                                        <text x={x} y={y - 6} fontSize="4" textAnchor="middle" fill="#333">
+                                            {point.percent}%
+                                        </text>
+                                        <text x={x} y="98" fontSize="4" textAnchor="middle" fill="#616161">
+                                            {point.day}
+                                        </text>
+                                    </g>
+                                );
+                            })}
+                        </svg>
                     </div>
                 </div>
             </div>
         </MainCard>
     );
 }
+
 export default DateRecommend;
