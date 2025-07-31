@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import type { TDateCourseSearchFilterOption } from '@/types/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
+
+import { useCourse } from '@/hooks/course/useCourse';
+import useDebounce from '@/hooks/useDebounce';
 
 import DateCourseOptionButton from './dateCourseOptionButton';
 import DateKeyword from './dateKeyword';
@@ -11,15 +14,19 @@ import EditableInputBox from '../common/EditableInputBox';
 import Calendar from '@/assets/icons/calendar_Blank.svg?react';
 
 export default function DateCourseSearchFilterOption({ options, type, value, onChange, title, subTitle, errorMessage }: TDateCourseSearchFilterOption) {
-    const [inputValue, setInputValue] = useState('');
+    const { useSearchRegion } = useCourse();
+    const { mutate: searchRegionMutate } = useSearchRegion;
     const now = new Date();
+
     const defaultDate = now.toISOString().split('T')[0]; // '2025-07-17'
     const defaultTime = now.toTimeString().slice(0, 5);
     const dateInputRef = useRef<HTMLInputElement>(null);
     const timeInputRef = useRef<HTMLInputElement>(null);
+
     const [date, setDate] = useState(defaultDate);
     const [time, setTime] = useState(defaultTime);
-
+    const [inputValue, setInputValue] = useState('');
+    const debouncedInputValue = useDebounce(inputValue, 3000);
     useEffect(() => {
         onChange(`${date} ${time}`);
     }, []);
@@ -38,10 +45,27 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
         }
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setInputValue(e.target.value);
+    };
+
+    useEffect(() => {
+        if (!debouncedInputValue) return;
+
+        searchRegionMutate(
+            { keyword: debouncedInputValue },
+            {
+                onSuccess: (data) => {
+                    console.log('검색 결과:', data);
+                },
+            },
+        );
+    }, [debouncedInputValue]);
+
     return (
         <div className="flex w-full gap-[24px] flex-col h-fit">
-            <div className="flex w-full font-heading2 text-default-gray-700 sm:flex-row flex-col gap-[8px] sm:items-center">
-                <div className="flex flex-nowrap">{title}</div>
+            <div className="flex w-full text-default-gray-700 sm:flex-row flex-col gap-[8px] sm:items-center">
+                <div className="flex flex-nowrap font-heading3">{title}</div>
                 <span className="text-default-gray-700 font-heading3 flex">{subTitle}</span>
             </div>
             <div className="font-body3 text-warning">{errorMessage}</div>
@@ -84,7 +108,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                 placeholder="ex: 서울시 강남구"
                                 className="w-full"
                                 value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
+                                onChange={(e) => handleInputChange(e)}
                             />
                         </div>
 

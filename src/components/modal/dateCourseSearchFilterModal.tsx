@@ -1,6 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
+
+import {
+    BudgetTimeValidation,
+    DateTimeStartValidation,
+    KeywordGroupOverValidation,
+    KeywordMealValidation,
+    MealTimeValidation,
+    TotalTimeMealValidation,
+} from '@/utils/dateCourseValidation';
 
 import Button from '../common/Button';
 import Modal from '../common/modal';
@@ -31,15 +40,60 @@ const Questions: IQuestion[] = Array.isArray(DateCourseQuestion)
 export default function DateCourseSearchFilterModal({ onClose }: TDateCourseSearchFilterModalProps) {
     const [answers, setAnswers] = useState<(string | string[] | null)[]>(Array(7).fill(null));
     const num = 5325; // 예시용
+    const [errorMessages, setErrorMessages] = useState<string[]>(Array(7).fill(''));
 
     const handleSearch = () => {
         console.log('선택된 필터:', answers);
-
         onClose();
     };
 
+    const checkError = () => {
+        const newErrors = [...errorMessages];
+
+        newErrors[0] =
+            BudgetTimeValidation({
+                budget: answers[0] as string,
+                totalTime: answers[2] as string,
+            }) || '';
+
+        newErrors[2] =
+            TotalTimeMealValidation({
+                totalTime: answers[2] as string,
+                meal: Array.isArray(answers[3]) ? answers[3] : [],
+            }) || '';
+
+        newErrors[3] =
+            KeywordMealValidation({
+                meal: Array.isArray(answers[3]) ? answers[3] : [],
+                keywords: Array.isArray(answers[5]) ? answers[5] : [],
+            }) || '';
+
+        newErrors[5] =
+            KeywordGroupOverValidation({
+                keywords: Array.isArray(answers[5]) ? answers[5] : [],
+            }) || '';
+
+        newErrors[6] =
+            MealTimeValidation({
+                meal: Array.isArray(answers[3]) ? answers[3] : [],
+                time: answers[6] as string,
+                totalTime: answers[2] as string,
+            }) ||
+            DateTimeStartValidation({
+                time: answers[6] as string,
+                totalTime: answers[2] as string,
+            }) ||
+            '';
+
+        setErrorMessages(newErrors);
+    };
+
+    useEffect(() => {
+        checkError();
+    }, [answers]);
+
     return (
-        <Modal onClose={onClose}>
+        <Modal onClose={onClose} title="검색 필터">
             <div className="flex flex-col w-[1000px] max-w-[80vw] px-[10%] gap-10 py-10">
                 {Questions.map(
                     (question, idx) =>
@@ -58,12 +112,12 @@ export default function DateCourseSearchFilterModal({ onClose }: TDateCourseSear
                                     });
                                 }}
                                 type={question.type}
-                                errorMessage={''}
+                                errorMessage={errorMessages[idx] ?? ''}
                             />
                         ),
                 )}
                 <div className="flex w-full justify-end">
-                    <Button size="big-16" variant="mint" className="w-fit text-center" onClick={handleSearch}>
+                    <Button size="big-16" variant="mint" className="w-fit text-center px-[30px] font-body1" onClick={handleSearch}>
                         데이트 코스 {num}개 보기
                     </Button>
                 </div>
