@@ -22,17 +22,19 @@ export default function Modal({ isOpen = true, title, children, onClose, positio
     return createPortal(
         isVisible && (
             <div
-                className={`z-[1000] fixed w-[100vw] h-[100dvh] bg-black/30 flex items-center justify-center
-            ${position === 'default' && 'inset-0'}
-            ${position === 'main' && 'top-[115px] right-[95px]'}
+                className={`z-[1000] fixed w-[100vw] h-[100dvh] inset-0 bg-black/30 flex items-center justify-center
             `}
             >
-                <div className="relative bg-white lg:p-[30px] flex flex-col rounding-16 shadow-default w-fit max-h-[90dvh] max-w-[95vw] overflow-y-auto gap-[10px]">
-                    <div className="w-full flex items-center justify-between mb-2 px-[30px] pt-[30px]">
-                        <div className="font-heading2 text-default-gray-800">{title}</div>
-                        <GraySvgButton type="cancle" onClick={onClose} />
+                <div className={`flex ${position === 'main' && 'md:w-[1280px] flex px-8 md:justify-end md:items-start items-center md:py-[90px] h-full'}`}>
+                    <div
+                        className={`relative bg-white md:px-[48px] px-[20px] py-[40px] flex flex-col rounding-16 shadow-default w-fit max-h-[90dvh] h-fit sm:max-w-[70vw] max-w-[95vw] overflow-y-auto gap-[10px]`}
+                    >
+                        <div className="w-full flex items-center justify-between mb-2 px-[28px] md:px-0">
+                            <div className="font-heading2 text-default-gray-800">{title}</div>
+                            <GraySvgButton type="cancle" onClick={onClose} />
+                        </div>
+                        <div className="flex">{children}</div>
                     </div>
-                    <div className="flex md:p-[30px]">{children}</div>
                 </div>
             </div>
         ),

@@ -94,7 +94,7 @@ export default function DateCourseSearchFilterModal({ onClose }: TDateCourseSear
 
     return (
         <Modal onClose={onClose} title="검색 필터">
-            <div className="flex flex-col w-[1000px] max-w-[80vw] px-[10%] gap-10 py-10">
+            <div className="flex flex-col w-full max-w-[80vw] px-[10%] gap-10 py-10">
                 {Questions.map(
                     (question, idx) =>
                         question.filterTitle !== '' && (
