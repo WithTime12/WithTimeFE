@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { TDateCourseSearchFilterOption } from '@/types/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
 
-import { useCourse } from '@/hooks/course/useCourse';
+import { useSearchRegion } from '@/hooks/course/useSearchRegion';
 import useDebounce from '@/hooks/useDebounce';
 
 import DateCourseOptionButton from './dateCourseOptionButton';
@@ -14,8 +14,6 @@ import EditableInputBox from '../common/EditableInputBox';
 import Calendar from '@/assets/icons/calendar_Blank.svg?react';
 
 export default function DateCourseSearchFilterOption({ options, type, value, onChange, title, subTitle, errorMessage }: TDateCourseSearchFilterOption) {
-    const { useSearchRegion } = useCourse();
-    const { mutate: searchRegionMutate } = useSearchRegion;
     const now = new Date();
 
     const defaultDate = now.toISOString().split('T')[0]; // '2025-07-17'
@@ -26,7 +24,10 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
     const [date, setDate] = useState(defaultDate);
     const [time, setTime] = useState(defaultTime);
     const [inputValue, setInputValue] = useState('');
+    const [showSearchResults, setShowSearchResults] = useState(false);
+
     const debouncedInputValue = useDebounce(inputValue, 3000);
+
     useEffect(() => {
         onChange(`${date} ${time}`);
     }, []);
@@ -49,18 +50,12 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
         setInputValue(e.target.value);
     };
 
-    useEffect(() => {
-        if (!debouncedInputValue) return;
+    const { data: regionList } = useSearchRegion({ keyword: debouncedInputValue });
 
-        searchRegionMutate(
-            { keyword: debouncedInputValue },
-            {
-                onSuccess: (data) => {
-                    console.log('검색 결과:', data);
-                },
-            },
-        );
-    }, [debouncedInputValue]);
+    const handleSearch = () => {
+        if (!inputValue.trim()) return;
+        setShowSearchResults(true);
+    };
 
     return (
         <div className="flex w-full gap-[24px] flex-col h-fit">
@@ -94,23 +89,33 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                         <div className="flex justify-center items-center gap-4 w-full relative">
                             <EditableInputBox
                                 mode="search"
-                                onSearchClick={() => {
-                                    const trimmed = inputValue.trim();
-                                    if (!trimmed) return;
-
-                                    const current = Array.isArray(value) ? value : [];
-                                    if (!current.includes(trimmed)) {
-                                        onChange([...current, trimmed]);
-                                    }
-
-                                    setInputValue('');
-                                }}
+                                onSearchClick={handleSearch}
                                 placeholder="ex: 서울시 강남구"
                                 className="w-full"
                                 value={inputValue}
-                                onChange={(e) => handleInputChange(e)}
+                                onChange={handleInputChange}
                             />
                         </div>
+                        {showSearchResults && regionList && regionList.result.regions.length > 0 && (
+                            <ul className="mt-2 w-full border border-primary-500 rounding-16 shadow-default bg-white max-h-[200px] overflow-auto">
+                                {regionList.result.regions.map((region: string, idx: number) => (
+                                    <li
+                                        key={idx}
+                                        className="p-2 cursor-pointer hover:bg-gray-100 text-sm text-default-gray-800"
+                                        onClick={() => {
+                                            const current = Array.isArray(value) ? value : [];
+                                            if (!current.includes(region)) {
+                                                onChange([...current, region]);
+                                            }
+                                            setInputValue('');
+                                            setShowSearchResults(false);
+                                        }}
+                                    >
+                                        {region}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
 
                         <div className="mt-4 flex flex-wrap gap-2">
                             {Array.isArray(value) && value.map((v, idx) => <PlaceButton key={idx} placeName={v} onClick={() => handleDeletePlaceOption(v)} />)}

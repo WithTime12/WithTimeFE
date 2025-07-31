@@ -3,6 +3,10 @@ import type { TSearchRegionResponse, TSearchRegionValues } from '@/types/dateCou
 import { axiosInstance } from '../axiosInstance';
 
 export const searchRegion = async ({ keyword }: TSearchRegionValues): Promise<TSearchRegionResponse> => {
-    const { data } = await axiosInstance.post('/api/v1/regions/search', { keyword });
+    const { data } = await axiosInstance.get('/api/v1/regions/search', {
+        params: {
+            keyword,
+        },
+    });
     return data;
 };

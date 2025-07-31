@@ -70,5 +70,7 @@ export type TSearchRegionValues = {
 };
 
 export type TSearchRegionResponse = TCommonResponse<{
-    result: string;
+    regions: string[];
+    keyword: string;
+    resultCount: number;
 }>;
