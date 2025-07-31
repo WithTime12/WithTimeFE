@@ -38,14 +38,17 @@ export type TLogoutResponse = TCommonResponse<{
 export type TEmailVerfications = TCommonResponse<{
     result: string;
 }>;
+
 export type TCheckEmailVerifications = TCommonResponse<{
     result: string;
 }>;
+
 export type TSocialLoginResponse = TCommonResponse<{
     email: string;
     socialId: number;
     isFirst: boolean;
 }>;
+
 export enum TSocialLoginPlatform {
     kakao = 'kakao',
     naver = 'naver',
@@ -64,3 +67,22 @@ export type TFindPasswordValues = {
 export type TFindPasswordResponse = TCommonResponse<{
     result: string;
 }>;
+
+export type TFormValues = {
+    email: string;
+    password: string;
+    repassword: string;
+    code: string;
+};
+
+export type TLoginFormValues = {
+    email: string;
+    password: string;
+};
+
+export type TUserSettingFormValues = {
+    gender: Gender;
+    birth: string;
+    nickname: string;
+    phoneNum: string;
+};

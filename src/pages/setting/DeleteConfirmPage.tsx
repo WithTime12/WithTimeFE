@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import CommonAuthInput from '@/components/common/commonAuthInput';
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Header from '@/components/layout/Header';
 
 import ArrowLeftCircle from '@/assets/icons/Arrow_left_circle.svg?react';

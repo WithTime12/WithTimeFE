@@ -3,7 +3,7 @@ import React from 'react';
 
 import formatInputNumber from '@/utils/formatPhoneNumber';
 
-import Button from './Button';
+import Button from '@/components/common/Button';
 
 import AlertCircle from '@/assets/icons/alert-circle_Fill.svg?react';
 
@@ -81,7 +81,7 @@ const CommonAuthInput = React.forwardRef<HTMLInputElement, TCommonAuthInputProps
                         size="small"
                         variant={`${validation ? 'mint' : 'white'}`}
                         children={buttonText}
-                        disabled={error && !validation}
+                        disabled={type === 'code' ? false : error || !validation}
                         className={`hover:!cursor-pointer ${validation ? 'hover:!bg-primary-500 hover:!text-[#ffffff]' : 'hover:!bg-default-gray-400'}`}
                         onClick={buttonOnclick}
                         type="button"

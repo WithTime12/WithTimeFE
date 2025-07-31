@@ -4,26 +4,28 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TFormValues } from '@/types/auth';
+
 import { findingSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Button from '@/components/common/Button';
-import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
-
-type TFormValues = {
-    email: string;
-    password: string;
-    repassword: string;
-    code: string;
-};
 
 export default function FindPw() {
     const navigate = useNavigate();
+
     const [codeVerify, setCodeVerify] = useState(false);
     const [sendCode, setSendCode] = useState(false);
     const [codeError, setCodeError] = useState('');
+
+    const { useSendCode, useCheckCode, useFindPassword } = useAuth();
+    const { mutate: sendCodeMutation, isPending: sendCodePending } = useSendCode;
+    const { mutate: checkCodeMutation, isPending: checkCodePending } = useCheckCode;
+    const { mutate: findPasswordMutation } = useFindPassword;
+
     const {
         register,
         handleSubmit,
@@ -33,11 +35,6 @@ export default function FindPw() {
         mode: 'onChange',
         resolver: zodResolver(findingSchema),
     });
-
-    const { useSendCode, useCheckCode, useFindPassword } = useAuth();
-    const { mutate: sendCodeMutation, isPending: sendCodePending } = useSendCode;
-    const { mutate: checkCodeMutation, isPending: checkCodePending } = useCheckCode;
-    const { mutate: findPasswordMutation } = useFindPassword;
 
     const watchedPassword = useWatch({
         control,
@@ -101,15 +98,6 @@ export default function FindPw() {
         }
     };
 
-    useEffect(() => {
-        setCodeVerify(false);
-        setCodeError('');
-    }, [watchedCode, watchedEmail]);
-
-    useEffect(() => {
-        setSendCode(false);
-    }, [watchedEmail]);
-
     const onSubmit: SubmitHandler<TFormValues> = async () => {
         if (isValid) {
             findPasswordMutation(
@@ -121,7 +109,7 @@ export default function FindPw() {
                     onSuccess: (data) => {
                         if (data.isSuccess === true) {
                             alert('비밀번호가 성공적으로 변경되었습니다.');
-                            navigate('/login');
+                            navigate('/');
                         } else {
                             alert('비밀번호 변경에 실패하였습니다. 다시 시도해주세요.');
                         }
@@ -133,6 +121,16 @@ export default function FindPw() {
             );
         }
     };
+
+    useEffect(() => {
+        setCodeVerify(false);
+        setCodeError('');
+    }, [watchedCode, watchedEmail]);
+
+    useEffect(() => {
+        setSendCode(false);
+    }, [watchedEmail]);
+
     return (
         <div className="min-w-[280px] w-[450px] max-w-[96vw] flex flex-col items-center justify-center gap-2 overflow-hidden">
             <div className="w-full flex justify-start">
@@ -162,6 +160,7 @@ export default function FindPw() {
                             validation={sendCode && codeVerify && !checkCodePending}
                             button={true}
                             buttonOnclick={checkCode}
+                            type="code"
                             buttonText={codeVerify ? '인증완료' : '인증하기'}
                             {...register('code')}
                         />

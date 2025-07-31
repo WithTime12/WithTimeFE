@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TUserSettingFormValues } from '@/types/auth';
 import { Gender } from '@/types/auth';
 
 import formatDateInput from '@/utils/formatDateInput';
@@ -12,19 +13,12 @@ import { userSettingSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
-import CommonAuthInput from '@/components/common/commonAuthInput';
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
 import Button from '../../components/common/Button';
 
 import useAuthStore from '@/store/useAuthStore';
-
-type TFormValues = {
-    gender: Gender;
-    birth: string;
-    nickname: string;
-    phoneNum: string;
-};
 
 export default function User() {
     const [error, setError] = useState('');
@@ -41,7 +35,7 @@ export default function User() {
         control,
         setValue,
         formState: { isValid, errors },
-    } = useForm<TFormValues>({
+    } = useForm<TUserSettingFormValues>({
         mode: 'onChange',
         resolver: zodResolver(userSettingSchema),
         defaultValues: {
@@ -49,7 +43,7 @@ export default function User() {
         },
     });
     const { mutate: signupMutate, isPending } = useDefaultSignup;
-    const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+    const onSubmit: SubmitHandler<TUserSettingFormValues> = async (submitData) => {
         const formattedBirth = submitData.birth.replace(/\./g, '-');
         if (isValid && agree1 && agree2) {
             signupMutate(

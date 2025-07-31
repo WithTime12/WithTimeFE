@@ -4,34 +4,31 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TFormValues } from '@/types/auth';
+
 import { signupSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Button from '@/components/common/Button';
-import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
 import useAuthStore from '@/store/useAuthStore';
 
-type TFormValues = {
-    email: string;
-    password: string;
-    repassword: string;
-    code: string;
-};
-
 export default function Join() {
-    const { setEmail, setPassword } = useAuthStore();
-    const [codeVerify, setCodeVerify] = useState(false);
-    const [sendCode, setSendCode] = useState(false);
-    const [codeError, setCodeError] = useState('');
     const navigate = useNavigate();
+
+    const { setEmail, setPassword } = useAuthStore();
+
     const { useSendCode, useCheckCode } = useAuth();
+
     const { mutate: sendCodeMutation } = useSendCode;
     const { mutate: checkCodeMutation } = useCheckCode;
 
-    const socialId = localStorage.getItem('socialId') || '';
+    const [codeVerify, setCodeVerify] = useState(false);
+    const [sendCode, setSendCode] = useState(false);
+    const [codeError, setCodeError] = useState('');
 
     const {
         register,
@@ -134,25 +131,24 @@ export default function Join() {
                             error={!!errors.email?.message || watchedEmail == ''}
                             errorMessage={errors.email?.message}
                             validation={!errors.email?.message && !!watchedEmail}
-                            button={socialId !== '' && !socialId ? true : false}
+                            button={true}
                             buttonOnclick={postSendCode}
                             buttonText="인증번호"
                             {...register('email')}
                         />
 
-                        {socialId !== '' && !socialId && (
-                            <CommonAuthInput
-                                placeholder="인증번호를 입력하세요"
-                                title="Verification code"
-                                error={!!errors.code?.message || watchedCode == '' || codeError !== ''}
-                                errorMessage={errors.code?.message || codeError}
-                                validation={sendCode && codeVerify}
-                                button={true}
-                                buttonOnclick={checkCode}
-                                buttonText={codeVerify ? '인증완료' : '인증하기'}
-                                {...register('code')}
-                            />
-                        )}
+                        <CommonAuthInput
+                            placeholder="인증번호를 입력하세요"
+                            title="Verification code"
+                            error={!!errors.code?.message || watchedCode == '' || codeError !== ''}
+                            errorMessage={errors.code?.message || codeError}
+                            validation={sendCode && codeVerify}
+                            button={true}
+                            buttonOnclick={checkCode}
+                            buttonText={codeVerify ? '인증완료' : '인증하기'}
+                            {...register('code')}
+                        />
+
                         <div className="border-[0.5px] w-full border-default-gray-500" />
                         <CommonAuthInput
                             placeholder="새로운 비밀번호"
@@ -179,7 +175,7 @@ export default function Join() {
                         size="big-16"
                         variant={'mint'}
                         children={'다음으로'}
-                        disabled={socialId ? watchedEmail === '' || watchedPassword === '' : !isValid || watchedEmail === '' || watchedPassword === ''}
+                        disabled={!isValid || watchedEmail === '' || watchedPassword === ''}
                         onClick={() => {
                             setEmail(watchedEmail);
                             setPassword(watchedPassword);

@@ -4,22 +4,19 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TLoginFormValues } from '@/types/auth';
+
 import { loginSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Button from '@/components/common/Button';
-import CommonAuthInput from '@/components/common/commonAuthInput';
 
 import Logo from '@/assets/withTimeLogo/Korean_Logo.svg?react';
 import Google from '@/images/socialLogin/google.png';
 import Kakao from '@/images/socialLogin/kakao.png';
 import Naver from '@/images/socialLogin/naver.png';
-
-type TFormValues = {
-    email: string;
-    password: string;
-};
 
 export default function Login() {
     const navigate = useNavigate();
@@ -32,7 +29,7 @@ export default function Login() {
         handleSubmit,
         control,
         formState: { isValid, errors },
-    } = useForm<TFormValues>({
+    } = useForm<TLoginFormValues>({
         mode: 'onChange',
         resolver: zodResolver(loginSchema),
     });
@@ -46,7 +43,7 @@ export default function Login() {
         name: 'email',
     });
 
-    const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+    const onSubmit: SubmitHandler<TLoginFormValues> = async (submitData) => {
         if (isValid) {
             loginMutate(
                 {

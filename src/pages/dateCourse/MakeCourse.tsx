@@ -1,5 +1,3 @@
-// import GraySvgButton from '@/components/common/';
-
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/common/Button';
