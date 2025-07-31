@@ -81,7 +81,8 @@ const CommonAuthInput = React.forwardRef<HTMLInputElement, TCommonAuthInputProps
                         size="small"
                         variant={`${validation ? 'mint' : 'white'}`}
                         children={buttonText}
-                        disabled={error}
+                        disabled={error && !validation}
+                        className={`hover:!cursor-pointer ${validation ? 'hover:!bg-primary-500 hover:!text-[#ffffff]' : 'hover:!bg-default-gray-400'}`}
                         onClick={buttonOnclick}
                         type="button"
                     />

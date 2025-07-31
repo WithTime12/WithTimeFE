@@ -25,6 +25,7 @@ export default function Join() {
     const { setEmail, setPassword } = useAuthStore();
     const [codeVerify, setCodeVerify] = useState(false);
     const [sendCode, setSendCode] = useState(false);
+    const [codeError, setCodeError] = useState('');
     const navigate = useNavigate();
     const { useSendCode, useCheckCode } = useAuth();
     const { mutate: sendCodeMutation } = useSendCode;
@@ -67,13 +68,14 @@ export default function Join() {
                 },
                 {
                     onSuccess: (data) => {
-                        if (data.isSuccess === false) {
+                        if (data.isSuccess === true) {
                             setCodeVerify(true);
                         } else {
                             setCodeVerify(false);
                         }
                     },
                     onError: () => {
+                        setCodeError('인증번호가 일치하지 않습니다.');
                         setCodeVerify(false);
                     },
                 },
@@ -111,6 +113,7 @@ export default function Join() {
     useEffect(() => {
         setCodeVerify(false);
     }, [watchedCode, watchedEmail]);
+
     useEffect(() => {
         setSendCode(false);
     }, [watchedEmail]);
@@ -141,8 +144,8 @@ export default function Join() {
                             <CommonAuthInput
                                 placeholder="인증번호를 입력하세요"
                                 title="Verification code"
-                                error={!!errors.code?.message || watchedCode == ''}
-                                errorMessage={errors.code?.message}
+                                error={!!errors.code?.message || watchedCode == '' || codeError !== ''}
+                                errorMessage={errors.code?.message || codeError}
                                 validation={sendCode && codeVerify}
                                 button={true}
                                 buttonOnclick={checkCode}

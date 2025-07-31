@@ -55,3 +55,12 @@ export type TSocialLoginValues = {
     platform: TSocialLoginPlatform;
     code: string;
 };
+
+export type TFindPasswordValues = {
+    email: string;
+    newPassword: string;
+};
+
+export type TFindPasswordResponse = TCommonResponse<{
+    result: string;
+}>;

@@ -1,6 +1,8 @@
 import type {
     TCheckEmailVerifications,
     TEmailVerfications,
+    TFindPasswordResponse,
+    TFindPasswordValues,
     TLoginResponse,
     TLoginValues,
     TLogoutResponse,
@@ -37,11 +39,18 @@ export const emailVerifications = async ({ email }: { email: string }): Promise<
     const { data } = await axiosInstance.post('/api/v1/auth/email-verifications', { email });
     return data;
 };
+
 export const checkEmailVerifications = async ({ email, code }: { email: string; code: string }): Promise<TCheckEmailVerifications> => {
-    const { data } = await axiosInstance.post('/api/v1/auth/email-verifications', { email, code });
+    const { data } = await axiosInstance.post('/api/v1/auth/check-email-verifications', { email, code });
     return data;
 };
+
 export const socialLogin = async ({ platform, code }: TSocialLoginValues): Promise<TSocialLoginResponse> => {
     const { data } = await axiosInstance.get(`/api/v1/oauth2/callback/${platform}?code=${code}`);
+    return data;
+};
+
+export const findPassword = async ({ email, newPassword }: TFindPasswordValues): Promise<TFindPasswordResponse> => {
+    const { data } = await axiosInstance.post('/api/v1/auth/passwords', { email, newPassword });
     return data;
 };

@@ -21,6 +21,7 @@ function LoginRedirect() {
     const { useSocialLogin } = useAuth();
     const { mutate: socialLoginMutate } = useSocialLogin;
     const { setEmail, setSocialId } = useAuthStore();
+
     useEffect(() => {
         if (code) {
             socialLoginMutate(

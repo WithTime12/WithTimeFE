@@ -23,8 +23,10 @@ type TFormValues = {
 
 export default function Login() {
     const navigate = useNavigate();
-    const { useDefaultLogin } = useAuth();
     const [error, setError] = useState('');
+    const { useDefaultLogin } = useAuth();
+    const { mutate: loginMutate } = useDefaultLogin;
+
     const {
         register,
         handleSubmit,
@@ -34,6 +36,7 @@ export default function Login() {
         mode: 'onChange',
         resolver: zodResolver(loginSchema),
     });
+
     const watchedPassword = useWatch({
         control,
         name: 'password',
@@ -42,7 +45,7 @@ export default function Login() {
         control,
         name: 'email',
     });
-    const { mutate: loginMutate } = useDefaultLogin;
+
     const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
         if (isValid) {
             loginMutate(
