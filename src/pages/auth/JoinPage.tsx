@@ -23,8 +23,8 @@ export default function Join() {
 
     const { useSendCode, useCheckCode } = useAuth();
 
-    const { mutate: sendCodeMutation } = useSendCode;
-    const { mutate: checkCodeMutation } = useCheckCode;
+    const { mutate: sendCodeMutation, isPending: sendCodePending } = useSendCode;
+    const { mutate: checkCodeMutation, isPending: checkCodePending } = useCheckCode;
 
     const [codeVerify, setCodeVerify] = useState(false);
     const [sendCode, setSendCode] = useState(false);
@@ -56,6 +56,26 @@ export default function Join() {
         name: 'repassword',
     });
 
+    const postSendCode = () => {
+        setCodeVerify(false);
+        if (watchedEmail != '' && !errors.email?.message) {
+            sendCodeMutation(
+                {
+                    email: watchedEmail,
+                },
+                {
+                    onSuccess: () => {
+                        setSendCode(true);
+                    },
+                    onError: () => {
+                        setSendCode(false);
+                        alert('인증코드 발송 중 에러가 발생하였습니다.');
+                    },
+                },
+            );
+        }
+    };
+
     const checkCode = () => {
         if (watchedCode != '' && watchedCode != undefined && sendCode) {
             checkCodeMutation(
@@ -80,27 +100,6 @@ export default function Join() {
         }
     };
 
-    const postSendCode = () => {
-        setCodeVerify(false);
-        if (watchedEmail != '' && !errors.email?.message) {
-            sendCodeMutation(
-                {
-                    email: watchedEmail,
-                },
-                {
-                    onSuccess: () => {
-                        setSendCode(true);
-                    },
-                    onError: (err) => {
-                        setSendCode(false);
-                        console.error(err);
-                        alert('인증코드 발송 중 에러가 발생하였습니다.');
-                    },
-                },
-            );
-        }
-    };
-
     const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
         setEmail(submitData.email);
         setPassword(submitData.password);
@@ -109,6 +108,7 @@ export default function Join() {
 
     useEffect(() => {
         setCodeVerify(false);
+        setCodeError('');
     }, [watchedCode, watchedEmail]);
 
     useEffect(() => {
@@ -130,21 +130,21 @@ export default function Join() {
                             title="Email"
                             error={!!errors.email?.message || watchedEmail == ''}
                             errorMessage={errors.email?.message}
-                            validation={!errors.email?.message && !!watchedEmail}
+                            validation={!errors.email?.message && !!watchedEmail && !sendCodePending}
                             button={true}
                             buttonOnclick={postSendCode}
                             buttonText="인증번호"
                             {...register('email')}
                         />
-
                         <CommonAuthInput
                             placeholder="인증번호를 입력하세요"
                             title="Verification code"
                             error={!!errors.code?.message || watchedCode == '' || codeError !== ''}
                             errorMessage={errors.code?.message || codeError}
-                            validation={sendCode && codeVerify}
+                            validation={sendCode && codeVerify && !checkCodePending}
                             button={true}
                             buttonOnclick={checkCode}
+                            type="code"
                             buttonText={codeVerify ? '인증완료' : '인증하기'}
                             {...register('code')}
                         />
