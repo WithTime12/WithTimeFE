@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import type { TDateCourseSearchFilterOption } from '@/types/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
+
+import { useSearchRegion } from '@/hooks/course/useSearchRegion';
+import useDebounce from '@/hooks/useDebounce';
 
 import DateCourseOptionButton from './dateCourseOptionButton';
 import DateKeyword from './dateKeyword';
@@ -11,14 +14,19 @@ import EditableInputBox from '../common/EditableInputBox';
 import Calendar from '@/assets/icons/calendar_Blank.svg?react';
 
 export default function DateCourseSearchFilterOption({ options, type, value, onChange, title, subTitle, errorMessage }: TDateCourseSearchFilterOption) {
-    const [inputValue, setInputValue] = useState('');
     const now = new Date();
+
     const defaultDate = now.toISOString().split('T')[0]; // '2025-07-17'
     const defaultTime = now.toTimeString().slice(0, 5);
     const dateInputRef = useRef<HTMLInputElement>(null);
     const timeInputRef = useRef<HTMLInputElement>(null);
+
     const [date, setDate] = useState(defaultDate);
     const [time, setTime] = useState(defaultTime);
+    const [inputValue, setInputValue] = useState('');
+    const [showSearchResults, setShowSearchResults] = useState(false);
+
+    const debouncedInputValue = useDebounce(inputValue, 3000);
 
     useEffect(() => {
         onChange(`${date} ${time}`);
@@ -38,10 +46,21 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
         }
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setInputValue(e.target.value);
+    };
+
+    const { data: regionList } = useSearchRegion({ keyword: debouncedInputValue });
+
+    const handleSearch = () => {
+        if (!inputValue.trim()) return;
+        setShowSearchResults(true);
+    };
+
     return (
         <div className="flex w-full gap-[24px] flex-col h-fit">
-            <div className="flex w-full font-heading2 text-default-gray-700 sm:flex-row flex-col gap-[8px] sm:items-center">
-                <div className="flex flex-nowrap">{title}</div>
+            <div className="flex w-full text-default-gray-700 sm:flex-row flex-col gap-[8px] sm:items-center">
+                <div className="flex flex-nowrap font-heading3">{title}</div>
                 <span className="text-default-gray-700 font-heading3 flex">{subTitle}</span>
             </div>
             <div className="font-body3 text-warning">{errorMessage}</div>
@@ -70,23 +89,33 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                         <div className="flex justify-center items-center gap-4 w-full relative">
                             <EditableInputBox
                                 mode="search"
-                                onSearchClick={() => {
-                                    const trimmed = inputValue.trim();
-                                    if (!trimmed) return;
-
-                                    const current = Array.isArray(value) ? value : [];
-                                    if (!current.includes(trimmed)) {
-                                        onChange([...current, trimmed]);
-                                    }
-
-                                    setInputValue('');
-                                }}
+                                onSearchClick={handleSearch}
                                 placeholder="ex: 서울시 강남구"
                                 className="w-full"
                                 value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
+                                onChange={handleInputChange}
                             />
                         </div>
+                        {showSearchResults && regionList && regionList.result.regions.length > 0 && (
+                            <ul className="mt-2 w-full border border-primary-500 rounding-16 shadow-default bg-white max-h-[200px] overflow-auto">
+                                {regionList.result.regions.map((region: string, idx: number) => (
+                                    <li
+                                        key={idx}
+                                        className="p-2 cursor-pointer hover:bg-gray-100 text-sm text-default-gray-800"
+                                        onClick={() => {
+                                            const current = Array.isArray(value) ? value : [];
+                                            if (!current.includes(region)) {
+                                                onChange([...current, region]);
+                                            }
+                                            setInputValue('');
+                                            setShowSearchResults(false);
+                                        }}
+                                    >
+                                        {region}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
 
                         <div className="mt-4 flex flex-wrap gap-2">
                             {Array.isArray(value) && value.map((v, idx) => <PlaceButton key={idx} placeName={v} onClick={() => handleDeletePlaceOption(v)} />)}
@@ -116,7 +145,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                         <div className="flex gap-3 items-center w-fit flex-nowrap sm:flex-nowrap rounding-32 border-[2px] border-primary-500 py-[16px] px-[32px]">
                             <div className="relative flex gap-[4px]" onClick={handleDateClick}>
                                 <Calendar stroke="#000000" />
-                                <div className="cursor-pointer font-heading3 text-default-gray-800">{date}</div>
+                                <div className="cursor-pointer font-heading3 text-default-gray-800 whitespace-nowrap">{date}</div>
 
                                 <input
                                     ref={dateInputRef}

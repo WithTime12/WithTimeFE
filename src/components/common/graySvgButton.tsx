@@ -7,13 +7,13 @@ type TGraySVGButton = {
     child?: ReactElement;
     type?: 'cancle' | 'backward';
     onClick: () => void;
-    size?: 'small' | 'default';
+    size?: 'big' | 'default';
 };
 
 function GraySvgButton({ child, type, onClick, size = 'default' }: TGraySVGButton) {
-    const svgSize = size == 'small' ? '35' : '56';
+    const svgSize = size == 'big' ? '56' : '35';
     return (
-        <div className={`rounded-full hover:cursor-pointer ${size == 'small' ? 'h-[35px] w-[35px]' : 'w-[56px] h-[56px]'}`} onClick={onClick}>
+        <div className={`rounded-full hover:cursor-pointer ${size == 'big' ? 'w-[56px] h-[56px]' : 'h-[35px] w-[35px]'}`} onClick={onClick}>
             {child && child}
             {type == 'backward' && <ArrowLeftCircle className="z-10" fill="#c3c3c3" width={svgSize} height={svgSize} />}
             {type == 'cancle' && <ErrorCircle className="z-10 w-full h-full" fill="#c3c3c3" />}

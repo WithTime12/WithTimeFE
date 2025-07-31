@@ -1,5 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 
+import type { TCommonResponse } from './common/common';
+
 export type TTimeline = {
     end?: boolean;
     title?: string;
@@ -62,3 +64,13 @@ export interface IQuestion {
     subTitle: string | null;
     type: 'choice' | 'search' | 'time' | 'choices' | 'keyword';
 }
+
+export type TSearchRegionValues = {
+    keyword: string;
+};
+
+export type TSearchRegionResponse = TCommonResponse<{
+    regions: string[];
+    keyword: string;
+    resultCount: number;
+}>;
