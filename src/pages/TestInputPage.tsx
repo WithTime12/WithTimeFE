@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import EditableInputBox from '@/components/common/EditableInputBox';
 
-import SearchIcon from '@/assets/icons/Search_Blank.svg?react';
+// import SearchIcon from '@/assets/icons/Search_Blank.svg?react';
 
 export default function TestInputPage() {
     const [text, setText] = useState('');
