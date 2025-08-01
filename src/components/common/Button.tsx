@@ -27,7 +27,7 @@ export default function Button({ size, variant, disabled = false, onClick, class
         <button
             type={type}
             className={cx(
-                'px-4 transition-colors duration-200',
+                'px-4 transition-colors duration-200 flex items-center justify-center h-fit whitespace-nowrap',
                 sizeClasses[size],
                 variantClasses[variant],
                 disabled && 'opacity-50 cursor-not-allowed pointer-events-none',

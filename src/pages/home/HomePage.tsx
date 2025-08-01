@@ -1,14 +1,43 @@
-import { MODAL_TYPES } from '@/components/common/modalProvider';
+import Banner from '@/components/home/banner';
+import DateCourseStore from '@/components/home/dateCourseStore';
+import DateLocation from '@/components/home/dateLocation';
+import DateRecommend from '@/components/home/dateRecommend';
+import DateTimes from '@/components/home/dateTimes';
+import MainInfo from '@/components/home/info';
+import Level from '@/components/home/level';
+import WordCloudCard from '@/components/home/wordCloud';
 
-import useModalStore from '@/store/useModalStore';
-
-// 임시로 만든 Home 페이지 입니다.
-// 모달 사용법은 아래와 같이 useModalStore에서 openModal 함수를 꺼내오고, modalType을 인자로 전달하면 됩니다.
 function Home() {
-    const { openModal } = useModalStore();
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <button onClick={() => openModal({ modalType: MODAL_TYPES.ErrorModal })}>누르면 에러 모달이 나옵니다</button>
+        <div className="bg-default-gray-100 min-h-screen mb-[40px]">
+            <Banner />
+            <section className="flex flex-col px-10 gap-[30px] mt-20">
+                <div className="flex flex-col">
+                    <div className="text-2xl">
+                        <span className="font-bold text-[50px]">Madeleine</span>
+                        <span className="font-semibold text-[25px]"> 님의 WithTime</span>
+                    </div>
+                    <div className="max-w-9xl mt-10 grid grid-cols-1 lg:grid-cols-2 gap-15">
+                        <div className="flex flex-col gap-[30px]">
+                            <Level />
+                            <div className="grid grid-cols-[3fr_2fr] h-fit w-full gap-[37px]">
+                                <DateCourseStore />
+                                <DateTimes />
+                            </div>
+                        </div>
+                        <DateRecommend />
+                    </div>
+                </div>
+                <div>
+                    <div className="text-xl font-bold mb-3 w-full ">WithTime 데이트 관련 현황</div>
+                    <div className="text-primary-700 mb-6 w-full font-bold text-xs">WithTime에서 더 편리하게 데이트를 준비해보세요</div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-15 items-end">
+                        <DateLocation />
+                        <WordCloudCard />
+                    </div>
+                </div>
+                <MainInfo />
+            </section>
         </div>
     );
 }
