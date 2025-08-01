@@ -13,7 +13,6 @@ export const MODAL_TYPES = {
     ErrorModal: 'ErrorModal',
     DateCourseSearchFilterModal: 'DateCourseSearchFilterModal',
     SettingsModal: 'SettingsModal', //설정 모달 추가
-
 };
 
 export const MODAL_COMPONENTS = {
