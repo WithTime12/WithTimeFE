@@ -22,9 +22,6 @@ jobs:
             - name: Create .env file
               run: |
                   echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env
-                  echo "VITE_S3_HOSTNAME=${{ secrets.VITE_S3_HOSTNAME }}" >> .env
-                  echo "VITE_CHANNEL_TALK_PLUGIN_KEY=${{ secrets.VITE_CHANNEL_TALK_PLUGIN_KEY }}" >> .env
-
             - name: Install dependencies
               run: pnpm install
 
@@ -45,3 +42,11 @@ jobs:
             - name: Invalidate CloudFront Cache
               run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
               continue-on-error: true
+
+            - name: Notify Discord
+              if: success()
+              run: |
+                  curl -H "Content-Type: application/json" \
+                  -X POST \
+                  -d "{\"content\": \"✅ 배포가 완료되었습니다! 🎉 (브랜치: main)\"}" \
+                  ${{ secrets.DISCORD_WEBHOOK_URL }}
