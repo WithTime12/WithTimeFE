@@ -12,7 +12,7 @@ export default function DateKeyword<T>({ category, tags, setState, state }: TDat
     };
     return (
         <div className="flex gap-[40px] p-[24px] w-full flex-col">
-            <div className="font-heading2 text-default-gray-700">#{category}</div>
+            <div className="font-heading3 text-default-gray-700">#{category}</div>
             <div className="flex w-full flex-wrap gap-[16px] sm:justify-start justify-center">
                 {tags.map((tag) => {
                     return (

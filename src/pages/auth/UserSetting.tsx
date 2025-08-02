@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TUserSettingFormValues } from '@/types/auth';
 import { Gender } from '@/types/auth';
 
 import formatDateInput from '@/utils/formatDateInput';
@@ -12,28 +13,21 @@ import { userSettingSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
-import CommonAuthInput from '@/components/common/commonAuthInput';
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
 import Button from '../../components/common/Button';
 
 import useAuthStore from '@/store/useAuthStore';
 
-type TFormValues = {
-    gender: Gender;
-    birth: string;
-    nickname: string;
-    phoneNum: string;
-};
-
 export default function User() {
     const [error, setError] = useState('');
     const [gender, setGender] = useState(Gender.MALE);
     const [agree1, setAgree1] = useState(false);
     const [agree2, setAgree2] = useState(false);
-    const { email, password } = useAuthStore();
+    const { email, password, socialId, setSocialId } = useAuthStore();
     const { useDefaultSignup } = useAuth();
-    const socialId = localStorage.getItem('socialId') || '';
+
     const navigate = useNavigate();
     const {
         register,
@@ -41,7 +35,7 @@ export default function User() {
         control,
         setValue,
         formState: { isValid, errors },
-    } = useForm<TFormValues>({
+    } = useForm<TUserSettingFormValues>({
         mode: 'onChange',
         resolver: zodResolver(userSettingSchema),
         defaultValues: {
@@ -49,26 +43,27 @@ export default function User() {
         },
     });
     const { mutate: signupMutate, isPending } = useDefaultSignup;
-    const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+    const onSubmit: SubmitHandler<TUserSettingFormValues> = async (submitData) => {
         const formattedBirth = submitData.birth.replace(/\./g, '-');
         if (isValid && agree1 && agree2) {
             signupMutate(
                 {
                     email: email,
-                    password: password,
+                    password: password !== '' ? password : null,
                     username: submitData.nickname,
                     gender: submitData.gender,
                     phoneNumber: submitData.phoneNum,
                     birth: formattedBirth,
-                    socialId: socialId ? Number(socialId) : undefined,
+                    socialId: socialId !== -1 ? Number(socialId) : undefined,
                 },
                 {
                     onSuccess: () => {
-                        localStorage.removeItem('socialId');
+                        setSocialId(-1);
                         navigate('/home');
                     },
                     onError: (err) => {
-                        setError(err.message);
+                        console.log(err);
+                        setError(err.response?.data.message!);
                     },
                 },
             );
@@ -145,8 +140,6 @@ export default function User() {
                                     ref={ref}
                                     placeholder="전화번호 (010-xxxx-xxxx)"
                                     title="Phone Number"
-                                    error={!!errors.phoneNum?.message || error != ''}
-                                    errorMessage={errors.phoneNum?.message || error}
                                 />
                             )}
                         />
@@ -170,12 +163,13 @@ export default function User() {
                         이용약관 동의
                     </div>
                 </div>
+                <div className="flex text-warning font-body1">{error}</div>
                 <Button
                     children={'회원가입 완료'}
                     size="big-16"
                     variant="mint"
                     onClick={handleSubmit(onSubmit)}
-                    disabled={!isValid || !agree1 || !agree2 || isPending}
+                    disabled={!isValid || !agree1 || !agree2 || isPending || error !== ''}
                     className="w-full"
                 />
             </form>

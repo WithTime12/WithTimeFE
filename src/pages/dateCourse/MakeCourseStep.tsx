@@ -123,7 +123,7 @@ export default function MakeCourseStep() {
     return (
         <div className="flex flex-col px-6 max-w-[90vw] w-[1000px] mx-auto pt-[50px] pb-[150px] gap-[10px] min-h-[90vh] h-fit">
             <div className="w-full">
-                <GraySvgButton type="backward" onClick={handlePrev} size="small" />
+                <GraySvgButton type="backward" onClick={handlePrev} />
             </div>
             <div className="flex flex-col w-full mb:px-[50px] gap-[20px]">
                 <div className="w-full mb-8">

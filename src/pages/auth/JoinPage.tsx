@@ -4,33 +4,31 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TFormValues } from '@/types/auth';
+
 import { signupSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 
+import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Button from '@/components/common/Button';
-import CommonAuthInput from '@/components/common/commonAuthInput';
 import GraySvgButton from '@/components/common/graySvgButton';
 
 import useAuthStore from '@/store/useAuthStore';
 
-type TFormValues = {
-    email: string;
-    password: string;
-    repassword: string;
-    code: string;
-};
-
 export default function Join() {
+    const navigate = useNavigate();
+
     const { setEmail, setPassword } = useAuthStore();
+
+    const { useSendCode, useCheckCode } = useAuth();
+
+    const { mutate: sendCodeMutation, isPending: sendCodePending } = useSendCode;
+    const { mutate: checkCodeMutation, isPending: checkCodePending } = useCheckCode;
+
     const [codeVerify, setCodeVerify] = useState(false);
     const [sendCode, setSendCode] = useState(false);
-    const navigate = useNavigate();
-    const { useSendCode, useCheckCode } = useAuth();
-    const { mutate: sendCodeMutation } = useSendCode;
-    const { mutate: checkCodeMutation } = useCheckCode;
-
-    const socialId = localStorage.getItem('socialId') || '';
+    const [codeError, setCodeError] = useState('');
 
     const {
         register,
@@ -58,29 +56,6 @@ export default function Join() {
         name: 'repassword',
     });
 
-    const checkCode = () => {
-        if (watchedCode != '' && watchedCode != undefined && sendCode) {
-            checkCodeMutation(
-                {
-                    email: watchedEmail,
-                    code: watchedCode,
-                },
-                {
-                    onSuccess: (data) => {
-                        if (data.isSuccess === false) {
-                            setCodeVerify(true);
-                        } else {
-                            setCodeVerify(false);
-                        }
-                    },
-                    onError: () => {
-                        setCodeVerify(false);
-                    },
-                },
-            );
-        }
-    };
-
     const postSendCode = () => {
         setCodeVerify(false);
         if (watchedEmail != '' && !errors.email?.message) {
@@ -92,10 +67,33 @@ export default function Join() {
                     onSuccess: () => {
                         setSendCode(true);
                     },
-                    onError: (err) => {
+                    onError: () => {
                         setSendCode(false);
-                        console.error(err);
                         alert('인증코드 발송 중 에러가 발생하였습니다.');
+                    },
+                },
+            );
+        }
+    };
+
+    const checkCode = () => {
+        if (watchedCode != '' && watchedCode != undefined && sendCode) {
+            checkCodeMutation(
+                {
+                    email: watchedEmail,
+                    code: watchedCode,
+                },
+                {
+                    onSuccess: (data) => {
+                        if (data.isSuccess === true) {
+                            setCodeVerify(true);
+                        } else {
+                            setCodeVerify(false);
+                        }
+                    },
+                    onError: () => {
+                        setCodeError('인증번호가 일치하지 않습니다.');
+                        setCodeVerify(false);
                     },
                 },
             );
@@ -110,7 +108,9 @@ export default function Join() {
 
     useEffect(() => {
         setCodeVerify(false);
+        setCodeError('');
     }, [watchedCode, watchedEmail]);
+
     useEffect(() => {
         setSendCode(false);
     }, [watchedEmail]);
@@ -130,26 +130,25 @@ export default function Join() {
                             title="Email"
                             error={!!errors.email?.message || watchedEmail == ''}
                             errorMessage={errors.email?.message}
-                            validation={!errors.email?.message && !!watchedEmail}
-                            button={socialId !== '' && !socialId ? true : false}
+                            validation={!errors.email?.message && !!watchedEmail && !sendCodePending}
+                            button={true}
                             buttonOnclick={postSendCode}
                             buttonText="인증번호"
                             {...register('email')}
                         />
+                        <CommonAuthInput
+                            placeholder="인증번호를 입력하세요"
+                            title="Verification code"
+                            error={!!errors.code?.message || watchedCode == '' || codeError !== ''}
+                            errorMessage={errors.code?.message || codeError}
+                            validation={sendCode && codeVerify && !checkCodePending}
+                            button={true}
+                            buttonOnclick={checkCode}
+                            type="code"
+                            buttonText={codeVerify ? '인증완료' : '인증하기'}
+                            {...register('code')}
+                        />
 
-                        {socialId !== '' && !socialId && (
-                            <CommonAuthInput
-                                placeholder="인증번호를 입력하세요"
-                                title="Verification code"
-                                error={!!errors.code?.message || watchedCode == ''}
-                                errorMessage={errors.code?.message}
-                                validation={sendCode && codeVerify}
-                                button={true}
-                                buttonOnclick={checkCode}
-                                buttonText={codeVerify ? '인증완료' : '인증하기'}
-                                {...register('code')}
-                            />
-                        )}
                         <div className="border-[0.5px] w-full border-default-gray-500" />
                         <CommonAuthInput
                             placeholder="새로운 비밀번호"
@@ -176,7 +175,7 @@ export default function Join() {
                         size="big-16"
                         variant={'mint'}
                         children={'다음으로'}
-                        disabled={socialId ? watchedEmail === '' || watchedPassword === '' : !isValid || watchedEmail === '' || watchedPassword === ''}
+                        disabled={!isValid || watchedEmail === '' || watchedPassword === ''}
                         onClick={() => {
                             setEmail(watchedEmail);
                             setPassword(watchedPassword);
