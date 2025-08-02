@@ -1,123 +1,111 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import type { DebouncedFunc } from 'lodash';
+import throttle from 'lodash.throttle';
+import type { ListEntry } from 'wordcloud';
+import WordCloud from 'wordcloud';
 
-interface IKeyword {
-    text: string;
-    className: string;
-}
-interface ICoordinates {
-    left: number;
-    top: number;
-}
+const keywords = [
+    { text: '드라이브', value: 19 },
+    { text: '포토존', value: 18 },
+    { text: '카페', value: 20 },
+    { text: '감성', value: 17 },
+    { text: '맛집', value: 19.5 },
+    { text: '피크닉', value: 16 },
+    { text: '영화관', value: 17.5 },
+    { text: '산책', value: 15 },
+    { text: '실내', value: 15.5 },
+    { text: '레저', value: 14 },
+    { text: '홍대', value: 19.2 },
+    { text: '전시', value: 14.8 },
+    { text: '성수', value: 18.8 },
+    { text: '가로수길', value: 15.2 },
+    { text: '행궁동', value: 15.3 },
+    { text: '레트로', value: 15.6 },
+    { text: '쇼핑', value: 15.5 },
+];
 
-interface IArea extends ICoordinates {
-    width: number;
-    height: number;
-}
-interface IPositionedKeyword {
-    text: string;
-    className: string;
-    style: React.CSSProperties;
-}
+export default function WordCloudCanvas() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const throttledDrawRef = useRef<DebouncedFunc<(w: number, h: number) => void> | null>(null);
 
-// 겹침 체크 함수: generatePositions보다 위로 이동
-const isOverlapping = (newPos: ICoordinates, existingAreas: IArea[], textLength: number): boolean => {
-    const margin = 5;
-    const newWidth = textLength * 2;
-    const newHeight = 3;
+    const drawCloud = (width: number, height: number) => {
+        console.log('워드클라우드 렌더링!', width, height);
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-    return existingAreas.some((area: IArea) => {
-        return !(
-            newPos.left + newWidth + margin < area.left ||
-            newPos.left - margin > area.left + area.width ||
-            newPos.top + newHeight + margin < area.top ||
-            newPos.top - margin > area.top + area.height
-        );
-    });
-};
-// 워드클라우드 컴포넌트
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
 
-export default function WordCloudCard() {
-    const keywords: IKeyword[] = [
-        { text: '드라이브', className: 'text-4xl font-bold text-teal-700' },
-        { text: '포토존', className: 'text-3xl font-bold text-teal-700' },
-        { text: '카페', className: 'text-2xl font-bold text-teal-500' },
-        { text: '감성', className: 'text-xl font-bold text-teal-600' },
-        { text: '맛집', className: 'text-xl font-bold text-teal-600' },
-        { text: '피크닉', className: 'text-lg text-teal-300' },
-        { text: '영화관', className: 'text-lg text-teal-500' },
-        { text: '산책', className: 'text-lg text-teal-300' },
-        { text: '실내', className: 'text-base text-gray-400' },
-        { text: '레저', className: 'text-base text-gray-400' },
-        { text: '홍대', className: 'text-base text-gray-300' },
-        { text: '전시', className: 'text-base text-gray-300' },
-        { text: '성수', className: 'text-base text-gray-300' },
-        { text: '가로수길', className: 'text-base text-gray-400' },
-        { text: '행궁동', className: 'text-base text-gray-400' },
-        { text: '레트로', className: 'text-base text-gray-200' },
-        { text: '쇼핑', className: 'text-base text-gray-500' },
-    ];
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const [positionedKeywords, setPositionedKeywords] = useState<IPositionedKeyword[]>([]);
+        const list: ListEntry[] = keywords.map((k) => [k.text, k.value]);
 
-    const generatePositions = (): IPositionedKeyword[] => {
-        const positions: IPositionedKeyword[] = [];
-        const usedAreas: IArea[] = [];
-
-        keywords.forEach((keyword: IKeyword) => {
-            let position: ICoordinates;
-            let attempts = 0;
-
-            do {
-                position = {
-                    left: Math.random() * 60 + 20,
-                    top: Math.random() * 60 + 20,
-                };
-                attempts++;
-            } while (attempts < 50 && isOverlapping(position, usedAreas, keyword.text.length));
-
-            usedAreas.push({
-                ...position,
-                width:
-                    keyword.text.length *
-                    (keyword.className.includes('text-4xl')
-                        ? 3
-                        : keyword.className.includes('text-3xl')
-                          ? 2.5
-                          : keyword.className.includes('text-2xl')
-                            ? 2
-                            : keyword.className.includes('text-xl')
-                              ? 1.5
-                              : 1),
-                height: 3,
-            });
-
-            positions.push({
-                ...keyword,
-                style: {
-                    position: 'absolute',
-                    left: `${position.left}%`,
-                    top: `${position.top}%`,
-                    transform: 'translate(-50%, -50%)',
-                },
-            });
+        WordCloud(canvas, {
+            list,
+            gridSize: Math.round(8 * (width / 400)),
+            weightFactor: (size) => size * (width / 350),
+            fontFamily: 'Pretendard, sans-serif',
+            color: (_word, weight) => {
+                if (Number(weight) > 18) return '#186a6d';
+                if (Number(weight) > 17) return '#3fa495';
+                if (Number(weight) > 16) return '#7fe4c1';
+                if (Number(weight) > 15) return '#b5f7d3';
+                return '#c3c3c3';
+            },
+            rotateRatio: 0.4,
+            rotationSteps: 2,
+            minRotation: 0,
+            maxRotation: Math.PI / 2,
+            backgroundColor: '#fff',
+            drawOutOfBound: false,
+            origin: [width / 2, height / 2],
         });
-
-        return positions;
     };
 
+    // throttle 등록 및 초기 실행
     useEffect(() => {
-        setPositionedKeywords(generatePositions());
+        throttledDrawRef.current = throttle(drawCloud, 200, {
+            leading: false,
+            trailing: true,
+        });
+
+        const container = containerRef.current;
+        if (container) {
+            const { width, height } = container.getBoundingClientRect();
+            drawCloud(width, height); // 최초 한 번 직접 호출
+        }
+    }, []);
+
+    // ResizeObserver 적용
+    useEffect(() => {
+        if (!containerRef.current || !throttledDrawRef.current) return;
+
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                const { width, height } = entry.contentRect;
+                throttledDrawRef.current?.(width, height);
+            }
+        });
+
+        resizeObserver.observe(containerRef.current);
+
+        return () => {
+            resizeObserver.disconnect();
+            throttledDrawRef.current?.cancel?.();
+        };
     }, []);
 
     return (
-        <div className="bg-white shadow-black rounded-2xl p-8 flex flex-col items-center h-full">
-            <div className="text-xl font-bold text-gray-700 mb-6">이번주 인기 데이트 키워드 현황</div>
-            <div className="relative w-full h-64 overflow-hidden rounded-lg flex items-center justify-center">
-                {positionedKeywords.map((keyword, index) => (
-                    <span key={index} className={keyword.className} style={keyword.style}>
-                        {keyword.text}
-                    </span>
-                ))}
+        <div className="py-[28px] w-full h-[400px] shadow-black rounding-16 md:h-[500px] flex flex-col items-center justify-center gap-3">
+            <div className="z-1 flex w-full items-center justify-center font-heading3 text-default-gray-700">이번주 인기 데이트 키워드 현황</div>
+            <div ref={containerRef} className="w-full h-[85%] min-h-[200px] relative">
+                <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full rounding-16" />
             </div>
         </div>
     );

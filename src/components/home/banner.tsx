@@ -94,9 +94,9 @@ function Banner() {
             <div className="absolute left-1/2 -bottom-7 -translate-x-1/2 z-20">
                 <Button
                     onClick={() => navigate('/makeCourse')}
-                    size="big-16"
+                    size="big-32"
                     variant="white"
-                    className="sm:w-[600px] py-[10px] w-[250px] !text-wrap break-keep h-[60px] !text-[16px] tracking-[0.5px] bg-white shadow-[0_0_8px_2px_rgba(127,228,193,0.5)] rounded-2xl"
+                    className="sm:w-[600px] py-[20px] w-[250px] !text-wrap break-keep h-[60px] tracking-[0.5px] !text-[18px] bg-white shadow-[0_0_8px_2px_rgba(127,228,193,0.5)] rounded-2xl"
                 >
                     WithTime을 통해 원하시는 데이트 코스를 만들어보세요
                     <span className="ml-2">→</span>
