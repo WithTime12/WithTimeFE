@@ -9,8 +9,10 @@ import { queryClient } from './api/queryClient.ts';
 import App from './App.tsx';
 
 createRoot(document.getElementById('root')!).render(
-    <QueryClientProvider client={queryClient}>
-        {import.meta.env.VITE_DEV_MODE && <ReactQueryDevtools initialIsOpen={false} />}
-        <App />
-    </QueryClientProvider>,
+    <StrictMode>
+        <QueryClientProvider client={queryClient}>
+            {import.meta.env.VITE_DEV_MODE && <ReactQueryDevtools initialIsOpen={false} />}
+            <App />
+        </QueryClientProvider>
+    </StrictMode>,
 );
