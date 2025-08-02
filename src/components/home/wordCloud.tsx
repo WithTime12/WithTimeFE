@@ -30,7 +30,6 @@ export default function WordCloudCanvas() {
     const throttledDrawRef = useRef<DebouncedFunc<(w: number, h: number) => void> | null>(null);
 
     const drawCloud = (width: number, height: number) => {
-        console.log('워드클라우드 렌더링!', width, height);
         const canvas = canvasRef.current;
         if (!canvas) return;
 
