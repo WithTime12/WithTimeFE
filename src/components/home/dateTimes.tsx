@@ -3,7 +3,7 @@ import MainCard from './mainCard';
 function DateTimes() {
     return (
         <MainCard>
-            <div className="flex flex-row min-w-fit py-[28px] sm:px-[10px] justify-center">
+            <div className="flex flex-row min-w-fit py-[28px] justify-center">
                 {/* 첫 번째 카드 */}
                 <div className="flex flex-col items-center justify-center min-w-fit px-[30px] sm:px-[56px]">
                     <div className="text-sm text-default-gray-700 mb-1 flex">최근 1개월</div>
