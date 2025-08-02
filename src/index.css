@@ -1,26 +1,82 @@
 @import 'tailwindcss';
 
+* {
+  font-family: 'Pretendard';
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html,
+body {
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100dvh;
+  height: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  cursor: pointer;
+  /* border: none; */
+}
+
+@theme {
+  --color-primary-100: #e7fdec;
+  --color-primary-300: #b5f7d3;
+  --color-primary-500: #7fe4c1;
+  --color-primary-700: #3fa495;
+  --color-primary-900: #186a6d;
+  
+  --color-secondary-yellow: #fdfa91;
+  --color-secondary-blue: #005880;
+  --color-warning: #ff517c;
+  
+  --color-default-gray-100: #fefefe;
+  --color-default-gray-400: #e6e6e6;
+  --color-default-gray-500: #c3c3c3;
+  --color-default-gray-700: #616161;
+  --color-default-gray-800: #212121;
+}
+
+@layer utilities {
+  input:-webkit-autofill {
+    @apply bg-white text-black;
+  }
+  
+  input:-webkit-tap-highlight-color {
+    @apply bg-white;
+  }
+}
+
 @font-face {
   font-family: 'Pretendard';
-  src: url('/fonts/PretendardVariable.woff2') format('woff2');
+  src: url('/fonts/PretendardVariable.woff2') format('font-woff2');
   font-display: swap;
   font-weight: 45 920;
 }
 
 @theme {
-  --color-primary-main: #7fe5c1;
-  --color-primary-green: #080c52;
-  --color-primary-yellow: #fdfa91;
-  --color-primary-lightblue: #e7f7ff;
-  --color-primary-blue: #005880;
-  --color-danger: #ff517c;
+  --color-primary-100: #e7fdec;
+  --color-primary-300: #b5f7d3;
+  --color-primary-500: #7fe4c1;
+  --color-primary-700: #3fa495;
+  --color-primary-900: #186a6d;
+  
+  --color-secondary-yellow: #fdfa91;
+  --color-secondary-blue: #005880;
+  --color-warning: #ff517c;
   
   --color-default-gray-100: #fefefe;
-  --color-default-gray-200: #fafafa;
-  --color-default-gray-300: #f4f6f8;
   --color-default-gray-400: #e6e6e6;
   --color-default-gray-500: #c3c3c3;
-  --color-default-gray-600: #919191;
   --color-default-gray-700: #616161;
   --color-default-gray-800: #212121;
 }
@@ -29,69 +85,130 @@
   .font-hero {
     font-size: 54px;
     font-weight: 700;
-    letter-spacing: -0.04rem;
+    line-height: 140%;
   }
   
   .font-heading1 {
-    font-size: var(--font-heading1);
+    font-size: 38px;
     font-weight: 700;
-    letter-spacing: -0.02rem;
+    line-height: 130%;
   }
   
   .font-heading2 {
-    font-size: var(--font-heading2);
+    font-size: 28px;
     font-weight: 600;
-    letter-spacing: -0.02rem;
+    line-height: 130%;
   }
   
   .font-heading3 {
-    font-size: var(--font-heading3);
+    font-size: 22px;
     font-weight: 600;
-    letter-spacing: -0.02rem;
+    line-height: 130%;
   }
   
   .font-body1 {
-    font-size: var(--font-body1);
-    font-weight: 700;
-    letter-spacing: -0.02rem;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 140%;
   }
   
   .font-body2 {
-    font-size: var(--font-body2);
-    font-weight: 600;
-    letter-spacing: -0.02rem;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
   }
   
   .font-caption {
-    font-size: var(--font-caption);
-    font-weight: 600;
-    letter-spacing: -0.02rem;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 130%;
+  }
+  
+  .rounding-16 {
+    border-radius: 16px;
+  }
+  
+  .rounding-32 {
+    border-radius: 32px;
+  }
+  
+  .shadow-default {
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+  }
+  
+  .shadow-black {
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+  }
+  
+  .animate-blink {
+    animation: blink 1.5s ease-in-out infinite;
   }
 }
 
-* {
-  font-family: 'Pretendard';
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  
+  50% {
+    opacity: 1;
+  }
 }
 
-html,
-body {
-  height: 100%;
-  overflow-x: hidden;
+.animate-blink {
+  animation: blink 1.5s ease-in-out infinite;
 }
 
-body {
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  
+  50% {
+    opacity: 1;
+  }
+}
+
+input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:autofill,
+  input:autofill:hover,
+  input:autofill:focus,
+  input:autofill:active {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
+.modal-root {
   min-height: 100vh;
+  min-width: 100vw;
+  overflow-y: auto;
 }
 
-button {
-  cursor: pointer;
-  border: none;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-ul,
-li {
-  list-style: none;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
