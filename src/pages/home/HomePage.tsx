@@ -11,18 +11,18 @@ function Home() {
     return (
         <div className="bg-default-gray-100 min-h-screen mb-[40px]">
             <Banner />
-            <section className="flex flex-col px-10 gap-[30px] mt-20">
+            <section className="flex flex-col sm:px-10 px-5 gap-[120px] mt-20">
                 <div className="flex flex-col">
-                    <div className="text-2xl">
-                        <span className="font-bold text-[50px]">Madeleine</span>
-                        <span className="font-semibold text-[25px]"> 님의 WithTime</span>
+                    <div className="flex items-center gap-2">
+                        <span className="font-heading2">Madeleine</span>
+                        <span className="font-heading3">님의 WithTime</span>
                     </div>
-                    <div className="max-w-9xl mt-10 grid grid-cols-1 lg:grid-cols-2 gap-15">
-                        <div className="flex flex-col gap-[30px]">
+                    <div className="max-w-9xl mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <div className="flex flex-col gap-[30px] w-full">
                             <Level />
-                            <div className="grid grid-cols-[3fr_2fr] h-fit w-full gap-[37px]">
-                                <DateCourseStore />
+                            <div className="grid sm:grid-cols-[3fr_2fr] grid-cols-1 h-fit w-full gap-[24px]">
                                 <DateTimes />
+                                <DateCourseStore />
                             </div>
                         </div>
                         <DateRecommend />
@@ -31,7 +31,7 @@ function Home() {
                 <div>
                     <div className="text-xl font-bold mb-3 w-full ">WithTime 데이트 관련 현황</div>
                     <div className="text-primary-700 mb-6 w-full font-bold text-xs">WithTime에서 더 편리하게 데이트를 준비해보세요</div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-15 items-end">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
                         <DateLocation />
                         <WordCloudCard />
                     </div>

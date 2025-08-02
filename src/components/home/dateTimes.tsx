@@ -1,18 +1,29 @@
 import MainCard from './mainCard';
 
-import ArchiveBlank from '@/assets/icons/Archive_Blank.svg?react';
-
 function DateTimes() {
     return (
         <MainCard>
-            <div className="flex flex-col px-4 sm:px-8 lg:px-[60px] py-4 sm:py-6 lg:py-[28px] h-full justify-center">
-                <div className="flex items-start justify-start">
-                    <ArchiveBlank className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 stroke-[#000000] mb-2" />
+            <div className="flex flex-row min-w-fit py-[28px] sm:px-[10px] justify-center">
+                {/* 첫 번째 카드 */}
+                <div className="flex flex-col items-center justify-center min-w-fit px-[30px] sm:px-[56px]">
+                    <div className="text-sm text-default-gray-700 mb-1 flex">최근 1개월</div>
+                    <div className="text-xs text-default-gray-500 mb-2 text-center flex flex-nowrap">
+                        WithTime 이용자
+                        <br />
+                        평균 데이트 횟수
+                    </div>
+                    <div className="text-3xl font-bold text-default-gray-800">4.6회</div>
                 </div>
-                <div className="flex text-sm sm:text-base lg:text-m bold-medium text-[#616161] mb-1">내 데이트 코스를</div>
-                <div className="flex gap-1 items-center">
-                    <div className="text-lg sm:text-xl font-bold text-primary-700 whitespace-nowrap">2,345명</div>
-                    <div className="text-sm sm:text-base lg:text-m bold-medium text-[#616161] whitespace-nowrap">이 저장했어요.</div>
+                <div className="w-[1px] h-[149px] border-[0.5px] border-default-gray-400" />
+                {/* 두 번째 카드 */}
+                <div className="flex flex-col items-center justify-center min-w-fit px-[30px] sm:px-[56px]">
+                    <div className="text-sm text-default-gray-700 mb-1">최근 1개월</div>
+                    <div className="text-xs text-default-gray-500 mb-2 text-center">
+                        WithTime 이용자
+                        <br />
+                        평균 데이트 횟수
+                    </div>
+                    <div className="text-3xl font-bold text-primary-700">2회</div>
                 </div>
             </div>
         </MainCard>
