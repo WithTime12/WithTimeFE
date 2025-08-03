@@ -70,7 +70,24 @@ export type TSearchRegionValues = {
 };
 
 export type TSearchRegionResponse = TCommonResponse<{
-    regions: string[];
+    regions: TRegion[];
     keyword: string;
     resultCount: number;
 }>;
+
+export type TRegion = {
+    regionId: number;
+    name: string;
+    latitude: number;
+    longitude: number;
+    gridX: number;
+    gridY: number;
+    regionCode: {
+        landRegCode: string;
+        tempRegCode: string;
+        regionCodeId: number;
+        name: string;
+    };
+    createdAt: string;
+    updatedAt: string;
+};

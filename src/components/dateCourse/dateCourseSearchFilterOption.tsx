@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import type { TDateCourseSearchFilterOption } from '@/types/dateCourse';
+import type { TDateCourseSearchFilterOption, TRegion } from '@/types/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
 
 import { useSearchRegion } from '@/hooks/course/useSearchRegion';
-import useDebounce from '@/hooks/useDebounce';
 
 import DateCourseOptionButton from './dateCourseOptionButton';
 import DateKeyword from './dateKeyword';
@@ -25,8 +24,6 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
     const [time, setTime] = useState(defaultTime);
     const [inputValue, setInputValue] = useState('');
     const [showSearchResults, setShowSearchResults] = useState(false);
-
-    const debouncedInputValue = useDebounce(inputValue, 3000);
 
     useEffect(() => {
         onChange(`${date} ${time}`);
@@ -50,10 +47,12 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
         setInputValue(e.target.value);
     };
 
-    const { data: regionList } = useSearchRegion({ keyword: debouncedInputValue });
+    const { data: regionList, refetch } = useSearchRegion({ keyword: inputValue }, { enabled: false });
 
     const handleSearch = () => {
-        if (!inputValue.trim()) return;
+        const keyword = inputValue.trim();
+        if (!keyword) return;
+        refetch();
         setShowSearchResults(true);
     };
 
@@ -98,20 +97,20 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                         </div>
                         {showSearchResults && regionList && regionList.result.regions.length > 0 && (
                             <ul className="mt-2 w-full border border-primary-500 rounding-16 shadow-default bg-white max-h-[200px] overflow-auto">
-                                {regionList.result.regions.map((region: string, idx: number) => (
+                                {regionList.result.regions.map((region: TRegion, idx: number) => (
                                     <li
                                         key={idx}
-                                        className="p-2 cursor-pointer hover:bg-gray-100 text-sm text-default-gray-800"
+                                        className="px-4 py-2 cursor-pointer hover:bg-gray-100 text-sm text-default-gray-800"
                                         onClick={() => {
                                             const current = Array.isArray(value) ? value : [];
-                                            if (!current.includes(region)) {
-                                                onChange([...current, region]);
+                                            if (!current.includes(region.name)) {
+                                                onChange([...current, region.name]);
                                             }
                                             setInputValue('');
                                             setShowSearchResults(false);
                                         }}
                                     >
-                                        {region}
+                                        {region.name}
                                     </li>
                                 ))}
                             </ul>
