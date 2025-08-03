@@ -1,4 +1,4 @@
-import type { TCommonResponse } from './common/common';
+import type { TCommonResponse } from '@/types/common/common';
 
 export enum Gender {
     MALE = 'MALE',

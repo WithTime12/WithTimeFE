@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 
-import type { TCommonResponse } from './common/common';
+import type { TCommonResponse } from '@/types/common/common';
 
 export type TTimeline = {
     end?: boolean;
