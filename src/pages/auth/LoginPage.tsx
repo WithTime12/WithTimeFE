@@ -4,7 +4,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { TLoginFormValues } from '@/types/auth';
+import type { TLoginFormValues } from '@/types/auth/auth';
 
 import { loginSchema } from '@/utils/validation';
 

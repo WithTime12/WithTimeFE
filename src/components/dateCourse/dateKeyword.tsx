@@ -1,4 +1,4 @@
-import type { TDateKeyword } from '@/types/dateCourse';
+import type { TDateKeyword } from '@/types/dateCourse/dateCourse';
 
 import KeywordButton from './keywordButton';
 

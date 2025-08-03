@@ -1,4 +1,4 @@
-import type { TInfo } from '@/types/dateCourse';
+import type { TInfo } from '@/types/dateCourse/dateCourse';
 
 import InfoElement from './infoElement';
 

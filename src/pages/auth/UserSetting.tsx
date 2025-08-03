@@ -4,8 +4,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { TUserSettingFormValues } from '@/types/auth';
-import { Gender } from '@/types/auth';
+import type { TUserSettingFormValues } from '@/types/auth/auth';
+import { Gender } from '@/types/auth/auth';
 
 import formatDateInput from '@/utils/formatDateInput';
 import formatInputNumber from '@/utils/formatPhoneNumber';

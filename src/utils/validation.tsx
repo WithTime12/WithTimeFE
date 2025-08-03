@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { Gender } from '@/types/auth';
+import { Gender } from '@/types/auth/auth';
 
 const nicknamePattern = /^[a-zA-Z]+$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import type { TDateCourseSearchFilterOption, TRegion } from '@/types/dateCourse';
+import type { TDateCourseSearchFilterOption, TRegion } from '@/types/dateCourse/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
 
 import { useSearchRegion } from '@/hooks/course/useSearchRegion';

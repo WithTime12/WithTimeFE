@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import type { IQuestion } from '@/types/dateCourse';
+import type { IQuestion } from '@/types/dateCourse/dateCourse';
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
 import {
