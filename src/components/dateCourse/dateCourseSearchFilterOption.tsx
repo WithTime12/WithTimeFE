@@ -23,7 +23,6 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
     const [date, setDate] = useState(defaultDate);
     const [time, setTime] = useState(defaultTime);
     const [inputValue, setInputValue] = useState('');
-    const [showSearchResults, setShowSearchResults] = useState(false);
 
     useEffect(() => {
         onChange(`${date} ${time}`);
@@ -53,7 +52,6 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
         const keyword = inputValue.trim();
         if (!keyword) return;
         refetch();
-        setShowSearchResults(true);
     };
 
     return (
@@ -95,7 +93,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                 onChange={handleInputChange}
                             />
                         </div>
-                        {showSearchResults && regionList && regionList.result.regions.length > 0 && (
+                        {regionList && regionList.result.regions.length > 0 && (
                             <ul className="mt-2 w-full border border-primary-500 rounding-16 shadow-default bg-white max-h-[200px] overflow-auto">
                                 {regionList.result.regions.map((region: TRegion, idx: number) => (
                                     <li
@@ -107,7 +105,6 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                                 onChange([...current, region.name]);
                                             }
                                             setInputValue('');
-                                            setShowSearchResults(false);
                                         }}
                                     >
                                         {region.name}
