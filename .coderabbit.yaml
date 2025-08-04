@@ -47,12 +47,12 @@ reviews:
         - '!**/*.lock' # yarn.lock, package-lock.json 제외
         - '!**/*.snap' # snapshot 파일 제외
 
-# 🧠 Finishing Touches (AI가 자동 생성하는 보조 기능들)
-finishing_touches:
-    docstrings:
-        enabled: true # 함수에 docstring 자동 생성
-    unit_tests:
-        enabled: false # 유닛 테스트 자동 생성 (false = 비활성화)
+    # 🧠 Finishing Touches (AI가 자동 생성하는 보조 기능들)
+    finishing_touches:
+        docstrings:
+            enabled: true # 함수에 docstring 자동 생성
+        unit_tests:
+            enabled: false # 유닛 테스트 자동 생성 (false = 비활성화)
 
 # 💬 챗봇 설정
 chat:
