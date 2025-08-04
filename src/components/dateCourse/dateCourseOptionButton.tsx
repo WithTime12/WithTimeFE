@@ -1,4 +1,4 @@
-import type { TDateCourseOptionButtonProps } from '@/types/dateCourse';
+import type { TDateCourseOptionButtonProps } from '@/types/dateCourse/dateCourse';
 
 export default function DateCourseOptionButton({ option, isSelected, onClick }: TDateCourseOptionButtonProps) {
     return (

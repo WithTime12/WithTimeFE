@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import type { TSocialLoginPlatform } from '@/types/auth';
+import type { TSocialLoginPlatform } from '@/types/auth/auth';
 
 import { useAuth } from '@/hooks/auth/useAuth';
 

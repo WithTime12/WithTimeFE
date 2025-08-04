@@ -1,4 +1,4 @@
-import type { TSearchRegionResponse, TSearchRegionValues } from '@/types/dateCourse';
+import type { TSearchRegionResponse, TSearchRegionValues } from '@/types/dateCourse/dateCourse';
 
 import { axiosInstance } from '../axiosInstance';
 
