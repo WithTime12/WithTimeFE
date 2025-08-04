@@ -1,4 +1,4 @@
-import type { TKeywordButtonProps } from '@/types/dateCourse';
+import type { TKeywordButtonProps } from '@/types/dateCourse/dateCourse';
 
 export default function KeywordButton({ tag, selected = false, onClick, isButton }: TKeywordButtonProps) {
     return (

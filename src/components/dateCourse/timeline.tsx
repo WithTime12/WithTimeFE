@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { TTimeline } from '@/types/dateCourse';
+import type { TTimeline } from '@/types/dateCourse/dateCourse';
 
 import KeywordButton from './keywordButton';
 

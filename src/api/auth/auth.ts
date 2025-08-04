@@ -11,7 +11,7 @@ import type {
     TSignupValues,
     TSocialLoginResponse,
     TSocialLoginValues,
-} from '@/types/auth';
+} from '@/types/auth/auth';
 
 import { axiosInstance } from '../axiosInstance';
 
