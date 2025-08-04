@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
 language: 'ko-KR'
 early_access: false
 
@@ -7,10 +9,10 @@ localization:
     default_language: 'Korean'
 
 reviews:
-    profile: 'balanced'
+    profile: 'assertive' # ← 가장 중요한 변경!
     request_changes_workflow: false
     high_level_summary: true
-    poem: false
+    poem: true
     review_status: true
     collapse_walkthrough: false
     summarize: true
@@ -28,7 +30,6 @@ base_branches:
     - '^main$'
     - '^develop$'
     - '^feature/.*$'
-    - '^hotfix/.*$'
 
 auto_generate:
     docstrings: true
