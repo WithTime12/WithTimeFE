@@ -1,50 +1,77 @@
-# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-
+# 리뷰 기본 언어 설정 (출력 언어 기준)
 language: 'ko-KR'
+
+# 얼리 액세스 기능 사용 여부
 early_access: false
 
-code_generation_language: 'Korean'
-
-localization:
-    default_language: 'Korean'
-
+# ----------------------------
+# 리뷰 설정
+# ----------------------------
 reviews:
-    profile: 'assertive' # ← 가장 중요한 변경!
-    request_changes_workflow: false
-    high_level_summary: true
-    poem: true
-    review_status: true
-    collapse_walkthrough: false
-    summarize: true
-    comment_mode: inline
-    suggestions: true
-    accessibility_checks: true
+    profile: 'assertive' # 리뷰 스타일: assertive → 더 많은 지적과 상세 피드백 제공
+    request_changes_workflow: false # 리뷰 코멘트가 모두 해결되면 자동 승인 여부 (false = 수동)
+    high_level_summary: true # PR 상단에 요약 생성
+    high_level_summary_in_walkthrough: true # 요약을 워크스루에도 포함
+    review_status: true # 리뷰 진행 상태 메시지 표시
+    commit_status: true # 리뷰 중이면 커밋 상태를 pending으로 설정
+    fail_commit_status: false # 리뷰 실패 시 커밋 상태를 실패로 설정할지 여부
+    collapse_walkthrough: false # 워크스루를 접힌 상태로 표시할지 여부
+    changed_files_summary: true # 변경된 파일 요약 표시
+    sequence_diagrams: true # 시퀀스 다이어그램 생성
+    estimate_code_review_effort: true # 코드 리뷰 예상 난이도/시간 추정
+    assess_linked_issues: true # 연결된 이슈와 변경사항의 연관도 평가
+    related_issues: true # 관련 가능성이 있는 이슈 표시
+    related_prs: true # 관련 가능성이 있는 PR 표시
+    suggested_labels: true # 라벨 추천 (예: bug, enhancement)
+    auto_apply_labels: false # 추천 라벨을 자동으로 붙일지 여부
+    suggested_reviewers: true # 리뷰어 추천
+    auto_assign_reviewers: false # 추천된 리뷰어를 자동 할당할지 여부
+    poem: false # 리뷰에 귀여운 시 추가 🐰 시러
+    auto_title_placeholder: '@coderabbitai' # 제목에 이 키워드가 있으면 자동 생성됨
+    summarize: true # 요약 자동 생성
+    comment_mode: inline # 줄 단위 리뷰 코멘트
+    suggestions: true # 코드 수정 diff 제안 포함
+    accessibility_checks: true # 접근성 관련 리뷰 활성화
+    abort_on_close: true # PR이 닫히거나 병합되면 리뷰 중단
+    disable_cache: false # 캐시 비활성화 여부 (false = 캐시 사용)
+
+    # 자동 리뷰 조건 설정
     auto_review:
-        enabled: true
-        drafts: false
+        enabled: true # 자동 리뷰 기능 활성화
+        auto_incremental_review: true # push마다 자동 증분 리뷰 수행
+        drafts: false # draft 상태의 PR도 리뷰할지 여부
+        base_branches: # 리뷰 대상 브랜치 (기본 브랜치 외)
+            - '^main$'
+            - '^develop$'
+            - '^feature/.*$'
 
+# ----------------------------
+# Finishing Touches (자동 생성 요소)
+# ----------------------------
+finishing_touches:
+    docstrings:
+        enabled: true # 코드에 docstring 자동 생성
+    unit_tests:
+        enabled: false # 유닛 테스트 자동 생성은 비활성화
+
+# ----------------------------
+# 챗봇 설정
+# ----------------------------
 chat:
-    auto_reply: true
+    auto_reply: true # @태그 없이도 자동 응답 허용
 
-base_branches:
-    - '^main$'
-    - '^develop$'
-    - '^feature/.*$'
+# ----------------------------
+# 코드 생성 설정
+# ----------------------------
+code_generation:
+    docstrings:
+        language: 'ko-KR' # Docstring 생성 시 사용할 언어
 
-auto_generate:
-    docstrings: true
-    unit_tests: false
-    diagrams: false
-
-ignored_files:
-    - '^node_modules/'
-    - '^public/'
-    - '.*\\.lock$'
-
-security:
-    secrets_detection: true
-    lint_checks: true
-
-experimental:
-    enable_chat_threads: true
-    proactive_responses: false
+# ----------------------------
+# 리뷰할 경로 필터링 (리뷰 제외할 경로)
+# 예: node_modules나 .lock 파일은 리뷰하지 않음
+# ----------------------------
+path_filters:
+    - '!**/node_modules/**'
+    - '!**/*.lock'
+    - '!**/*.snap'
