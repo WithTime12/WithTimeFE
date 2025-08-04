@@ -9,7 +9,7 @@ early_access: false
 # ----------------------------
 reviews:
     profile: 'assertive' # 리뷰 스타일: assertive → 더 많은 지적과 상세 피드백 제공
-    request_changes_workflow: false # 리뷰 코멘트가 모두 해결되면 자동 승인 여부 (false = 수동)
+    request_changes_workflow: true # 리뷰 코멘트가 모두 해결되면 자동 승인 여부 (false = 수동)
     high_level_summary: true # PR 상단에 요약 생성
     high_level_summary_in_walkthrough: true # 요약을 워크스루에도 포함
     review_status: true # 리뷰 진행 상태 메시지 표시
