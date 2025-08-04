@@ -1,0 +1,64 @@
+language: 'ko-KR' # 리뷰 언어 설정 (전체 시스템 메시지에 영향)
+early_access: false # 얼리엑세스 기능 사용 여부
+tone_instructions: '모든 설명과 리뷰는 공손하고 간결하게, 한국어로 작성해 주세요.' # 리뷰 말투 스타일 요청
+
+reviews:
+    profile: 'assertive' # 리뷰 스타일: chill (최소 피드백) / assertive (꼼꼼한 피드백)
+    request_changes_workflow: true # 수정 요청이 있으면 자동으로 Request Changes 처리, 없으면 Approve
+    high_level_summary: true # PR 요약 생성
+    high_level_summary_in_walkthrough: true # 워크스루에도 요약 표시
+    auto_title_placeholder: '@coderabbitai' # PR 제목 자동 생성을 위한 키워드
+    review_status: true # 리뷰 상태 메시지 출력
+    commit_status: true # GitHub 상태 체크와 연동 (리뷰 중: pending / 완료: success)
+    fail_commit_status: false # 리뷰 실패 시 커밋 상태를 failure로 표시할지 여부
+    collapse_walkthrough: false # 워크스루 접기 기능 비활성화 (false = 항상 펼쳐짐)
+    changed_files_summary: true # 변경 파일 요약 표시
+    sequence_diagrams: true # 시퀀스 다이어그램 생성
+    estimate_code_review_effort: true # 코드 리뷰 난이도/예상 시간 추정 표시
+    assess_linked_issues: true # 연결된 이슈 반영 여부 평가
+    related_issues: true # 관련 이슈 제안
+    related_prs: true # 관련 PR 제안
+    suggested_labels: true # 라벨 추천
+    auto_apply_labels: false # 추천 라벨 자동 적용 여부
+    suggested_reviewers: true # 리뷰어 추천
+    auto_assign_reviewers: false # 리뷰어 자동 할당 여부
+    poem: false # 리뷰에 시 포함 x
+    summarize: true # 리뷰 요약 포함
+    comment_mode: inline # 줄 단위 코멘트 작성
+    suggestions: true # 코드 수정 diff 제안 포함
+    accessibility_checks: true # 접근성 리뷰 포함
+    abort_on_close: true # PR 닫히면 리뷰 중단
+    disable_cache: false # 캐시 사용 (false = 캐시 사용함)
+
+    # 🔍 리뷰 대상 브랜치 및 자동 리뷰 설정
+    auto_review:
+        enabled: true # 자동 리뷰 활성화
+        auto_incremental_review: true # push할 때마다 증분 리뷰 수행
+        drafts: false # draft 상태 PR은 리뷰 제외
+        base_branches: # 기본 브랜치 외 리뷰 대상 브랜치
+            - '^main$'
+            - '^develop$'
+            - '^feature/.*$'
+            - '^hotfix/.*$'
+
+    # 🧼 리뷰 제외할 파일/디렉토리
+    path_filters:
+        - '!**/node_modules/**' # node_modules 제외
+        - '!**/*.lock' # yarn.lock, package-lock.json 제외
+        - '!**/*.snap' # snapshot 파일 제외
+
+    # 🧠 Finishing Touches (AI가 자동 생성하는 보조 기능들)
+    finishing_touches:
+        docstrings:
+            enabled: true # 함수에 docstring 자동 생성
+        unit_tests:
+            enabled: false # 유닛 테스트 자동 생성 (false = 비활성화)
+
+# 💬 챗봇 설정
+chat:
+    auto_reply: true # @coderabbitai 태그 없이도 자동 응답
+
+# 🧾 코드 생성 관련 설정 (특히 docstring 생성 언어)
+code_generation:
+    docstrings:
+        language: 'ko-KR' # Docstring 생성 시 한국어 사용
