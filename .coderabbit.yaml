@@ -1,6 +1,6 @@
 # 리뷰 기본 언어 설정 (출력 언어 기준)
 language: 'ko-KR'
-
+tone_instructions: '모든 설명과 리뷰는 한국어로 작성해 주세요. 말투는 공손하게 적어주세요. 설명과 리뷰는 자세하게 해주세요.'
 # 얼리 액세스 기능 사용 여부
 early_access: false
 
