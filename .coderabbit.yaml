@@ -1,14 +1,49 @@
 language: 'ko-KR'
 early_access: false
+
+code_generation_language: 'Korean'
+
+localization:
+    default_language: 'Korean'
+
 reviews:
-    profile: 'chill'
+    profile: 'balanced'
     request_changes_workflow: false
     high_level_summary: true
-    poem: true
+    poem: false
     review_status: true
     collapse_walkthrough: false
+    summarize: true
+    comment_mode: inline
+    suggestions: true
+    accessibility_checks: true
     auto_review:
         enabled: true
         drafts: false
+
 chat:
     auto_reply: true
+
+base_branches:
+    - '^main$'
+    - '^develop$'
+    - '^feature/.*$'
+    - '^hotfix/.*$'
+
+auto_generate:
+    docstrings: true
+    unit_tests: false
+    diagrams: false
+
+ignored_files:
+    - '^node_modules/'
+    - '^public/'
+    - '.*\\.lock$'
+
+security:
+    secrets_detection: true
+    lint_checks: true
+
+experimental:
+    enable_chat_threads: true
+    proactive_responses: false
