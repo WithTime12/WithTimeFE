@@ -1,10 +1,10 @@
-import type { ReactElement } from 'react';
+import React from 'react';
 
 import ArrowLeftCircle from '@/assets/icons/Arrow_left_circle.svg?react';
 import ErrorCircle from '@/assets/icons/Error-circle_Fill.svg?react';
 
 type TGraySVGButton = {
-    child?: ReactElement;
+    child?: React.ReactNode;
     type?: 'cancle' | 'backward';
     onClick: () => void;
     size?: 'big' | 'default';
