@@ -7,7 +7,7 @@ import { useGetAlarm } from '@/hooks/alarm/useGetAlarm';
 import Alarm from '../alarmModal/alarm';
 import Modal from '../common/modal';
 
-import Error from '@/pages/common/Error';
+import ErrorComponent from '@/pages/common/Error';
 
 type TAlarmModalProps = {
     onClose: () => void;
@@ -28,7 +28,7 @@ function AlarmModal({ onClose }: TAlarmModalProps) {
     }, [inView, isFetching, hasNextPage, fetchNextPage]);
 
     if (error) {
-        return <Error />;
+        return <ErrorComponent />;
     }
 
     return (
