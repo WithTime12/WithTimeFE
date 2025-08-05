@@ -16,7 +16,7 @@ export default function MobileMenu({ onClose, onOpenSettings }: IMobileMenuProps
     const { openModal } = useModalStore();
     return (
         <>
-            {/* 검정 반투명 배경 오버레이 */}
+            {/* 배경 오버레이 */}
             <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
 
             {/* 사이드 메뉴 */}
