@@ -36,12 +36,13 @@ export default function AlarmSetting() {
     ];
 
     return (
-        <div className="mt-15 flex flex-col gap-10 p-6">
+        <div className="mt-5 flex flex-col gap-10 p-8">
             {alarmItems.map(({ label, key }) => (
-                <div key={key} className="flex items-center justify-start gap-10">
-                    {/* 알람 이름 */}
-                    <p className="font-heading3 text-default-gray-800 w-[100px]">{label}</p>
-                    {/* 각 토글 스위치 */}
+                <div key={key} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6 w-full">
+                    {/* 텍스트 */}
+                    <p className="font-heading3 text-default-gray-800 truncate overflow-hidden">{label}</p>
+
+                    {/* 토글 */}
                     <ToggleSwitch value={alarmSetting[key]} onChange={() => handleToggle(key)} onLabel="ON" offLabel="OFF" />
                 </div>
             ))}

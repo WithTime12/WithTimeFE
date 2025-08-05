@@ -19,7 +19,7 @@ export default function InfoSetting() {
     }, []);
 
     return (
-        <div className="mt-15 flex flex-col items-start gap-5">
+        <div className="mt-5 flex flex-col items-start gap-5">
             {/* 닉네임 - 수정가능 */}
             <EditableInputBox
                 mode="nickname"

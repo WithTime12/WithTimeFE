@@ -9,7 +9,7 @@ export default function MembershipSetting() {
 
     // 버튼 공통 디자인
     const buttonClass =
-        'w-[255px] h-[38px] pl-[24px] rounding-32 border border-default-gray-500 text-default-gray-700 font-body2 text-left justify-start flex items-center bg-white';
+        'w-full h-[38px] pl-[20px] rounded-[32px] border border-default-gray-500 text-default-gray-700 font-body2 text-left justify-start flex items-center bg-white';
 
     // 버튼 목록
     const buttons = [
@@ -28,7 +28,7 @@ export default function MembershipSetting() {
     };
 
     return (
-        <div className="mt-15 flex flex-col gap-4 p-6">
+        <div className="mt-5 flex flex-col gap-4 p-6">
             {/* 등급 */}
             <p className="font-heading3">
                 현재 등급은 <span className="text-primary-700 font-heading2">Premium</span> 입니다.
@@ -38,7 +38,7 @@ export default function MembershipSetting() {
             <p className="font-body1 text-default-gray-700">다음 결제 예정일 : 2025.06.14</p>
 
             {/* 자동 결제 토글 */}
-            <div className="flex items-center gap-5 mt-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 mt-6">
                 <p className="font-heading3 text-default-gray-800">자동 결제</p>
                 <ToggleSwitch value={autoPay} onChange={setAutoPay} onLabel="ON" offLabel="OFF" />
             </div>
