@@ -7,8 +7,8 @@ import { alarmKeys } from '@/queryKey/queryKey';
 
 export const useGetAlarm = ({ cursor, size }: TRequestGetAlarm) => {
     return useInfiniteQuery({
-        queryKey: alarmKeys.getAlarm(cursor, size).queryKey,
-        queryFn: ({ pageParam = cursor }) => getAlarm({ cursor: pageParam, size }),
+        queryKey: alarmKeys.getAlarm(size ?? 5, cursor).queryKey,
+        queryFn: ({ pageParam = cursor }) => getAlarm({ cursor: pageParam, size: size ?? 10 }),
         initialPageParam: cursor,
         getNextPageParam: (lastPage) => lastPage.result.cursor ?? undefined,
     });
