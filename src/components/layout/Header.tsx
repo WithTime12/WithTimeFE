@@ -2,21 +2,22 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import MobileMenu from './MobileMenu';
-import SettingsModal from '../modal/SettingModal';
+import { MODAL_TYPES } from '../common/modalProvider';
 
 import BurgerIcon from '@/assets/icons/Burger_fill.svg?react';
 import ClearIcon from '@/assets/icons/Clear.svg?react';
 import NotificationsIcon from '@/assets/icons/notifications_Blank.svg?react';
 import SettingsIcon from '@/assets/icons/settings_Blank.svg?react';
 import NavbarLogo from '@/assets/withTimeLogo/navbarLogo.svg?react';
+import useModalStore from '@/store/useModalStore';
 
 interface IHeaderProps {
     mode?: 'full' | 'minimal'; // full: nav + border | minimal: 로고만
 }
 
 export default function Header({ mode = 'full' }: IHeaderProps) {
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false); //설정 모달
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // 모바일 메뉴
+    const { openModal } = useModalStore();
 
     const showNav = mode === 'full';
     const showBorder = mode === 'full';
@@ -56,10 +57,10 @@ export default function Header({ mode = 'full' }: IHeaderProps) {
 
                         {/* 아이콘 버튼 */}
                         <div className="hidden lg:flex items-center space-x-5">
-                            <Link to="/">
+                            <button type="button" onClick={() => openModal(MODAL_TYPES.AlarmModal)}>
                                 <NotificationsIcon className="w-5 h-5" fill="none" stroke="#000000" />
-                            </Link>
-                            <button type="button" onClick={() => setIsSettingsOpen(true)}>
+                            </button>
+                            <button type="button" onClick={() => openModal(MODAL_TYPES.SettingsModal)}>
                                 <SettingsIcon className="w-5 h-5" fill="none" stroke="#000000" />
                             </button>
                         </div>
@@ -83,10 +84,7 @@ export default function Header({ mode = 'full' }: IHeaderProps) {
             </div>
 
             {/* 모바일 메뉴 */}
-            {isMobileMenuOpen && <MobileMenu onClose={() => setIsMobileMenuOpen(false)} onOpenSettings={() => setIsSettingsOpen(true)} />}
-
-            {/* 설정 모달 */}
-            {isSettingsOpen && <SettingsModal onClose={() => setIsSettingsOpen(false)} />}
+            {isMobileMenuOpen && <MobileMenu onClose={() => setIsMobileMenuOpen(false)} onOpenSettings={() => openModal(MODAL_TYPES.SettingsModal)} />}
         </header>
     );
 }

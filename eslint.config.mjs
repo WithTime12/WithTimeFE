@@ -10,7 +10,7 @@ import tsConfig from './eslint/typescript.mjs';
 
 export default [
     {
-        ignores: ['src/vite-env.d.ts'],
+        ignores: ['src/vite-env.d.ts', 'public/firebase-messaging-sw.js'],
     },
     {
         files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],

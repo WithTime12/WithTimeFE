@@ -1,3 +1,5 @@
+import { useDeviceToken } from '@/hooks/alarm/useDeviceToken';
+
 import Banner from '@/components/home/banner';
 import DateCourseStore from '@/components/home/dateCourseStore';
 import DateLocation from '@/components/home/dateLocation';
@@ -8,6 +10,8 @@ import Level from '@/components/home/level';
 import WordCloudCard from '@/components/home/wordCloud';
 
 function Home() {
+    useDeviceToken();
+
     return (
         <div className="bg-default-gray-100 min-h-screen mb-[40px]">
             <Banner />
