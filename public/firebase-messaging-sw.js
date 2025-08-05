@@ -38,5 +38,5 @@ self.addEventListener('notificationclick', function (event) {
 
     event.notification.close();
 
-    event.waitUntil(clients.openWindow(event.notification.data));
+    event.waitUntil(clients.openWindow(event.notification.data).catch((error) => console.error('Failed to open window:', error)));
 });

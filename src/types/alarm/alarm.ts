@@ -13,7 +13,7 @@ export type TResponseGetAlarm = TCommonResponse<{
 export type TRequestPostDeviceToken = {
     deviceToken: string;
 };
-export type TResponsePOstDeviceToken = TCommonResponse<{}>;
+export type TResponsePostDeviceToken = TCommonResponse<{}>;
 export type TAlarm = {
     id: number;
     title: string;

@@ -57,7 +57,7 @@ export default function Header({ mode = 'full' }: IHeaderProps) {
 
                         {/* 아이콘 버튼 */}
                         <div className="hidden lg:flex items-center space-x-5">
-                            <button onClick={() => openModal(MODAL_TYPES.AlarmModal)}>
+                            <button type="button" onClick={() => openModal(MODAL_TYPES.AlarmModal)}>
                                 <NotificationsIcon className="w-5 h-5" fill="none" stroke="#000000" />
                             </button>
                             <button type="button" onClick={() => openModal(MODAL_TYPES.SettingsModal)}>

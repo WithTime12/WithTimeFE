@@ -5,5 +5,5 @@ export const regionKeys = createQueryKeys('region', {
 });
 
 export const alarmKeys = createQueryKeys('alarm', {
-    getAlarm: (size, cursor) => [size, cursor],
+    getAlarm: (size: number, cursor?: number) => [size, cursor],
 });

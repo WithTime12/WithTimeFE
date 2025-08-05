@@ -16,10 +16,18 @@ const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
 export const generateToken = async () => {
-    const token = await getToken(messaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-    });
-    return token;
+    try {
+        const token = await getToken(messaging, {
+            vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+        });
+        if (!token) {
+            console.warn('FCM 토큰 생성에 실패했습니다. 알림 권한을 확인해주세요.');
+        }
+        return token;
+    } catch (error) {
+        console.error('FCM 토큰 생성 중 오류 발생:', error);
+        return null;
+    }
 };
 
 export const registerServiceWorker = async () => {
