@@ -23,7 +23,7 @@ export default function SettingsModal({ onClose, defaultTab = '알람' }: ISetti
     return (
         <Modal onClose={onClose} position="main" title="설정">
             {/* 좌측 탭 메뉴 */}
-            <div className="w-[170px] flex flex-col justify-between pr-6">
+            <div className="w-[130px] sm:w-[170px] flex flex-col justify-between pr-4 sm:pr-6">
                 <div className="flex flex-col space-y-3">
                     {['알람', '멤버십', '정보'].map((tab) => (
                         <button
