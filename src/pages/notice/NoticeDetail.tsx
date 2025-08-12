@@ -1,5 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { formatDateDot } from '@/utils/date';
+
 import { useNotice } from '@/hooks/notice/useNotice';
 
 export default function NoticeDetail() {
@@ -13,13 +15,13 @@ export default function NoticeDetail() {
 
     // Id 유효성 검사 -> 훅 호출
     if (!isValidId) {
-        return <div className="text-center font-body2 text-default-gray-800 mt-10">잘못된 공지사항 ID입니다.</div>;
+        return <div className="text-center font-body1 text-default-gray-500 py-50">잘못된 공지사항 ID입니다.</div>;
     }
     if (isLoading) {
-        return <div className="text-center font-body2 text-default-gray-800 mt-10">로딩 중</div>;
+        return <div className="text-center font-body1 text-default-gray-500 py-50">로딩 중</div>;
     }
     if (isError || !data?.result) {
-        return <div className="text-center font-body2 text-default-gray-800 mt-10">공지사항을 불러오는 데 실패했습니다.</div>;
+        return <div className="text-center font-body1 text-default-gray-500 py-50">공지사항을 불러오는 데 실패했습니다.</div>;
     }
     const notice = data?.result ?? null;
 
@@ -29,8 +31,8 @@ export default function NoticeDetail() {
 
             {/* 제목 + 작성일 */}
             <div className="border-y border-default-gray-400 py-4 mb-8">
-                <p className="font-heading3 mb-1">{notice.title}</p>
-                <p className="font-body1 text-default-gray-500">{new Date(notice.createdAt).toLocaleDateString()}</p>
+                <p className="font-heading3 text-default-gray-800 mb-2">{notice.title}</p>
+                <p className="font-body1 text-default-gray-500">{formatDateDot(notice.createdAt)}</p>
             </div>
 
             {/* 내용 */}
@@ -38,7 +40,7 @@ export default function NoticeDetail() {
 
             {/* 목록으로 돌아가기 버튼 */}
             <div>
-                <button onClick={() => navigate('/notice')} className="px-6 py-2 rounded-full bg-primary-500 text-white">
+                <button onClick={() => navigate('/notice')} className="px-6 py-2 rounded-full font-body1 bg-primary-500 text-white">
                     목록으로 돌아가기
                 </button>
             </div>

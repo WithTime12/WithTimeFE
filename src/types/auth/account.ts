@@ -24,3 +24,17 @@ export type TChangePasswordMutationResult = UseMutationResult<TChangePasswordRes
 // 닉네임 변경 훅 타입
 export type TChangeNicknameMutationOptions = TUseMutationCustomOptions<TChangeNicknameResponse, TChangeNicknamePayload>;
 export type TChangeNicknameMutationResult = UseMutationResult<TChangeNicknameResponse, AxiosError, TChangeNicknamePayload>;
+
+// 사용자 정보 타입
+export type TMemberInfo = {
+    id: number;
+    email: string;
+    username: string;
+    userRank: string;
+    phoneNumber: string;
+    isAuthPayment: boolean;
+    gender: string;
+    birth: string;
+    role: string;
+    point: number;
+};

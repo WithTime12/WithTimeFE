@@ -17,7 +17,8 @@ export function useCoreQuery<TQueryFnData, TData = TQueryFnData>(
     });
 }
 
-export function useCoreMutation<T, U>(mutation: MutationFunction<T, U>, options?: TUseMutationCustomOptions) {
+//options 타입을 제네릭 변경
+export function useCoreMutation<T, U>(mutation: MutationFunction<T, U>, options?: TUseMutationCustomOptions<T, U>) {
     return useMutation({
         mutationFn: mutation,
         onError: (error) => {

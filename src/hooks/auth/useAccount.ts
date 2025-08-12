@@ -1,3 +1,4 @@
+// src/hooks/auth/useAccount.ts
 import type {
     TChangeNicknameMutationOptions,
     TChangeNicknameMutationResult,
@@ -8,10 +9,11 @@ import type {
     TChangePasswordPayload,
     TChangePasswordResponse,
 } from '@/types/auth/account';
+import type { TUseMutationCustomOptions } from '@/types/common/common';
 
-import { useCoreMutation } from '@/hooks/customQuery';
+import { useCoreMutation, useCoreQuery } from '@/hooks/customQuery';
 
-import { changeNickname, changePassword } from '@/api/auth/account';
+import { changeNickname, changePassword, deleteMember, getMemberInfo } from '@/api/auth/account';
 
 export function useAccount() {
     // 비밀번호 변경
@@ -24,5 +26,15 @@ export function useAccount() {
         return useCoreMutation<TChangeNicknameResponse, TChangeNicknamePayload>(changeNickname, options);
     }
 
-    return { useChangePassword, useChangeNickname };
+    // 회원 탈퇴
+    function useDeleteMember(options?: TUseMutationCustomOptions<void, void>) {
+        return useCoreMutation<void, void>(deleteMember, options);
+    }
+
+    // 사용자 정보 가져오기
+    function useGetMemberInfo() {
+        return useCoreQuery(['memberInfo'], getMemberInfo);
+    }
+
+    return { useChangePassword, useChangeNickname, useDeleteMember, useGetMemberInfo };
 }

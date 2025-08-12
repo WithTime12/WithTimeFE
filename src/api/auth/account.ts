@@ -1,4 +1,5 @@
-import type { TChangeNicknamePayload, TChangeNicknameResponse, TChangePasswordPayload } from '@/types/auth/account';
+import type { TChangeNicknamePayload, TChangeNicknameResponse, TChangePasswordPayload, TMemberInfo } from '@/types/auth/account';
+import type { TCommonResponse } from '@/types/common/common';
 
 import { axiosInstance } from '@/api/axiosInstance';
 
@@ -11,5 +12,15 @@ export async function changePassword(payload: TChangePasswordPayload): Promise<v
 // 닉네임 변경
 export async function changeNickname(payload: TChangeNicknamePayload): Promise<TChangeNicknameResponse> {
     const { data } = await axiosInstance.patch<TChangeNicknameResponse>('/api/v1/members/infos', payload);
+    return data;
+}
+
+// 탈퇴
+export async function deleteMember(): Promise<void> {
+    await axiosInstance.delete('/api/v1/members');
+}
+
+export async function getMemberInfo(): Promise<TCommonResponse<TMemberInfo>> {
+    const { data } = await axiosInstance.get<TCommonResponse<TMemberInfo>>('/api/v1/members/infos');
     return data;
 }

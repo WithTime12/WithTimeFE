@@ -95,7 +95,7 @@ const router = createBrowserRouter([
                 element: <Notice />,
             },
             {
-                path: 'notice/:id',
+                path: '/notice/:noticeId',
                 element: <NoticeDetail />,
             },
             {
@@ -136,8 +136,6 @@ const router = createBrowserRouter([
             },
         ],
     },
-
-    // Setting page 연결
     {
         path: '/paymentHistory',
         element: <PaymentHistory />, // 결제 내역 확인
