@@ -1,12 +1,18 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useGetNotices } from '@/hooks/notices/useGetNotices';
+
 import MainCard from './mainCard';
 
 import AddCircleBlank from '@/assets/icons/add-circle_Blank.svg?react';
 
 function MainInfo() {
     const navigate = useNavigate();
+    const { data, error } = useGetNotices({ size: 3, page: 0, noticeCategory: 'SERVICE' });
+    if (error) {
+        navigate('/error');
+    }
     return (
         <MainCard>
             <div className="flex flex-col w-full sm:px-[48px] px-[20px] sm:py-[40px] py-[20px] shadow-default rounded-2xl">
@@ -21,9 +27,19 @@ function MainInfo() {
                 </div>
 
                 <ul className="text-default-gray-700 space-y-1 w-full flex flex-col">
-                    <li className="whitespace-nowrap text-ellipsis overflow-hidden">여름 맞이 피서 데이트 코스 추가 업데이트</li>
-                    <li className="whitespace-nowrap text-ellipsis overflow-hidden">슬기로운 데이트를 하고싶은 커플을 위한 이벤트</li>
-                    <li className="whitespace-nowrap text-ellipsis overflow-hidden">위티 사칭 웹사이트 및 보이스피싱 주의 안내</li>
+                    {data?.pages.map((page) =>
+                        page.result.noticeList.map((notice) => {
+                            return (
+                                <li
+                                    className="whitespace-nowrap text-ellipsis overflow-hidden"
+                                    key={notice.noticeId}
+                                    onClick={() => navigate(`/notice/${notice.noticeId}`)}
+                                >
+                                    {notice.title}
+                                </li>
+                            );
+                        }),
+                    )}
                 </ul>
             </div>
         </MainCard>

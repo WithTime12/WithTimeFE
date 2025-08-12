@@ -1,19 +1,11 @@
-import type { TFetchNoticeDetailResponse, TFetchNoticesResponse } from '@/types/notice/notice';
+import type { TFetchNoticeDetailResponse, TFetchNoticesResponse, TRequestGetNoticeRequest } from '@/types/notice/notice';
 
 import { axiosInstance } from '../axiosInstance';
 
 // 공지사항 전체 조회 API
-export const fetchNotices = async ({
-    category,
-    page,
-    size,
-}: {
-    category: 'SERVICE' | 'SYSTEM';
-    page: number;
-    size: number;
-}): Promise<TFetchNoticesResponse> => {
+export const fetchNotices = async ({ noticeCategory = 'SERVICE', page, size }: TRequestGetNoticeRequest): Promise<TFetchNoticesResponse> => {
     const { data } = await axiosInstance.get('/api/v1/notices', {
-        params: { noticeCategory: category, page, size },
+        params: { noticeCategory: noticeCategory, page, size },
     });
     return data;
 };

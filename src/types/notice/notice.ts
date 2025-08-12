@@ -8,6 +8,12 @@ export type TNoticeItem = {
     createdAt: string;
 };
 
+export type TRequestGetNoticeRequest = {
+    size?: number;
+    noticeCategory: 'SERVICE' | 'SYSTEM';
+    page: number;
+};
+
 export type TFetchNoticesResponse = TCommonResponse<{
     noticeList: TNoticeItem[];
     totalPages: number;

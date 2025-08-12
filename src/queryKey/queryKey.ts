@@ -18,3 +18,8 @@ export const HomeKeys = createQueryKeys('home', {
     dateTimes: () => ['home', 'dateTimes'],
     montlyPlaceStates: () => ['home', 'montlyPlaceStates'],
 });
+
+export const NoticeKeys = createQueryKeys('notice', {
+    all: () => ['notice'],
+    getAllNotices: (page, size, noticeCategory) => ['notice', page, size, noticeCategory],
+});
