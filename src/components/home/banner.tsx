@@ -5,32 +5,35 @@ import Button from '../common/Button';
 
 import ChevronBack from '@/assets/icons/default_arrows/chevron_back.svg?react';
 import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?react';
-import scroll from '@/images/scroll.png';
+import bicycle from '@/images/banner/bicycle.png';
+import bukchon from '@/images/banner/bukchon.png';
+import itaewon from '@/images/banner/itaewon.png';
+import sungsu from '@/images/banner/sungsu.png';
 
 const slides = [
     {
         title: '서울 성수동 : 옛것과 새로운 것이 교차하는 하루',
         description: '1960년대부터 조성된 오래된 공장 건물과 최근 벽돌 건물들의 분위기',
         tags: ['#활발한 활동', '#레트로 감성', '#서울 핫플'],
-        img: scroll,
+        img: sungsu,
     },
     {
         title: '한강 자전거 데이트 : 바람 따라 달리는 낭만',
         description: '도심 속 자연을 만끽하며 힐링 타임',
         tags: ['#운동 데이트', '#자연과 함께', '#저녁노을'],
-        img: scroll,
+        img: bicycle,
     },
     {
         title: '이태원 세계 음식 투어 : 입 안 가득 여행',
         description: '세계 각국의 맛을 한 자리에서 즐기기',
         tags: ['#미식가 커플', '#이국적인 분위기', '#도심 속 여행'],
-        img: scroll,
+        img: itaewon,
     },
     {
         title: '북촌 한옥마을 산책 : 전통의 미를 따라 걷기',
         description: '골목골목 숨어있는 사진 명소',
         tags: ['#한옥', '#조용한 산책', '#전통과 현대'],
-        img: scroll,
+        img: bukchon,
     },
 ];
 
@@ -38,16 +41,14 @@ function Banner() {
     const navigate = useNavigate();
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // ⏱️ 자동 슬라이드 타이머
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         }, 3000); // 2초
 
-        return () => clearInterval(interval); // 언마운트 시 정리
+        return () => clearInterval(interval);
     }, []);
 
-    // ⬅️➡️ 버튼 클릭 핸들러
     const goToPrev = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
     };
@@ -61,7 +62,7 @@ function Banner() {
     return (
         <div className="relative w-full">
             <img src={img} alt="배너" className="w-full h-[450px] object-cover" />
-
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent z-[5]" />
             {/* 내용 */}
             <div className="absolute inset-0 flex flex-col justify-start px-4 sm:px-12 py-10 text-white z-10">
                 <div className="font-body1 mb-5 sm:mt-0 mt-[30px]">오늘의 데이트 추천</div>
