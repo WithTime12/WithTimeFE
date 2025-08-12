@@ -6,6 +6,8 @@ import DateCourseSearchFilterModal from '@/components/modal/dateCourseSearchFilt
 import ErrorModal from '@/components/modal/errorModal';
 import SettingsModal from '@/components/modal/SettingModal';
 
+import RegionModal from '../modal/regionModal';
+
 import useModalStore from '@/store/useModalStore';
 
 // 모달 타입 정의 -> 만약 다른 모달을 추가하고 싶다면 여기에 타입을 추가하고, MODAL_COMPONENTS에 컴포넌트를 추가하면 됩니다.
@@ -15,6 +17,7 @@ export const MODAL_TYPES = {
     DateCourseSearchFilterModal: 'DateCourseSearchFilterModal',
     SettingsModal: 'SettingsModal', //설정 모달 추가
     AlarmModal: 'AlarmModal',
+    RegionModal: 'RegionModal',
 };
 
 export const MODAL_COMPONENTS = {
@@ -22,6 +25,7 @@ export const MODAL_COMPONENTS = {
     [MODAL_TYPES.DateCourseSearchFilterModal]: DateCourseSearchFilterModal,
     [MODAL_TYPES.SettingsModal]: SettingsModal,
     [MODAL_TYPES.AlarmModal]: AlarmModal,
+    [MODAL_TYPES.RegionModal]: RegionModal,
 };
 
 export default function ModalProvider() {

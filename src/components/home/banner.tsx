@@ -12,21 +12,25 @@ const slides = [
         title: '서울 성수동 : 옛것과 새로운 것이 교차하는 하루',
         description: '1960년대부터 조성된 오래된 공장 건물과 최근 벽돌 건물들의 분위기',
         tags: ['#활발한 활동', '#레트로 감성', '#서울 핫플'],
+        img: scroll,
     },
     {
         title: '한강 자전거 데이트 : 바람 따라 달리는 낭만',
         description: '도심 속 자연을 만끽하며 힐링 타임',
         tags: ['#운동 데이트', '#자연과 함께', '#저녁노을'],
+        img: scroll,
     },
     {
         title: '이태원 세계 음식 투어 : 입 안 가득 여행',
         description: '세계 각국의 맛을 한 자리에서 즐기기',
         tags: ['#미식가 커플', '#이국적인 분위기', '#도심 속 여행'],
+        img: scroll,
     },
     {
         title: '북촌 한옥마을 산책 : 전통의 미를 따라 걷기',
         description: '골목골목 숨어있는 사진 명소',
         tags: ['#한옥', '#조용한 산책', '#전통과 현대'],
+        img: scroll,
     },
 ];
 
@@ -52,11 +56,11 @@ function Banner() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     };
 
-    const { title, description, tags } = slides[currentIndex];
+    const { title, description, tags, img } = slides[currentIndex];
 
     return (
         <div className="relative w-full">
-            <img src={scroll} alt="배너" className="w-full h-[450px] object-cover" />
+            <img src={img} alt="배너" className="w-full h-[450px] object-cover" />
 
             {/* 내용 */}
             <div className="absolute inset-0 flex flex-col justify-start px-4 sm:px-12 py-10 text-white z-10">

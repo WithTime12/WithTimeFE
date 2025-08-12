@@ -1,31 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
+import { getPrecipitation, getWeeklyWeatherRecommendation } from '../../api/home/weather';
+import { useCoreQuery } from '../customQuery';
 
-import { getWeeklyWeatherRecommendation } from '../../api/home/weather';
+import { HomeKeys } from '@/queryKey/queryKey';
 
 // 주간 날씨 추천 훅
-export const useWeatherForecast = (startDate: string, endDate: string) => {
-    return useQuery({
-        queryKey: ['weather-forecast', startDate, endDate],
-        queryFn: () => getWeeklyWeatherRecommendation(startDate, endDate),
-        staleTime: 10 * 60 * 1000, // 10분
-        gcTime: 30 * 60 * 1000, // 30분
-        retry: 3,
+export const useWeatherForecast = ({ startDate, regionId }: { startDate: string; regionId: number }) => {
+    return useCoreQuery(HomeKeys.weather(startDate, regionId).queryKey, () => getWeeklyWeatherRecommendation({ startDate, regionId }), {
+        staleTime: 0,
+        enabled: !!startDate || !!regionId,
     });
 };
 
-// 날씨 데이터 포맷팅 훅
-export const useWeatherForecastFormat = (data: any) => {
-    if (!data?.result?.dailyRecommendations) {
-        return [];
-    }
-
-    return data.result.dailyRecommendations.map((day: any) => ({
-        date: day.forecastDate,
-        weather: day.weatherType,
-        temperature: day.tempCategory,
-        precipitation: day.precipCategory === 'NONE' ? 0 : 30, // 임시 값
-        description: day.message,
-        emoji: day.emoji,
-        keywords: day.keywords || [],
-    }));
+export const useRainyInfo = ({ startDate, regionId }: { startDate: string; regionId: number }) => {
+    return useCoreQuery(HomeKeys.rainyInfo(startDate, regionId).queryKey, () => getPrecipitation({ startDate, regionId }), {
+        staleTime: 0,
+        enabled: !!startDate || !!regionId,
+    });
 };

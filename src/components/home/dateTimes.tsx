@@ -1,19 +1,16 @@
+import { memo } from 'react';
+
 import { useDateTimesStats } from '@/hooks/home/useDateTimes';
 
 import MainCard from './mainCard';
 
 function DateTimes() {
-    const { stats, isLoading, error } = useDateTimesStats();
+    const { data: stats, isLoading, error } = useDateTimesStats();
 
     // 기본 데이터 (API 에러 시 사용)
-    const defaultStats = {
-        totalPlaces: 68, // 실제 API 데이터 기반
-        averageDateTimes: 4.6,
-        monthlyGrowth: 15.2,
-    };
 
     // API 데이터 또는 기본 데이터 사용
-    const displayStats = stats.totalPlaces > 0 ? stats : defaultStats;
+    const displayStats = stats?.result;
 
     return (
         <MainCard>
@@ -29,7 +26,7 @@ function DateTimes() {
                     {isLoading ? (
                         <div className="text-3xl font-bold text-default-gray-800">로딩...</div>
                     ) : (
-                        <div className="text-3xl font-bold text-default-gray-800">{displayStats.averageDateTimes}회</div>
+                        <div className="text-3xl font-bold text-default-gray-800">{displayStats?.averageDateCount}회</div>
                     )}
                 </div>
 
@@ -42,7 +39,7 @@ function DateTimes() {
                     {isLoading ? (
                         <div className="text-3xl font-bold text-primary-700">로딩...</div>
                     ) : (
-                        <div className="text-3xl font-bold text-primary-700">{displayStats.totalPlaces}회</div>
+                        <div className="text-3xl font-bold text-primary-700">{displayStats?.myDateCount}회</div>
                     )}
                 </div>
             </div>
@@ -53,4 +50,4 @@ function DateTimes() {
     );
 }
 
-export default DateTimes;
+export default memo(DateTimes);

@@ -13,7 +13,6 @@ export function useCoreQuery<TQueryFnData, TData = TQueryFnData>(
         queryKey: keyName,
         queryFn: query,
         ...options,
-        staleTime: 1000 * 60 * 5,
     });
 }
 

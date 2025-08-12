@@ -1,13 +1,12 @@
-// 월별 데이트 장소 수 응답 타입
-export interface IMonthlyDatePlaceResponse {
-    isSuccess: boolean;
-    code: string;
-    message: string;
-    result: {
-        datePlaceLogList: IMonthlyDatePlaceLog[];
-    };
-}
+import type { TCommonResponse } from '../common/common';
 
+// 월별 데이트 장소 수 응답 타입
+export type TMonthlyDatePlaceResponse = TCommonResponse<{ datePlaceLogList: IMonthlyDatePlaceLog[] }>;
+
+export type TGetDateTimeStats = TCommonResponse<{
+    averageDateCount: number;
+    myDateCount: number;
+}>;
 // 월별 데이트 장소 로그 타입
 export interface IMonthlyDatePlaceLog {
     year: number;

@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import MainCard from './mainCard';
 
 import AddCircleBlank from '@/assets/icons/add-circle_Blank.svg?react';
 
-export default function MainInfo() {
+function MainInfo() {
     const navigate = useNavigate();
     return (
         <MainCard>
@@ -28,3 +29,5 @@ export default function MainInfo() {
         </MainCard>
     );
 }
+
+export default memo(MainInfo);
