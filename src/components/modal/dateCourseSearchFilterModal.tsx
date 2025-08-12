@@ -43,7 +43,6 @@ export default function DateCourseSearchFilterModal({ onClose }: TDateCourseSear
     const [errorMessages, setErrorMessages] = useState<string[]>(Array(7).fill(''));
 
     const handleSearch = () => {
-        console.log('선택된 필터:', answers);
         onClose();
     };
 

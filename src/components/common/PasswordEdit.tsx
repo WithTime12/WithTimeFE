@@ -57,8 +57,6 @@ export default function PasswordEditSection() {
             setErrors(newErrors);
             return;
         }
-
-        console.log('비밀번호 변경 요청:', { currentPw, newPw });
         setIsEditing(false);
         setErrors({});
     };

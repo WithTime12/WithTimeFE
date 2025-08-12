@@ -37,8 +37,6 @@ export default function Notice() {
                     size: itemsPerPage,
                 });
 
-                console.log('API 응답:', response);
-
                 // 공지 목록과 페이지 수 설정 (빈 배열도 허용)
                 setNoticeList(response.result.noticeList ?? []);
                 setTotalPages(response.result.totalPages ?? 1);

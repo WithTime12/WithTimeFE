@@ -27,7 +27,7 @@ export default function InfoSetting() {
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 onCancel={() => setNickname('')}
-                onSubmit={() => console.log('닉네임 저장:', nickname)}
+                onSubmit={() => {}}
             />
             {/* 이메일 - 수정 불가능 */}
             <EditableInputBox

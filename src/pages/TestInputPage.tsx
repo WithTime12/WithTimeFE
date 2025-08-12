@@ -24,9 +24,7 @@ export default function TestInputPage() {
                     placeholder="검색어 입력를 입력하세요"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)} // 입력 상태 저장
-                    onSearchClick={() => {
-                        console.log('검색 실행:', search); // 검색 아이콘 클릭 시 예시
-                    }}
+                    onSearchClick={() => {}}
                 />
             </div>
 
@@ -38,7 +36,7 @@ export default function TestInputPage() {
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
                     onCancel={() => setNickname('')}
-                    onSubmit={() => console.log('닉네임 저장:', nickname)}
+                    onSubmit={() => {}}
                 />
             </div>
         </div>

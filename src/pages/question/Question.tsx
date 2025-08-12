@@ -67,7 +67,7 @@ export default function Question() {
                     setSearchValue(e.target.value);
                     setCurrentPage(1);
                 }}
-                onSearchClick={() => console.log('검색 실행:', searchValue)}
+                onSearchClick={() => {}}
                 placeholder="내용을 검색하세요"
                 className="mb-8"
             />
