@@ -1,8 +1,8 @@
-import type { IMonthlyDatePlaceResponse, TGetDateTimeStats } from '../../types/home/datePlace';
+import type { TGetDateTimeStats, TMonthlyDatePlaceResponse } from '../../types/home/datePlace';
 import { axiosInstance } from '../axiosInstance';
 
 // 월별 데이트 장소 수 조회 API
-export const getMonthlyDatePlaceStats = async (): Promise<IMonthlyDatePlaceResponse> => {
+export const getMonthlyDatePlaceStats = async (): Promise<TMonthlyDatePlaceResponse> => {
     try {
         const response = await axiosInstance.get('/api/v1/logs/dateplaces/monthly');
         return response.data;
