@@ -15,6 +15,7 @@ export const noticeKeys = {
     // 상세 키 - ID별로 캐시 분리
     detail: (id: number) => [...noticeKeys.all, 'detail', id] as const,
 
-    // 검색 키
-    search: (p: { keyword: string; page: number; size: number; category?: string }) => [...noticeKeys.all, 'search', p] as const,
+    // 검색 키 - 개별 파라미터로 분리
+    search: (keyword: string, page: number, size: number, category?: string) =>
+        [...noticeKeys.all, 'search', keyword, page, size, ...(category ? [category] : [])] as const,
 };

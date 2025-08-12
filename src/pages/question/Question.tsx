@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
+import { keepPreviousData } from '@tanstack/react-query';
 
 import type { TFaqCategory, TFaqItem } from '@/types/faq/faq';
 
-import { useFaq } from '@/hooks/faq/useFaq';
+import { useGetFaqs, useSearchFaqs } from '@/hooks/faq/useFaq';
 
 import EditableInputBox from '@/components/common/EditableInputBox';
 import Navigator from '@/components/common/navigator';
@@ -19,48 +20,50 @@ const CATEGORY_MAP = [
 
 export default function Question() {
     const [searchValue, setSearchValue] = useState('');
-
     const [active, setActive] = useState<(typeof CATEGORY_MAP)[number]>(CATEGORY_MAP[0]);
     const [currentPage, setCurrentPage] = useState(1);
     const [openedIndex, setOpenedIndex] = useState<number | null>(null);
 
     const size = 10;
+    const hasKeyword = searchValue.trim().length > 0;
 
-    // 목록 API 파라미터
+    // 목록 API
     const paramsList = useMemo(
         () => ({
             category: active.value as TFaqCategory,
             page: currentPage - 1,
             size,
         }),
-        [active.value, currentPage, size],
+        [active.value, currentPage],
     );
 
-    // 검색 API 파라미터
+    // 검색 API
     const paramsSearch = useMemo(
         () => ({
             keyword: searchValue,
-            category: active.value as TFaqCategory, // 서버가 선택 카테고리를 받음
+            category: active.value as TFaqCategory,
             page: currentPage - 1,
             size,
         }),
-        [searchValue, active.value, currentPage, size],
+        [searchValue, active.value, currentPage],
     );
 
-    // FAQ 훅
-    const { useGetFaqs, useSearchFaqs } = useFaq();
+    // 두 훅을 항상 호출 - enabled로 제어
+    const listQuery = useGetFaqs(paramsList, {
+        enabled: !hasKeyword,
+        placeholderData: keepPreviousData,
+    });
 
-    // 키워드 있으면 검색 API / 없으면 목록 API
-    const { data, isLoading, isError } = searchValue.trim().length > 0 ? useSearchFaqs(paramsSearch) : useGetFaqs(paramsList);
+    const searchQuery = useSearchFaqs(paramsSearch, {
+        enabled: hasKeyword,
+        placeholderData: keepPreviousData,
+    });
+
+    const activeQuery = hasKeyword ? searchQuery : listQuery;
+    const { data, isLoading, isError } = activeQuery;
 
     const serverList = (data?.result?.faqList ?? []) as TFaqItem[];
     const totalPages = data?.result?.totalPages ?? 1;
-
-    const normalized = serverList.map((f) => ({
-        category: active.label,
-        question: f.title,
-        answer: f.content,
-    }));
 
     return (
         <div className="max-w-[1000px] mx-auto px-4 py-10 text-default-gray-800">
@@ -85,6 +88,7 @@ export default function Question() {
             <div className="flex flex-wrap gap-2 mb-8">
                 {CATEGORY_MAP.map((c) => (
                     <button
+                        type="button"
                         key={c.value}
                         onClick={() => {
                             setActive(c);
@@ -103,14 +107,14 @@ export default function Question() {
             {/* 상태 표시 */}
             {isLoading && <p className="text-center font-body1 text-default-gray-500">로딩 중</p>}
             {isError && <p className="text-center font-body1 text-default-gray-500">불러오기에 실패했습니다.</p>}
-            {!isLoading && !isError && normalized.length === 0 && <p className="text-center font-body1 text-default-gray-500">등록된 질문이 없습니다.</p>}
+            {!isLoading && !isError && serverList.length === 0 && <p className="text-center font-body1 text-default-gray-500">등록된 질문이 없습니다.</p>}
 
             {/* 리스트 */}
             <ul className="divide-y divide-default-gray-400 mb-10">
-                {normalized.map((item, index) => (
+                {serverList.map((item, index) => (
                     <FAQItem
-                        key={`${item.question}-${index}`}
-                        item={item} // { category, question, answer }
+                        key={item.faqId}
+                        item={{ ...item, categoryLabel: active.label }}
                         isOpen={openedIndex === index}
                         onToggle={() => setOpenedIndex(openedIndex === index ? null : index)}
                     />

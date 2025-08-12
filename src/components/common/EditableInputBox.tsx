@@ -29,6 +29,7 @@ export default function EditableInputBox({
     onSearchClick,
     className = '',
     placeholder = '',
+    readOnly = false,
 }: IEditableInputBoxProps) {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -78,7 +79,7 @@ export default function EditableInputBox({
                         type="text"
                         value={value}
                         onChange={onChange}
-                        readOnly={isNickname ? !isEditing : false}
+                        readOnly={readOnly || (isNickname ? !isEditing : false)}
                         placeholder={placeholder}
                         maxLength={maxLength}
                         onKeyDown={handleKeyDown}

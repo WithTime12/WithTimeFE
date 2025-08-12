@@ -97,6 +97,7 @@ export default function PasswordEditSection() {
                         className="w-full h-12 pl-4 pr-20 border border-primary-500 rounded-[16px] font-body1 text-black bg-white"
                     />
                     <button
+                        type="button"
                         onClick={() => setIsEditing(true)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1 rounding-32 font-body1 bg-default-gray-400 text-default-gray-700"
                     >
@@ -169,6 +170,7 @@ export default function PasswordEditSection() {
                     {/* 저장 버튼 */}
                     <div className="flex justify-end">
                         <button
+                            type="button"
                             onClick={handleSubmit}
                             disabled={isPending}
                             className="mt-2 px-6 py-2 rounding-32 font-body1 bg-default-gray-400 text-default-gray-700 disabled:opacity-60"

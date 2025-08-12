@@ -13,6 +13,9 @@ export default function InfoSetting() {
     const [nickname, setNickname] = useState('');
     const [initialNickname, setInitialNickname] = useState('');
 
+    const TERMS_URL = 'https://continuous-headphones-f4c.notion.site/1ece4447020b8049a727d11c3f853a46?source=copy_link';
+    const PRIVACY_URL = 'https://www.notion.so/1ece4447020b80c8befcd2f3886a0350?source=copy_link';
+
     // 이메일(읽기 전용)
     const { email } = useUserEmail();
 
@@ -73,18 +76,39 @@ export default function InfoSetting() {
             <PasswordEditSection />
 
             <div className="w-full flex mt-6">
-                <button className="bg-primary-500 px-6 py-2 rounding-32 text-white font-body1">취향 데이터 초기화</button>
+                <button
+                    type="button"
+                    onClick={() => alert('취향 데이터 초기화 기능은 준비 중입니다.')}
+                    className="bg-primary-500 px-6 py-2 rounding-32 text-white font-body1"
+                >
+                    취향 데이터 초기화
+                </button>
             </div>
 
             <div className="w-full max-w-[360px] mt-10 flex flex-col divide-y divide-default-gray-400">
-                <button className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
+                {/* 서비스 이용약관 - 노션페이지 */}
+                <a
+                    href={TERMS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800"
+                >
                     서비스 이용약관
                     <ChevronForward width={20} height={20} fill="#000000" />
-                </button>
-                <button className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
+                </a>
+
+                {/* 개인정보 처리방침 - 노션페이지 */}
+                <a
+                    href={PRIVACY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800"
+                >
                     개인정보 처리방침
                     <ChevronForward width={20} height={20} fill="#000000" />
-                </button>
+                </a>
+
+                {/* 탈퇴하기 */}
                 <Link to="/deleteAccount" className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
                     탈퇴하기
                     <ChevronForward width={20} height={20} fill="#000000" />

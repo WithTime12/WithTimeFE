@@ -28,7 +28,6 @@ import Question from '@/pages/question/Question';
 import DeleteConfirmPage from '@/pages/setting/DeleteConfirmPage';
 import DeleteReasonPage from '@/pages/setting/DeleteReasonPage.tsx';
 import PaymentHistory from '@/pages/setting/PaymentHistory';
-import SettingEntryPage from '@/pages/setting/SettingEntryPage';
 
 function ProtectedRoute({ children }: PropsWithChildren) {
     //추후 실제 로그인 여부로 대체 필요
@@ -139,10 +138,6 @@ const router = createBrowserRouter([
     },
 
     // Setting page 연결
-    {
-        path: '/setting',
-        element: <SettingEntryPage />,
-    },
     {
         path: '/paymentHistory',
         element: <PaymentHistory />, // 결제 내역 확인

@@ -1,6 +1,6 @@
 import type { TCommonResponse } from '../common/common';
 
-// 공지사항 전체 조회
+// 공지 항목
 export type TNoticeItem = {
     noticeId: number;
     title: string;
@@ -8,12 +8,16 @@ export type TNoticeItem = {
     createdAt: string;
 };
 
+<<<<<<< HEAD
 export type TRequestGetNoticeRequest = {
     size?: number;
     noticeCategory: 'SERVICE' | 'SYSTEM';
     page: number;
 };
 
+=======
+// 공지사항 목록 조회
+>>>>>>> f8aebe8 (fix: CodeRabbit 피드백 일부 수정)
 export type TFetchNoticesResponse = TCommonResponse<{
     noticeList: TNoticeItem[];
     totalPages: number;
@@ -31,27 +35,5 @@ export type TNoticeDetail = {
     createdAt: string;
 };
 
+// 공지 상세 조회 응답
 export type TFetchNoticeDetailResponse = TCommonResponse<TNoticeDetail | null>;
-
-// 생성 요청
-export type TCreateNoticePayload = {
-    title: string;
-    content: string;
-    isPinned: boolean;
-    noticeCategory: 'SERVICE' | 'SYSTEM';
-};
-
-// 수정 요청
-export type TUpdateNoticePayload = {
-    title: string;
-    content: string;
-    isPinned: boolean;
-};
-
-// 공통 응답 (이미 TCommonResponse가 있다면 생략 가능)
-export type TNoticeCommonResponse = {
-    isSuccess: boolean;
-    code: string;
-    message: string;
-    result: string;
-};

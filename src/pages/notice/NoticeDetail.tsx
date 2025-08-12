@@ -6,19 +6,22 @@ export default function NoticeDetail() {
     const navigate = useNavigate();
     const { noticeId } = useParams<{ noticeId: string }>(); // URL에서 noticeId 추출
     const id = Number(noticeId);
+    const isValidId = Number.isInteger(id) && id > 0; // Id 유효성 계산
 
     const { useGetNoticeDetail } = useNotice();
     const { data, isLoading, isError } = useGetNoticeDetail(id);
 
-    const notice = data?.result ?? null;
-
-    if (!Number.isFinite(id)) {
+    // Id 유효성 검사 -> 훅 호출
+    if (!isValidId) {
         return <div className="text-center font-body2 text-default-gray-800 mt-10">잘못된 공지사항 ID입니다.</div>;
     }
-    if (isLoading) return <div className="text-center font-body2 text-default-gray-800 mt-10">로딩 중</div>;
-    if (isError || !notice) {
+    if (isLoading) {
+        return <div className="text-center font-body2 text-default-gray-800 mt-10">로딩 중</div>;
+    }
+    if (isError || !data?.result) {
         return <div className="text-center font-body2 text-default-gray-800 mt-10">공지사항을 불러오는 데 실패했습니다.</div>;
     }
+    const notice = data?.result ?? null;
 
     return (
         <div className="max-w-[1000px] mx-auto px-4 py-10">

@@ -24,7 +24,14 @@ type TSearchParams = {
 export function useNotice() {
     // 공지 목록
     const useGetNotices = (params: TListParams, options?: Parameters<typeof useCoreQuery<TFetchNoticesResponse>>[2]) => {
-        const stable = useMemo(() => params, [params.category, params.page, params.size]);
+        const stable = useMemo(
+            () => ({
+                category: params.category,
+                page: params.page,
+                size: params.size,
+            }),
+            [params.category, params.page, params.size],
+        );
 
         return useCoreQuery<TFetchNoticesResponse>(noticeKeys.list(stable), () => getNotices(stable), {
             placeholderData: keepPreviousData,
@@ -35,7 +42,7 @@ export function useNotice() {
     // 공지 상세
     const useGetNoticeDetail = (id: number, options?: Parameters<typeof useCoreQuery<TFetchNoticeDetailResponse>>[2]) =>
         useCoreQuery<TFetchNoticeDetailResponse>(noticeKeys.detail(id), () => getNoticeDetail(id), {
-            enabled: Number.isFinite(id),
+            enabled: Number.isFinite(id) && id > 0,
             ...options,
         });
 
