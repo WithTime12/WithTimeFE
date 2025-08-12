@@ -21,6 +21,7 @@ function MainInfo() {
             </MainCard>
         );
     }
+    const notices = data?.pages.flatMap((page) => page.result.noticeList) ?? [];
     return (
         <MainCard>
             <div className="flex flex-col w-full sm:px-[48px] px-[20px] sm:py-[40px] py-[20px] shadow-default rounded-2xl">
@@ -35,12 +36,13 @@ function MainInfo() {
                 </div>
 
                 <ul className="text-default-gray-700 space-y-1 w-full flex flex-col">
-                    {data?.pages.map((page) =>
-                        page.result.noticeList.map((notice) => {
-                            return (
+                    {notices.length === 0 ? (
+                        <li className="text-default-gray-500">공지사항이 없습니다.</li>
+                    ) : (
+                        notices.map((notice) => (
+                            <li key={notice.noticeId}>
                                 <button
                                     className="whitespace-nowrap text-ellipsis overflow-hidden w-full text-left"
-                                    key={notice.noticeId}
                                     onClick={() => navigate(`/notice/${notice.noticeId}`)}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter' || e.key === ' ') {
@@ -51,8 +53,8 @@ function MainInfo() {
                                 >
                                     {notice.title}
                                 </button>
-                            );
-                        }),
+                            </li>
+                        ))
                     )}
                 </ul>
             </div>

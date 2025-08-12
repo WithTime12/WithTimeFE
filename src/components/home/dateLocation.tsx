@@ -32,6 +32,7 @@ function DateLocation() {
                             <div className="flex flex-col items-center" key={idx}>
                                 <span className="text-xs text-default-gray-500 mb-1">{graph.count}</span>
                                 <div
+                                    aria-label={`월별 데이트 장소 수: ${graph.year}년 ${graph.month}월 ${graph.count}곳`}
                                     className="w-10 bg-default-gray-400 mb-2 flex items-start justify-center transition-all duration-300"
                                     style={{ height: `${height}px` }}
                                 />

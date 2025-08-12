@@ -7,7 +7,7 @@ import MainCard from './mainCard';
 function DateTimes() {
     const { data: states, isLoading, error } = useDateTimeStates();
 
-    const displaystates = states?.result;
+    const displayStates = states?.result;
     if (isLoading) {
         return (
             <div className="w-full h-full flex justify-center items-center">
@@ -27,7 +27,9 @@ function DateTimes() {
                         평균 데이트 횟수
                     </div>
 
-                    <div className="text-3xl font-bold text-default-gray-800">{displaystates?.averageDateCount}회</div>
+                    <div className="text-3xl font-bold text-default-gray-800">
+                        {displayStates?.averageDateCount != null ? `${displayStates.averageDateCount}회` : '—'}
+                    </div>
                 </div>
 
                 <div className="w-[1px] h-[149px] border-[0.5px] border-default-gray-400" />
@@ -37,7 +39,7 @@ function DateTimes() {
                     <div className="text-sm text-default-gray-700 mb-1">최근 1개월</div>
                     <div className="text-xs text-default-gray-500 mb-5 text-center">나의 데이트 횟수</div>
 
-                    <div className="text-3xl font-bold text-primary-700">{displaystates?.myDateCount}회</div>
+                    <div className="text-3xl font-bold text-primary-700">{displayStates?.myDateCount != null ? `${displayStates.myDateCount}회` : '—'}</div>
                 </div>
             </div>
 

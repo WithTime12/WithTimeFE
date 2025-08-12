@@ -83,8 +83,9 @@ function WordCloudCanvas() {
     // ResizeObserver 적용
     useEffect(() => {
         if (!containerRef.current || !throttledDrawRef.current) return;
-        WordCloud.stop();
+
         const resizeObserver = new ResizeObserver((entries) => {
+            WordCloud.stop();
             for (const entry of entries) {
                 const { width, height } = entry.contentRect;
                 throttledDrawRef.current?.(width, height);
