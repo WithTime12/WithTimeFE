@@ -43,7 +43,7 @@ export default function Notice() {
             } catch (err) {
                 // 오류 처리
                 setError('공지사항을 불러오는 데 실패했습니다.');
-                console.log(err);
+                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -64,7 +64,7 @@ export default function Notice() {
                 mode="search"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                onSearchClick={() => console.log('검색 실행:', searchValue)}
+                onSearchClick={() => {}}
                 placeholder="찾으시는 내용을 입력해주세요."
                 className="mb-8"
             />
