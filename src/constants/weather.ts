@@ -11,9 +11,9 @@ export const WeatherTypeLabel: Record<WeatherType, string> = {
     [WeatherType.CLEAR]: '맑고',
     [WeatherType.CLOUDY]: '흐리고',
     [WeatherType.RAINY]: '비오고',
-    [WeatherType.SNOWY]: '눈오고',
+    [WeatherType.SNOWY]: '눈오는',
     [WeatherType.RAIN_SNOW]: '비/눈오는',
-    [WeatherType.SHOWER]: '소나기',
+    [WeatherType.SHOWER]: '소나기오는',
 };
 
 export enum TempCategory {

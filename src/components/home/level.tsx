@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { IGradeInfo } from '@/types/home/level';
 
@@ -14,9 +14,7 @@ function Level({ grade, nextRequiredPoint }: IGradeInfo) {
         return ramji; // 기본 이미지
     };
     useEffect(() => {
-        if (nextRequiredPoint) {
-            setPercentage(nextRequiredPoint);
-        }
+        setPercentage(nextRequiredPoint);
     }, [nextRequiredPoint]);
 
     return (
@@ -43,7 +41,7 @@ function Level({ grade, nextRequiredPoint }: IGradeInfo) {
                         <div className="w-full h-6 bg-default-gray-400 rounded-full mt-[32px] relative">
                             <div
                                 className="absolute top-1 ml-1 h-4 bg-primary-500 rounded-full transition-all duration-500"
-                                style={{ width: `${percentage}%` }}
+                                style={{ width: `${Math.max(0, Math.min(100, percentage))}%` }}
                             />
                         </div>
                     </div>
@@ -53,4 +51,4 @@ function Level({ grade, nextRequiredPoint }: IGradeInfo) {
     );
 }
 
-export default memo(Level);
+export default Level;

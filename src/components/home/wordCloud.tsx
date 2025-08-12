@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import type { DebouncedFunc } from 'lodash';
+import { useEffect, useRef, useState } from 'react';
+import { type DebouncedFunc } from 'lodash';
 import throttle from 'lodash.throttle';
 import type { ListEntry } from 'wordcloud';
 import WordCloud from 'wordcloud';
 
-import { useWeeklyKeywords } from '@/hooks/home/useKeywordStats';
+import { useWeeklyKeywords } from '@/hooks/home/useKeywordStates';
 
 function WordCloudCanvas() {
     const { data } = useWeeklyKeywords();
@@ -14,7 +14,9 @@ function WordCloudCanvas() {
     const throttledDrawRef = useRef<DebouncedFunc<(w: number, h: number) => void> | null>(null);
 
     useEffect(() => {
-        setList(data?.result?.placeCategoryLogList!.map((k) => [String(k.placeCategoryLabel), Number(k.count)]) as ListEntry[]);
+        if (data?.result?.placeCategoryLogList) {
+            setList(data.result.placeCategoryLogList.map((k) => [String(k.placeCategoryLabel), Number(k.count)]) as ListEntry[]);
+        }
     }, [data]);
 
     const drawCloud = (width: number, height: number) => {
@@ -34,7 +36,12 @@ function WordCloudCanvas() {
         WordCloud(canvas, {
             list,
             gridSize: Math.round(8 * (width / 400)),
-            weightFactor: (size) => size * (width / 1500),
+            weightFactor: (size) => {
+                const factor = width / 1500;
+                const minFactor = 0.3;
+                const maxFactor = 1.5;
+                return size * Math.max(minFactor, Math.min(maxFactor, factor));
+            },
             fontFamily: 'Pretendard, sans-serif',
             color: (_word, weight) => {
                 if (Number(weight) > 95) return '#186a6d';
@@ -63,10 +70,12 @@ function WordCloudCanvas() {
 
         const container = containerRef.current;
         if (container) {
-            WordCloud.stop();
             const { width, height } = container.getBoundingClientRect();
             drawCloud(width, height); // 최초 한 번 직접 호출
         }
+        return () => {
+            WordCloud.stop();
+        };
     }, [list]);
 
     // ResizeObserver 적용
@@ -97,4 +106,4 @@ function WordCloudCanvas() {
         </div>
     );
 }
-export default React.memo(WordCloudCanvas);
+export default WordCloudCanvas;

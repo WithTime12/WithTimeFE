@@ -2,7 +2,7 @@ import type { TempCategory, WeatherType } from '@/constants/weather';
 
 import type { TCommonResponse } from '../common/common';
 
-export type TGetWeeklyWeatheerRecommendationRequest = {
+export type TGetWeeklyWeatherRecommendationRequest = {
     startDate: string;
     regionId: number;
 };
@@ -22,7 +22,7 @@ type TRegion = {
     landRegCode: string;
     tempRegCode: string;
 };
-export type TGetWeeklyWeatheerRecommendationResponse = TCommonResponse<{
+export type TGetWeeklyWeatherRecommendationResponse = TCommonResponse<{
     region: TRegion;
     startDate: string;
     endDate: string;
@@ -36,7 +36,7 @@ export type TGetPrecipitationRequest = {
     regionId: number;
 };
 export type TGetPrecipitationResponse = TCommonResponse<{
-    retion: TRegion;
+    region: TRegion;
     startDate: string;
     endDate: string;
     dailyPrecipitations: TDailyPrecipitations[];

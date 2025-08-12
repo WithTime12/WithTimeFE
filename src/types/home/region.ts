@@ -17,3 +17,13 @@ type TRegionCode = {
     tempRegCode: string;
     name: string;
 };
+
+export type TGetUserRegionResponse = TCommonResponse<{
+    regionId: number;
+    name: string;
+    latitude: number;
+    longitude: number;
+    gridX: number;
+    gridY: number;
+    regionCode: TRegionCode;
+}>;

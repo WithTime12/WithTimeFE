@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import { useDeviceToken } from '@/hooks/alarm/useDeviceToken';
@@ -16,11 +15,9 @@ import WordCloudCard from '@/components/home/wordCloud';
 
 function Home() {
     useDeviceToken();
-    const navigate = useNavigate();
+
     const { data: gradeData, isLoading, error } = useUserGrade();
-    useEffect(() => {
-        if (error) navigate('/error');
-    }, [error, navigate]);
+    if (error) return <Navigate to="/error" replace />;
     if (isLoading) {
         return (
             <div className="bg-default-gray-100 min-h-screen mb-[40px] w-full flex items-center justify-center">
@@ -39,7 +36,7 @@ function Home() {
                     </div>
                     <div className="max-w-9xl mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6">
                         <div className="flex flex-col gap-[30px] w-full">
-                            <Level {...gradeData?.result!} />
+                            {gradeData?.result && <Level {...gradeData.result} />}
                             <div className="grid sm:grid-cols-[3fr_2fr] grid-cols-1 h-fit w-full gap-[24px]">
                                 <DateTimes />
                                 <DateCourseStore />

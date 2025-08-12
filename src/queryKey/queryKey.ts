@@ -16,10 +16,11 @@ export const HomeKeys = createQueryKeys('home', {
     rainyInfo: (startDate, regionId) => ['home', 'rainy', 'forecast', startDate, regionId],
     keywords: () => ['home', 'keywords'],
     dateTimes: () => ['home', 'dateTimes'],
-    montlyPlaceStates: () => ['home', 'montlyPlaceStates'],
+    monthlyPlaceStates: () => ['home', 'monthlyPlaceStates'],
+    userRegion: () => ['home', 'user', 'region'],
 });
 
 export const NoticeKeys = createQueryKeys('notice', {
     all: () => ['notice'],
-    getAllNotices: (page, size, noticeCategory) => ['notice', page, size, noticeCategory],
+    getAllNotices: (page: number, size: number, noticeCategory: 'SERVICE' | 'SYSTEM') => ['notice', page, size, noticeCategory],
 });

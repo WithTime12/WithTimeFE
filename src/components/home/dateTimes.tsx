@@ -1,17 +1,20 @@
-import { memo } from 'react';
+import ClipLoader from 'react-spinners/ClipLoader';
 
-import { useDateTimesStats } from '@/hooks/home/useDateTimes';
+import { useDateTimesstates } from '@/hooks/home/useDateTimes';
 
 import MainCard from './mainCard';
 
 function DateTimes() {
-    const { data: stats, isLoading, error } = useDateTimesStats();
+    const { data: states, isLoading, error } = useDateTimesstates();
 
-    // 기본 데이터 (API 에러 시 사용)
-
-    // API 데이터 또는 기본 데이터 사용
-    const displayStats = stats?.result;
-
+    const displaystates = states?.result;
+    if (isLoading) {
+        return (
+            <div className="w-full h-full flex justify-center items-center">
+                <ClipLoader />
+            </div>
+        );
+    }
     return (
         <MainCard>
             <div className="flex flex-row min-w-fit py-[28px] justify-center">
@@ -23,11 +26,8 @@ function DateTimes() {
                         <br />
                         평균 데이트 횟수
                     </div>
-                    {isLoading ? (
-                        <div className="text-3xl font-bold text-default-gray-800">로딩...</div>
-                    ) : (
-                        <div className="text-3xl font-bold text-default-gray-800">{displayStats?.averageDateCount}회</div>
-                    )}
+
+                    <div className="text-3xl font-bold text-default-gray-800">{displaystates?.averageDateCount}회</div>
                 </div>
 
                 <div className="w-[1px] h-[149px] border-[0.5px] border-default-gray-400" />
@@ -36,11 +36,8 @@ function DateTimes() {
                 <div className="flex flex-col items-center justify-center min-w-fit px-[30px] sm:px-[56px]">
                     <div className="text-sm text-default-gray-700 mb-1">최근 1개월</div>
                     <div className="text-xs text-default-gray-500 mb-5 text-center">나의 데이트 횟수</div>
-                    {isLoading ? (
-                        <div className="text-3xl font-bold text-primary-700">로딩...</div>
-                    ) : (
-                        <div className="text-3xl font-bold text-primary-700">{displayStats?.myDateCount}회</div>
-                    )}
+
+                    <div className="text-3xl font-bold text-primary-700">{displaystates?.myDateCount}회</div>
                 </div>
             </div>
 
@@ -50,4 +47,4 @@ function DateTimes() {
     );
 }
 
-export default memo(DateTimes);
+export default DateTimes;

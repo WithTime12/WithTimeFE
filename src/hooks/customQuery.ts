@@ -12,6 +12,7 @@ export function useCoreQuery<TQueryFnData, TData = TQueryFnData>(
     return useQuery({
         queryKey: keyName,
         queryFn: query,
+        staleTime: options?.staleTime ?? 1000 * 60 * 5,
         ...options,
     });
 }

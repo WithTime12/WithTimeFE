@@ -1,17 +1,15 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
-import { useDateCourseSavedCount } from '@/hooks/home/useDateCourseStats';
+import { useDateCourseSavedCount } from '@/hooks/home/useDateCourseStates';
 
 import MainCard from './mainCard';
 
 import ArchiveBlank from '@/assets/icons/Archive_Blank.svg?react';
 
 function DateCourseStore() {
-    const navigate = useNavigate();
     const { data, isLoading, error } = useDateCourseSavedCount();
     if (error) {
-        navigate('/error');
+        return <Navigate to="/error" replace />;
     }
     return (
         <MainCard>
@@ -33,4 +31,4 @@ function DateCourseStore() {
     );
 }
 
-export default React.memo(DateCourseStore);
+export default DateCourseStore;

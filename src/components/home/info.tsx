@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import { useGetNotices } from '@/hooks/notices/useGetNotices';
 
@@ -9,9 +9,15 @@ import AddCircleBlank from '@/assets/icons/add-circle_Blank.svg?react';
 
 function MainInfo() {
     const navigate = useNavigate();
-    const { data, error } = useGetNotices({ size: 3, page: 0, noticeCategory: 'SERVICE' });
+    const { data, error, isLoading } = useGetNotices({ size: 3, page: 0, noticeCategory: 'SERVICE' });
+
     if (error) {
-        navigate('/error');
+        <Navigate to={'/error'} replace />;
+    }
+    if (isLoading) {
+        <MainCard>
+            <ClipLoader className="slef-center" />
+        </MainCard>;
     }
     return (
         <MainCard>
@@ -34,6 +40,13 @@ function MainInfo() {
                                     className="whitespace-nowrap text-ellipsis overflow-hidden"
                                     key={notice.noticeId}
                                     onClick={() => navigate(`/notice/${notice.noticeId}`)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            navigate(`/notice/${notice.noticeId}`);
+                                        }
+                                    }}
+                                    tabIndex={0}
+                                    role="button"
                                 >
                                     {notice.title}
                                 </li>
@@ -46,4 +59,4 @@ function MainInfo() {
     );
 }
 
-export default memo(MainInfo);
+export default MainInfo;

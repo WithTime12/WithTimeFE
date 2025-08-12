@@ -1,17 +1,14 @@
-import type { TGetDateTimeStats, TMonthlyDatePlaceResponse } from '../../types/home/datePlace';
-import { axiosInstance } from '../axiosInstance';
+import type { TGetDateTimeStates, TMonthlyDatePlaceResponse } from '../../types/home/datePlace';
+
+import { axiosInstance } from '@/api/axiosInstance';
 
 // 월별 데이트 장소 수 조회 API
-export const getMonthlyDatePlaceStats = async (): Promise<TMonthlyDatePlaceResponse> => {
-    try {
-        const response = await axiosInstance.get('/api/v1/logs/dateplaces/monthly');
-        return response.data;
-    } catch {
-        throw new Error('월별 데이트 장소 통계를 가져오는데 실패했습니다.');
-    }
+export const getMonthlyDatePlaceStates = async (): Promise<TMonthlyDatePlaceResponse> => {
+    const { data } = await axiosInstance.get('/api/v1/logs/dateplaces/monthly');
+    return data;
 };
 
-export const getDateTimeStats = async (): Promise<TGetDateTimeStats> => {
+export const getDateTimeStates = async (): Promise<TGetDateTimeStates> => {
     const { data } = await axiosInstance.get('/api/v1/logs/datecourses/average');
     return data;
 };

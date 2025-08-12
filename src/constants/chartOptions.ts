@@ -1,4 +1,6 @@
-export const chartOptions = {
+import type { ChartOptions } from 'chart.js';
+
+export const chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -7,10 +9,8 @@ export const chartOptions = {
     },
     scales: {
         x: {
-            grid: { display: false },
+            grid: { display: false, drawOnChartArea: false },
             ticks: { color: '#616161', font: { size: 12, weight: 500 } },
-            drawBorder: false,
-            drawOnChartArea: false,
             border: { display: false },
         },
         y: {
@@ -21,4 +21,4 @@ export const chartOptions = {
             grid: { display: false },
         },
     },
-} as const;
+};

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useSearchRegion } from '@/hooks/course/useSearchRegion';
-import useUserRegion from '@/hooks/home/useUserRegion';
+import { useUserRegion } from '@/hooks/home/useUserRegion';
 
 import EditableInputBox from '@/components/common/EditableInputBox';
 import Modal from '@/components/common/modal';
@@ -13,14 +13,20 @@ interface IRegionModalProps {
 function RegionModal({ onClose }: IRegionModalProps) {
     const [searchQuery, setSearchQuery] = useState(''); // 검색어
     const [showResults, setShowResults] = useState(false); // 검색 결과 표시 여부
-    const { usePatchUserRegion } = useUserRegion();
+    const { mutate: patchUserRegionMutate } = useUserRegion();
     const { data: regionList, refetch } = useSearchRegion({ keyword: searchQuery }, { enabled: false });
-    const { mutate: patchUserRegionMutate } = usePatchUserRegion;
 
     const handleRegionSelect = (regionId: number) => {
-        patchUserRegionMutate({
-            regionId: regionId,
-        });
+        patchUserRegionMutate(
+            {
+                regionId: regionId,
+            },
+            {
+                onSuccess: () => {
+                    onClose();
+                },
+            },
+        );
     };
 
     const handleSearch = () => {
@@ -53,9 +59,11 @@ function RegionModal({ onClose }: IRegionModalProps) {
                 {showResults && (
                     <div className="px-6 pb-6 w-full h-full flex flex-col">
                         <div className="border-t border-default-gray-400 flex flex-col w-full overflow-y-auto ">
+                            {regionList?.result.regions.length === 0 && <div className="text-center py-8 text-default-gray-500">검색 결과가 없습니다</div>}
                             {regionList?.result.regions.map((region, index) => (
                                 <div key={region.regionId}>
                                     <button
+                                        type="button"
                                         onClick={() => handleRegionSelect(region.regionId)}
                                         className={`w-full text-left py-3 px-4 hover:bg-primary-100 transition-colors`}
                                     >

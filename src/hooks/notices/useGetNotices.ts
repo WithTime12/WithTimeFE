@@ -10,6 +10,6 @@ export const useGetNotices = ({ size, page, noticeCategory }: TRequestGetNoticeR
         queryKey: NoticeKeys.getAllNotices(page, size ?? 5, noticeCategory).queryKey,
         queryFn: ({ pageParam = page }) => fetchNotices({ page: pageParam, size: size ?? 5, noticeCategory }),
         initialPageParam: page,
-        getNextPageParam: (lastPage) => lastPage.result.currentPage ?? undefined,
+        getNextPageParam: (lastPage) => (lastPage.result.hasNextPage ? lastPage.result.currentPage + 1 : undefined),
     });
 };

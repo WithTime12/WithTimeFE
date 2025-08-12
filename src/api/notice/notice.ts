@@ -1,6 +1,6 @@
 import type { TFetchNoticeDetailResponse, TFetchNoticesResponse, TRequestGetNoticeRequest } from '@/types/notice/notice';
 
-import { axiosInstance } from '../axiosInstance';
+import { axiosInstance } from '@/api/axiosInstance';
 
 // 공지사항 전체 조회 API
 export const fetchNotices = async ({ noticeCategory = 'SERVICE', page, size }: TRequestGetNoticeRequest): Promise<TFetchNoticesResponse> => {

@@ -1,5 +1,5 @@
 // src/components/home/dateRecommend.tsx
-import { type ComponentType, memo, type SVGProps, useEffect, useMemo, useState } from 'react';
+import { type ComponentType, type SVGProps, useEffect, useMemo, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
@@ -12,6 +12,7 @@ import { getTodayString } from '@/utils/getTodayString';
 import { normalizeEmojiKey } from '@/utils/normalizeEmojiKey';
 import { getWeatherSentence } from '@/utils/weatherMessage';
 
+import { useGetUserRegion } from '@/hooks/home/useUserRegion';
 import { useRainyInfo, useWeatherForecast } from '@/hooks/home/useWeather';
 
 import Button from '@/components/common/Button';
@@ -38,14 +39,13 @@ const EMOJI_KEY_ICON_MAP: Record<string, ComponentType<SVGProps<SVGSVGElement>>>
 
 function DateRecommend() {
     const [dateIdx, setDateIdx] = useState(0);
-
+    const { data } = useGetUserRegion();
     // 기준 날짜/지역
     const startDate = getTodayString();
-    const regionId = 1;
+    const regionId = data?.result.regionId;
 
-    // 쿼리
-    const { data: forecastData, isLoading: forecastLoading } = useWeatherForecast({ startDate, regionId });
-    const { data: rainyData, isLoading: rainyLoading } = useRainyInfo({ startDate, regionId });
+    const { data: forecastData, isLoading: forecastLoading } = useWeatherForecast({ startDate, regionId: regionId! });
+    const { data: rainyData, isLoading: rainyLoading } = useRainyInfo({ startDate, regionId: regionId! });
 
     const safeStartDate = rainyData?.result?.startDate ?? startDate;
     const dateList = useMemo(() => getNextSevenDay(safeStartDate), [safeStartDate]);
@@ -100,7 +100,11 @@ function DateRecommend() {
                 {/* 상단 텍스트 */}
                 <div className="flex items-center justify-between sm:flex-row flex-col">
                     <div className="text-2xl font-bold whitespace-nowrap">이번 주 {forecastData?.result?.region?.regionName ?? '지역'} 데이트 추천</div>
-                    <button className="sm:mt-1 mt-4 text-sm text-black underline sm:self-center self-end" onClick={() => openModal(MODAL_TYPES.RegionModal)}>
+                    <button
+                        type="button"
+                        className="sm:mt-1 mt-4 text-sm text-black underline sm:self-center self-end"
+                        onClick={() => openModal(MODAL_TYPES.RegionModal)}
+                    >
                         장소 변경하기
                     </button>
                 </div>
@@ -121,11 +125,11 @@ function DateRecommend() {
                 </div>
 
                 {/* 날씨 설명 */}
-                <div className="flex justify-evenly items-center w-full sm:gap-4 md:gap-2 gap-10 sm:flex-row flex-col">
-                    <div className="flex flex-col items-start w-fit px-4">
-                        <div className="flex flex-row items-center mb-4">
+                <div className="flex items-center w-full sm:gap-4 md:gap-2 gap-10 sm:flex-row flex-col">
+                    <div className="flex flex-col items-start min-w-[300px] max-w-[320px] px-4">
+                        <div className="flex flex-row items-center mb-4 w-full">
                             <Icon key={iconKey} fill="#616161" className="w-12 h-12 mb-1" aria-label={`weather-icon-${iconKey || 'sun'}`} />
-                            <span className="text-[#616161] font-medium mb-1 ml-3 text-[25px] text-nowrap">
+                            <span className="text-[#616161] font-medium mb-1 ml-3 text-[25px] text-nowrap ">
                                 {forecastLoading
                                     ? '날씨 로딩 중...'
                                     : currentRec
@@ -157,7 +161,7 @@ function DateRecommend() {
                 <div className="flex flex-col w-full">
                     <div className="text-base font-semibold text-[#616161] mb-4">이번주 강수확률 (%)</div>
                     <div className="flex justify-center h-[200px] w-full self-center">
-                        <Line data={rainData as any} options={chartOptions as any} />
+                        <Line data={rainData} options={chartOptions} />
                     </div>
                 </div>
             </div>
@@ -165,4 +169,4 @@ function DateRecommend() {
     );
 }
 
-export default memo(DateRecommend);
+export default DateRecommend;
