@@ -1,9 +1,22 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
+import type { UseQueryOptions } from '@tanstack/react-query';
 
 export const regionKeys = createQueryKeys('region', {
-    search: (keyword: string) => [keyword],
+    all: () => ({
+        queryKey: ['region'],
+    }),
+    search: (keyword: string) =>
+        ({
+            queryKey: ['region', 'search', keyword] as const,
+        }) satisfies UseQueryOptions,
 });
 
 export const alarmKeys = createQueryKeys('alarm', {
-    getAlarm: (size: number, cursor?: number) => [size, cursor],
+    all: () => ({
+        queryKey: ['alarm'],
+    }),
+    getAlarm: (size: number, cursor?: number) =>
+        ({
+            queryKey: ['alarm', 'getAlarm', size, cursor] as const,
+        }) satisfies UseQueryOptions,
 });

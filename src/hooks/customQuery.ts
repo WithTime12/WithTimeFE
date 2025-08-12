@@ -1,8 +1,9 @@
 import { type MutationFunction, type QueryFunction, type QueryKey, useMutation, useQuery, type UseQueryResult } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import { toast } from 'sonner';
 
 import type { TUseMutationCustomOptions, TUseQueryCustomOptions } from '@/types/common/common';
+
+import { queryClient } from '@/api/queryClient';
 
 export function useCoreQuery<TQueryFnData, TData = TQueryFnData>(
     keyName: QueryKey,
@@ -17,12 +18,53 @@ export function useCoreQuery<TQueryFnData, TData = TQueryFnData>(
     });
 }
 
-export function useCoreMutation<T, U>(mutation: MutationFunction<T, U>, options?: TUseMutationCustomOptions) {
-    return useMutation({
+export function useCoreMutation<TData, TVariables>(
+    mutation: MutationFunction<TData, TVariables>,
+    options?: TUseMutationCustomOptions<TData, TVariables, AxiosError<{ message?: string }>, { prevData?: unknown }>,
+) {
+    const qc = queryClient;
+
+    const {
+        optimisticUpdate,
+        invalidateKeys,
+        userOnError,
+        userOnSuccess,
+        ...rest // retry, gcTime 등 표준 옵션
+    } = options ?? {};
+
+    return useMutation<TData, AxiosError<{ message?: string }>, TVariables, { prevData?: unknown }>({
         mutationFn: mutation,
-        onError: (error) => {
-            toast.error(error.response?.data.message || 'An error occurred.');
+
+        onMutate: async (vars) => {
+            if (!optimisticUpdate) return {};
+            await qc.cancelQueries({ queryKey: optimisticUpdate.key });
+            const prevData = qc.getQueryData(optimisticUpdate.key);
+            qc.setQueryData(optimisticUpdate.key, (old: any) => optimisticUpdate.updateFn(old, vars));
+            return { prevData };
         },
-        ...options,
+
+        onError: (error, vars, ctx) => {
+            // 롤백
+            if (optimisticUpdate && ctx?.prevData !== undefined) {
+                qc.setQueryData(optimisticUpdate.key, ctx.prevData);
+            }
+
+            // 사용자 콜백 위임
+            userOnError?.(error, vars, ctx);
+        },
+
+        onSuccess: async (data, vars, ctx) => {
+            // invalidate
+            if (invalidateKeys?.length) {
+                for (const key of invalidateKeys) {
+                    await qc.invalidateQueries({ queryKey: key });
+                }
+            }
+            // 사용자 콜백 위임
+            userOnSuccess?.(data, vars, ctx);
+        },
+
+        // 나머지 표준 옵션 주입
+        ...rest,
     });
 }

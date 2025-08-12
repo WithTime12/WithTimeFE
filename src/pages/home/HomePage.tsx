@@ -1,4 +1,4 @@
-import { useDeviceToken } from '@/hooks/alarm/useDeviceToken';
+import { useEffect } from 'react';
 
 import Banner from '@/components/home/banner';
 import DateCourseStore from '@/components/home/dateCourseStore';
@@ -9,8 +9,23 @@ import MainInfo from '@/components/home/info';
 import Level from '@/components/home/level';
 import WordCloudCard from '@/components/home/wordCloud';
 
+import { useDeviceTokenContext } from '@/providers/deviceTokenProvider';
+
 function Home() {
-    useDeviceToken();
+    const { requestAndRegister } = useDeviceTokenContext();
+
+    useEffect(() => {
+        const fire = () => {
+            requestAndRegister().catch((err) => {
+                console.error('Device token 등록 실패:', err);
+            });
+        };
+
+        window.addEventListener('pointerdown', fire, { once: true });
+        return () => {
+            window.removeEventListener('pointerdown', fire);
+        };
+    }, [requestAndRegister]);
 
     return (
         <div className="bg-default-gray-100 min-h-screen mb-[40px]">

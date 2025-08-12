@@ -88,7 +88,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                 mode="search"
                                 onSearchClick={handleSearch}
                                 placeholder="ex: 서울시 강남구"
-                                className="w-full"
+                                className="!w-full min-w-full"
                                 value={inputValue}
                                 onChange={handleInputChange}
                             />

@@ -1,6 +1,7 @@
 // src/firebase/firebase.ts
 import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken } from 'firebase/messaging';
+import type { Messaging } from 'firebase/messaging';
+import { deleteToken, getMessaging, getToken, isSupported } from 'firebase/messaging';
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -13,22 +14,34 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+export let messaging: Messaging | null = null;
+(async () => {
+    if (await isSupported()) {
+        messaging = getMessaging(app);
+    }
+})();
 
-export const generateToken = async () => {
+export async function generateToken(): Promise<string | null> {
+    if (!(await isSupported())) return null;
+    if (!messaging) messaging = getMessaging(app);
+
+    // 권한 요청 (이미 허용/거부된 상태면 브라우저가 적절히 동작)
+    if ('Notification' in window && Notification.permission !== 'granted') {
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') return null;
+    }
+
     try {
         const token = await getToken(messaging, {
             vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+            serviceWorkerRegistration: await navigator.serviceWorker.getRegistration(),
         });
-        if (!token) {
-            console.warn('FCM 토큰 생성에 실패했습니다. 알림 권한을 확인해주세요.');
-        }
-        return token;
-    } catch (error) {
-        console.error('FCM 토큰 생성 중 오류 발생:', error);
+        return token ?? null;
+    } catch (e) {
+        console.error('FCM getToken 실패:', e);
         return null;
     }
-};
+}
 
 export const registerServiceWorker = async () => {
     try {
@@ -39,3 +52,14 @@ export const registerServiceWorker = async () => {
         console.error('Service Worker registration failed:', err);
     }
 };
+
+export async function deleteFcmToken(): Promise<boolean> {
+    if (!(await isSupported())) return false;
+    if (!messaging) messaging = getMessaging(app);
+    try {
+        return await deleteToken(messaging);
+    } catch (e) {
+        console.error('FCM deleteToken 실패:', e);
+        return false;
+    }
+}
