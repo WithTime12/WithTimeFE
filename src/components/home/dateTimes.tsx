@@ -1,11 +1,11 @@
 import ClipLoader from 'react-spinners/ClipLoader';
 
-import { useDateTimesstates } from '@/hooks/home/useDateTimes';
+import { useDateTimeStates } from '@/hooks/home/useDateTimes';
 
 import MainCard from './mainCard';
 
 function DateTimes() {
-    const { data: states, isLoading, error } = useDateTimesstates();
+    const { data: states, isLoading, error } = useDateTimeStates();
 
     const displaystates = states?.result;
     if (isLoading) {

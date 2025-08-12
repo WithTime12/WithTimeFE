@@ -1,6 +1,6 @@
-import { getDateCourseSavedCount } from '../../api/home/dateCourse';
-import { useCoreQuery } from '../customQuery';
+import { useCoreQuery } from '@/hooks/customQuery';
 
+import { getDateCourseSavedCount } from '@/api/home/dateCourse';
 import { HomeKeys } from '@/queryKey/queryKey';
 
 // 데이트 코스 저장 횟수 훅

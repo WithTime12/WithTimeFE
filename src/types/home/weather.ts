@@ -16,14 +16,14 @@ type TDailyRecommendations = {
     keywords: string[];
 };
 
-type TRegion = {
+type TWeatherRegion = {
     regionId: number;
     regionName: string;
     landRegCode: string;
     tempRegCode: string;
 };
 export type TGetWeeklyWeatherRecommendationResponse = TCommonResponse<{
-    region: TRegion;
+    region: TWeatherRegion;
     startDate: string;
     endDate: string;
     dailyRecommendations: TDailyRecommendations[];
@@ -36,7 +36,7 @@ export type TGetPrecipitationRequest = {
     regionId: number;
 };
 export type TGetPrecipitationResponse = TCommonResponse<{
-    region: TRegion;
+    region: TWeatherRegion;
     startDate: string;
     endDate: string;
     dailyPrecipitations: TDailyPrecipitations[];

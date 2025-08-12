@@ -12,12 +12,14 @@ function MainInfo() {
     const { data, error, isLoading } = useGetNotices({ size: 3, page: 0, noticeCategory: 'SERVICE' });
 
     if (error) {
-        <Navigate to={'/error'} replace />;
+        return <Navigate to={'/error'} replace />;
     }
     if (isLoading) {
-        <MainCard>
-            <ClipLoader className="slef-center" />
-        </MainCard>;
+        return (
+            <MainCard>
+                <ClipLoader className="self-center" />
+            </MainCard>
+        );
     }
     return (
         <MainCard>
@@ -36,8 +38,8 @@ function MainInfo() {
                     {data?.pages.map((page) =>
                         page.result.noticeList.map((notice) => {
                             return (
-                                <li
-                                    className="whitespace-nowrap text-ellipsis overflow-hidden"
+                                <button
+                                    className="whitespace-nowrap text-ellipsis overflow-hidden w-full text-left"
                                     key={notice.noticeId}
                                     onClick={() => navigate(`/notice/${notice.noticeId}`)}
                                     onKeyDown={(e) => {
@@ -46,10 +48,9 @@ function MainInfo() {
                                         }
                                     }}
                                     tabIndex={0}
-                                    role="button"
                                 >
                                     {notice.title}
-                                </li>
+                                </button>
                             );
                         }),
                     )}

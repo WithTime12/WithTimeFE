@@ -16,6 +16,8 @@ function WordCloudCanvas() {
     useEffect(() => {
         if (data?.result?.placeCategoryLogList) {
             setList(data.result.placeCategoryLogList.map((k) => [String(k.placeCategoryLabel), Number(k.count)]) as ListEntry[]);
+        } else {
+            setList([]);
         }
     }, [data]);
 

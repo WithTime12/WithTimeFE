@@ -58,10 +58,10 @@ function RegionModal({ onClose }: IRegionModalProps) {
                 {/* 검색 결과 리스트 */}
                 {showResults && (
                     <div className="px-6 pb-6 w-full h-full flex flex-col">
-                        <div className="border-t border-default-gray-400 flex flex-col w-full overflow-y-auto ">
+                        <div className="border-t border-default-gray-400 flex flex-col w-full overflow-y-auto " role="listbox" aria-label="검색된 지역 목록">
                             {regionList?.result.regions.length === 0 && <div className="text-center py-8 text-default-gray-500">검색 결과가 없습니다</div>}
                             {regionList?.result.regions.map((region, index) => (
-                                <div key={region.regionId}>
+                                <div key={region.regionId} role="option">
                                     <button
                                         type="button"
                                         onClick={() => handleRegionSelect(region.regionId)}

@@ -17,7 +17,7 @@ function DateLocation() {
     if (isLoading) {
         return (
             <MainCard>
-                <ClipLoader className="slef-center" />
+                <ClipLoader className="self-center" />
             </MainCard>
         );
     }

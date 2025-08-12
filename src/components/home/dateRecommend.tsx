@@ -44,15 +44,15 @@ function DateRecommend() {
     const startDate = getTodayString();
     const regionId = data?.result.regionId;
 
-    const { data: forecastData, isLoading: forecastLoading } = useWeatherForecast({ startDate, regionId: regionId! });
-    const { data: rainyData, isLoading: rainyLoading } = useRainyInfo({ startDate, regionId: regionId! });
+    const { data: forecastData, isLoading: forecastLoading } = useWeatherForecast({ startDate, regionId: regionId ?? 0 });
+    const { data: rainyData, isLoading: rainyLoading } = useRainyInfo({ startDate, regionId: regionId ?? 0 });
 
     const safeStartDate = rainyData?.result?.startDate ?? startDate;
     const dateList = useMemo(() => getNextSevenDay(safeStartDate), [safeStartDate]);
 
     // 차트 데이터: 로딩/초기엔 빈 배열
     const rainData = useMemo(() => {
-        const values = rainyData?.result?.dailyPrecipitations?.map((f: { precipitationProbability: number }) => f.precipitationProbability) ?? [];
+        const values = rainyData?.result?.dailyPrecipitations?.map((f) => f.precipitationProbability) ?? [];
         return {
             labels: dateList,
             datasets: [
