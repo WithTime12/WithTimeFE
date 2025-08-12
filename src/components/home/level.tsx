@@ -4,15 +4,11 @@ import type { IGradeInfo } from '@/types/home/level';
 
 import MainCard from '@/components/home/mainCard';
 
-import ramji from '@/images/animals/ramgi.png';
+import mainCharacter from '@/images/mainCharacter.png';
 
 function Level({ grade, nextRequiredPoint }: IGradeInfo) {
     const [percentage, setPercentage] = useState<number>(0);
-    // 등급별 캐릭터 이미지 (필요시)
-    const getCharacterImage = () => {
-        // 등급에 따른 캐릭터 이미지 변경 로직
-        return ramji; // 기본 이미지
-    };
+
     useEffect(() => {
         setPercentage(nextRequiredPoint);
     }, [nextRequiredPoint]);
@@ -22,7 +18,7 @@ function Level({ grade, nextRequiredPoint }: IGradeInfo) {
             <div className="flex justify-center items-center py-[48px] min-w-full w-full">
                 <div className="flex md:flex-row flex-col max-w-[840px] w-[70%] justify-center items-center md:gap-[0px] gap-[30px]">
                     <img
-                        src={getCharacterImage()}
+                        src={mainCharacter}
                         alt="캐릭터"
                         className="w-[200px] h-[200px] lg:w-[240px] lg:h-[240px] aspect-square rounded-[12px] bg-[#F6E6FF] object-cover"
                     />
