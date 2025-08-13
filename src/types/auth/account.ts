@@ -7,7 +7,6 @@ export type TChangePasswordPayload = {
     currentPassword: string;
     newPassword: string;
 };
-export type TChangePasswordResponse = void;
 
 export type TChangeNicknamePayload = { username: string };
 export type TChangeNicknameResponse = {
@@ -18,8 +17,8 @@ export type TChangeNicknameResponse = {
 };
 
 // 비밀번호 변경 훅 타입
-export type TChangePasswordMutationOptions = TUseMutationCustomOptions<TChangePasswordResponse, TChangePasswordPayload>;
-export type TChangePasswordMutationResult = UseMutationResult<TChangePasswordResponse, AxiosError, TChangePasswordPayload>;
+export type TChangePasswordMutationOptions = TUseMutationCustomOptions<void, TChangePasswordPayload>;
+export type TChangePasswordMutationResult = UseMutationResult<void, AxiosError, TChangePasswordPayload>;
 
 // 닉네임 변경 훅 타입
 export type TChangeNicknameMutationOptions = TUseMutationCustomOptions<TChangeNicknameResponse, TChangeNicknamePayload>;

@@ -123,6 +123,7 @@ export default function EditableInputBox({
                 {/* 수정 */}
                 {isNickname && !isEditing && (
                     <button
+                        type="button"
                         onClick={() => {
                             setIsEditing(true);
                             onEditStart?.();

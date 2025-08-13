@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
+import { PRIVACY_URL, TERMS_URL } from '@/constants/policies';
+
 import { useAccount } from '@/hooks/auth/useAccount';
 
 import EditableInputBox from '../common/EditableInputBox';
@@ -9,8 +11,6 @@ import PasswordEditSection from '../common/PasswordEdit';
 
 import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?react';
 
-const TERMS_URL = 'https://continuous-headphones-f4c.notion.site/1ece4447020b8049a727d11c3f853a46?source=copy_link';
-const PRIVACY_URL = 'https://www.notion.so/1ece4447020b80c8befcd2f3886a0350?source=copy_link';
 const getApiErrorMessage = (err: any, fallback: string) => err?.response?.data?.message ?? (err?.response?.status === 401 ? '로그인이 필요합니다.' : fallback);
 
 export default function InfoSetting() {
