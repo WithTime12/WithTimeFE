@@ -72,7 +72,9 @@ export default function DateTestResultPage() {
 
     const scores = resultData.partTypeDescriptions.types.slice(0, 4).map((type, idx) => {
         const percentMap = [resultData.aPercentage, resultData.bPercentage, resultData.cPercentage, resultData.dPercentage];
-        const oppositePercent = 100 - (percentMap[idx] ?? 0);
+        const rawPercent = percentMap[idx] ?? 0;
+        const percent = Math.max(0, Math.min(100, rawPercent));
+        const oppositePercent = Math.max(0, 100 - percent);
 
         const oppositeTypeMap: Record<string, string> = {
             F: 'S',
