@@ -191,7 +191,7 @@ export default function DateTestResultPage() {
                         <div className="flex flex-col items-center w-full max-w-[300px]">
                             <div
                                 className="px-[16px] py-[8px] rounded-[32px] w-[138px] text-center font-bold text-sm mb-4"
-                                style={{ backgroundColor: resultColors[relationData.result?.bestType ?? 'default'] }}
+                                style={{ backgroundColor: bgColor }}
                             >
                                 잘 맞는 유형
                             </div>
@@ -217,7 +217,7 @@ export default function DateTestResultPage() {
                         <div className="flex flex-col items-center w-full max-w-[300px]">
                             <div
                                 className="px-[16px] py-[8px] rounded-[32px] w-[138px] text-center font-bold text-sm mb-4"
-                                style={{ backgroundColor: resultColors[relationData.result?.worstType ?? 'default'] }}
+                                style={{ backgroundColor: bgColor }}
                             >
                                 안 맞는 유형
                             </div>
