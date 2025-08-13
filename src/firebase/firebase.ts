@@ -15,6 +15,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export let messaging: Messaging | null = null;
+async function ensureMessaging() {
+    if (!(await isSupported())) return null;
+    if (!messaging) messaging = getMessaging(app);
+    return messaging;
+}
 (async () => {
     if (await isSupported()) {
         messaging = getMessaging(app);
@@ -22,8 +27,8 @@ export let messaging: Messaging | null = null;
 })();
 
 export async function generateToken(): Promise<string | null> {
-    if (!(await isSupported())) return null;
-    if (!messaging) messaging = getMessaging(app);
+    const m = await ensureMessaging();
+    if (!m) return null;
 
     // 권한 요청 (이미 허용/거부된 상태면 브라우저가 적절히 동작)
     if ('Notification' in window && Notification.permission !== 'granted') {
@@ -32,7 +37,7 @@ export async function generateToken(): Promise<string | null> {
     }
 
     try {
-        const token = await getToken(messaging, {
+        const token = await getToken(m, {
             vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
             serviceWorkerRegistration: await navigator.serviceWorker.ready,
         });
@@ -54,10 +59,10 @@ export const registerServiceWorker = async () => {
 };
 
 export async function deleteFcmToken(): Promise<boolean> {
-    if (!(await isSupported())) return false;
-    if (!messaging) messaging = getMessaging(app);
+    const m = await ensureMessaging();
+    if (!m) return false;
     try {
-        return await deleteToken(messaging);
+        return await deleteToken(m);
     } catch (e) {
         console.error('FCM deleteToken 실패:', e);
         return false;

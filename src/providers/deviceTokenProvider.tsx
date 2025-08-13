@@ -88,7 +88,7 @@ export function DeviceTokenProvider({ children, refetchKeys = [], onForegroundMe
             console.error('FCM 초기화 실패:', err);
             initOnceRef.current = false;
         }
-    }, [supported, wireOnMessage]);
+    }, [supported, wireOnMessage, postDeviceToken]);
 
     const unregisterToken = useCallback(async () => {
         try {

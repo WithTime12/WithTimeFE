@@ -26,7 +26,7 @@ function RegionModal({ onClose }: IRegionModalProps) {
             },
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: HomeKeys.userRegion().queryKey });
+                    void queryClient.invalidateQueries({ queryKey: HomeKeys.userRegion().queryKey });
                     onClose();
                 },
             },

@@ -40,20 +40,20 @@ axiosInstance.interceptors.response.use(
                 }
             } catch (errors) {
                 if (axios.isAxiosError(errors)) {
-                    const refreshError = error as AxiosError<IRefreshResponse>;
+                    const refreshError = errors as AxiosError<IRefreshResponse>;
                     if (refreshError.response?.data.message === 'The token is null.') {
                         console.error('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
-                        logout();
+                        void logout();
                     } else if (refreshError.response?.data.message === 'The token is invalid.') {
                         console.error('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.');
-                        logout();
+                        void logout();
                     } else {
                         console.error('알 수 없는 오류가 발생했습니다', errors);
-                        logout();
+                        void logout();
                     }
                 } else {
                     console.error('알 수 없는 오류가 발생했습니다', errors);
-                    logout();
+                    void logout();
                 }
 
                 return Promise.reject(errors);
