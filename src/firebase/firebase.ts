@@ -34,7 +34,7 @@ export async function generateToken(): Promise<string | null> {
     try {
         const token = await getToken(messaging, {
             vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-            serviceWorkerRegistration: await navigator.serviceWorker.getRegistration(),
+            serviceWorkerRegistration: await navigator.serviceWorker.ready,
         });
         return token ?? null;
     } catch (e) {

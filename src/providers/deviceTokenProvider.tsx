@@ -31,8 +31,8 @@ export function DeviceTokenProvider({ children, refetchKeys = [], onForegroundMe
     const [permission, setPermission] = useState<NotificationPermission | null>(null);
     const messageUnsubRef = useRef<(() => void) | null>(null);
     const initOnceRef = useRef(false);
-    const { usePostDeviceToken } = useFirebase();
-    const { mutate: usePostDeviceTokenMutate } = usePostDeviceToken;
+    const { postDeviceTokenMutation } = useFirebase();
+    const { mutate: postDeviceToken } = postDeviceTokenMutation;
     useEffect(() => {
         (async () => {
             const ok = await isSupported().catch(() => false);
@@ -63,11 +63,11 @@ export function DeviceTokenProvider({ children, refetchKeys = [], onForegroundMe
         try {
             await registerServiceWorker();
             const newToken = await generateToken();
-            setPermission(typeof window !== 'undefined' ? Notification.permission : null);
+            setPermission(typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : null);
 
             if (newToken) {
                 setToken(newToken);
-                usePostDeviceTokenMutate(
+                postDeviceToken(
                     { deviceToken: newToken },
                     {
                         onError: () => {
@@ -96,6 +96,8 @@ export function DeviceTokenProvider({ children, refetchKeys = [], onForegroundMe
         } finally {
             setToken(null);
             initOnceRef.current = false;
+            messageUnsubRef.current?.();
+            messageUnsubRef.current = null;
             for (const key of refetchKeys) qc.invalidateQueries({ queryKey: key });
         }
     }, [qc, refetchKeys]);

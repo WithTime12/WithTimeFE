@@ -19,13 +19,11 @@ export type TOptimisticUpdate<TCache, TVariables> = {
     updateFn: (old: TCache | undefined, vars: TVariables) => TCache;
 };
 
-export type TUseMutationCustomOptions<
-    TData = unknown,
-    TVariables = void,
-    TError = AxiosError<{ message?: string }>, // message 타입 명시
-    TContext = { prevData?: unknown },
-> = Omit<UseMutationOptions<TData, TError, TVariables, TContext>, 'mutationFn' | 'onMutate' | 'onError' | 'onSuccess'> & {
-    optimisticUpdate?: TOptimisticUpdate<any, TVariables>;
+export type TUseMutationCustomOptions<TData = unknown, TVariables = void, TError = TResponseError, TContext = { prevData?: unknown }, TCache = unknown> = Omit<
+    UseMutationOptions<TData, TError, TVariables, TContext>,
+    'mutationFn' | 'onMutate' | 'onError' | 'onSuccess'
+> & {
+    optimisticUpdate?: TOptimisticUpdate<TCache, TVariables>;
     invalidateKeys?: QueryKey[];
     silentError?: boolean;
 

@@ -63,7 +63,7 @@ export default function User() {
                     },
                     onError: (err) => {
                         console.error(err);
-                        setError(err.response?.data.message!);
+                        setError(err.response?.data.message || '회원가입 중 문제가 발생했습니다.');
                     },
                 },
             );

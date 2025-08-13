@@ -22,8 +22,6 @@ export function useCoreMutation<TData, TVariables>(
     mutation: MutationFunction<TData, TVariables>,
     options?: TUseMutationCustomOptions<TData, TVariables, AxiosError<{ message?: string }>, { prevData?: unknown }>,
 ) {
-    const qc = queryClient;
-
     const {
         optimisticUpdate,
         invalidateKeys,
@@ -37,16 +35,16 @@ export function useCoreMutation<TData, TVariables>(
 
         onMutate: async (vars) => {
             if (!optimisticUpdate) return {};
-            await qc.cancelQueries({ queryKey: optimisticUpdate.key });
-            const prevData = qc.getQueryData(optimisticUpdate.key);
-            qc.setQueryData(optimisticUpdate.key, (old: any) => optimisticUpdate.updateFn(old, vars));
+            await queryClient.cancelQueries({ queryKey: optimisticUpdate.key });
+            const prevData = queryClient.getQueryData(optimisticUpdate.key);
+            queryClient.setQueryData(optimisticUpdate.key, (old: unknown) => optimisticUpdate.updateFn(old, vars));
             return { prevData };
         },
 
         onError: (error, vars, ctx) => {
             // 롤백
             if (optimisticUpdate && ctx?.prevData !== undefined) {
-                qc.setQueryData(optimisticUpdate.key, ctx.prevData);
+                queryClient.setQueryData(optimisticUpdate.key, ctx.prevData);
             }
 
             // 사용자 콜백 위임
@@ -56,9 +54,7 @@ export function useCoreMutation<TData, TVariables>(
         onSuccess: async (data, vars, ctx) => {
             // invalidate
             if (invalidateKeys?.length) {
-                for (const key of invalidateKeys) {
-                    await qc.invalidateQueries({ queryKey: key });
-                }
+                await Promise.all(invalidateKeys.map((key) => queryClient.invalidateQueries({ queryKey: key })));
             }
             // 사용자 콜백 위임
             userOnSuccess?.(data, vars, ctx);
