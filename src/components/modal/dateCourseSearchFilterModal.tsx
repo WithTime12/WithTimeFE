@@ -1,5 +1,5 @@
 // DateCourseSearchFilterModal.tsx
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
@@ -12,7 +12,7 @@ import {
     TotalTimeMealValidation,
 } from '@/utils/dateCourseValidation';
 
-import useCourse from '@/hooks/course/useCourse';
+import useGetCourse from '@/hooks/course/useGetCourse';
 
 import Button from '../common/Button';
 import Modal from '../common/modal';
@@ -25,9 +25,19 @@ type TProps = { onClose: () => void };
 export default function DateCourseSearchFilterModal({ onClose }: TProps) {
     const { setField, ...filters } = useFilterStore();
     const [errorMessages, setErrorMessages] = useState<string[]>(Array(7).fill(''));
-    const { useGetBookmarkedCourse } = useCourse();
-    const { mutate: getBookmarkedDateCourse } = useGetBookmarkedCourse;
+
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    const { data } = useGetCourse({
+        budget,
+        datePlaces,
+        dateDurationTime,
+        startTime,
+        mealTypes,
+        transportation,
+        userPreferredKeywords,
+        size: 5,
+        page: 1,
+    });
     const Questions = useMemo(
         () =>
             (Array.isArray(DateCourseQuestion) ? DateCourseQuestion.slice(0, 7) : [])
@@ -101,27 +111,7 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         apply();
         runValidation();
     };
-    useEffect(() => {
-        getBookmarkedDateCourse(
-            {
-                page: 1,
-                size: 5,
-                budget: filters.budget,
-                dateDurationTime: filters.dateDurationTime,
-                datePlaces: filters.datePlaces,
-                mealTypes: filters.datePlaces,
-                transportation: filters.transportation,
-                userPreferredKeywords: filters.userPreferredKeywords,
-                startTime: filters.startTime,
-            },
-            {
-                onSuccess: () => {
-                    // 추후 데이터 추가되면 총 개수 불러와서 밑에 추가할 예정
-                },
-            },
-        );
-    }, [budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime]);
-
+    const number = 1234;
     return (
         <Modal onClose={onClose} title="검색 필터">
             <div className="flex flex-col w-full max-w-[80vw] px-[10%] gap-10 py-10">
@@ -141,7 +131,7 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
 
                 <div className="flex w-full justify-end">
                     <Button size="big-16" variant="mint" className="w-fit text-center px-[30px] font-body1" onClick={onClose}>
-                        닫기
+                        데이트 코스 {number}개 보기
                     </Button>
                 </div>
             </div>

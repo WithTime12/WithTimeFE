@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import type { TGetBookmarkedDateCourseResponse } from '@/types/dateCourse/dateCourse';
-
-import useCourse from '@/hooks/course/useCourse';
+import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider';
 import Navigator from '@/components/common/navigator';
@@ -15,31 +13,20 @@ import useModalStore from '@/store/useModalStore';
 function FindDateCourse() {
     const { openModal } = useModalStore();
     const [current, setCurrent] = useState(1);
-    const [courseData, setCourseData] = useState<TGetBookmarkedDateCourseResponse>();
 
-    const { useGetBookmarkedCourse } = useCourse();
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
-    const { mutate: getBookmarkedDateCourse } = useGetBookmarkedCourse;
-    useEffect(() => {
-        getBookmarkedDateCourse(
-            {
-                page: current,
-                size: 5,
-                budget,
-                dateDurationTime,
-                datePlaces,
-                mealTypes,
-                transportation,
-                userPreferredKeywords,
-                startTime,
-            },
-            {
-                onSuccess: (data) => {
-                    setCourseData(data);
-                },
-            },
-        );
-    }, [current]);
+    const { data: courseData } = useGetBookmarkedCourse({
+        page: current,
+        size: 5,
+        budget,
+        dateDurationTime,
+        datePlaces,
+        mealTypes,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+    });
+
     return (
         <div className="w-full flex justify-center items-center flex-col h-fit">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">

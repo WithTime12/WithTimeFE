@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 import type { TPostDateCourseResponse } from '@/types/dateCourse/dateCourse';
 
-import useCourse from '@/hooks/course/useCourse';
+import { useCourse } from '@/hooks/course/useCourse';
 
 import DateCourse from '@/components/dateCourse/dateCourse';
 import DateCourseLoading from '@/components/dateCourse/dateCourseLoading';

@@ -24,3 +24,30 @@ export const NoticeKeys = createQueryKeys('notice', {
     all: () => ['notice'],
     getAllNotices: (page: number, size: number, noticeCategory: 'SERVICE' | 'SYSTEM') => ['notice', page, size, noticeCategory],
 });
+
+export const dateCourseKeys = createQueryKeys('course', {
+    all: null,
+    getBookmarkedDateCourse: ({ budget, datePlaces, mealTypes, dateDurationTime, transportation, userPreferredKeywords, startTime, size, page }) => [
+        'bookmark',
+        budget,
+        datePlaces,
+        mealTypes,
+        dateDurationTime,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+        size,
+        page,
+    ],
+    getDateCourse: ({ budget, datePlaces, mealTypes, dateDurationTime, transportation, userPreferredKeywords, startTime, size, page }) => [
+        budget,
+        datePlaces,
+        mealTypes,
+        dateDurationTime,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+        size,
+        page,
+    ],
+});

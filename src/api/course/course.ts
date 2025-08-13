@@ -62,12 +62,10 @@ export const getDateCourse = async ({
     page,
     size,
 }: TGetDateCourseRequest): Promise<TGetDateCourseResponse> => {
-    const { data } = await axiosInstance.post('/api/v1/date-courses/search', {
+    const { data } = await axiosInstance.get('/api/v1/date-courses/search', {
         params: {
             page,
             size,
-        },
-        data: {
             budget,
             datePlaces,
             mealTypes,
@@ -87,12 +85,10 @@ export const getBookmarkedDateCourse = async ({
     page,
     size,
 }: TGetBookmarkedDateCourseRequest): Promise<TGetBookmarkedDateCourseResponse> => {
-    const { data } = await axiosInstance.post('/api/v1/date-courses/search', {
+    const { data } = await axiosInstance.get('/api/v1/date-courses/search', {
         params: {
             page,
             size,
-        },
-        data: {
             budget,
             datePlaces,
             mealTypes,
