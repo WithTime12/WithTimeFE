@@ -26,7 +26,6 @@ type TSearchParams = {
 export function useNotice() {
     // 공지 목록 조회 훅
     const useGetNotices = (params: TListParams, options?: Parameters<typeof useCoreQuery<TFetchNoticesResponse>>[2]) => {
-        // 파라미터 안정화 - 의존성이 변할 때만 새 객체 생성
         const stable = useMemo(
             () => ({
                 category: params.category,

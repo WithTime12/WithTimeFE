@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { PRIVACY_URL, TERMS_URL } from '@/constants/policies';
 
-import { useAccount } from '@/hooks/auth/useAccount';
+import { QUERY_KEYS, useAccount } from '@/hooks/auth/useAccount';
 
 import EditableInputBox from '../common/EditableInputBox';
 import PasswordEditSection from '../common/PasswordEdit';
@@ -39,7 +39,7 @@ export default function InfoSetting() {
                 setNickname(next);
                 setInitialNickname(next);
                 localStorage.setItem('nickname', next);
-                qc.invalidateQueries({ queryKey: ['memberInfo'] });
+                qc.invalidateQueries({ queryKey: QUERY_KEYS.memberInfo });
             } else {
                 alert(res?.message ?? '닉네임 변경에 실패했습니다.');
             }

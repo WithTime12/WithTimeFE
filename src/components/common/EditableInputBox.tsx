@@ -46,12 +46,11 @@ export default function EditableInputBox({
     useEffect(() => {
         const el = inputRef.current;
         if (isNickname && isEditing && el) {
-            requestAnimationFrame(() => {
+            const frameId = requestAnimationFrame(() => {
                 el.focus();
-                if ('select' in el) {
-                    (el as HTMLInputElement | HTMLTextAreaElement).select();
-                }
+                (el as HTMLInputElement | HTMLTextAreaElement).select();
             });
+            return () => cancelAnimationFrame(frameId);
         }
     }, [isNickname, isEditing]);
 
@@ -93,9 +92,7 @@ export default function EditableInputBox({
                 {/* 닉네임 */}
                 {isNickname && isEditing ? (
                     <textarea
-                        ref={(el) => {
-                            inputRef.current = el;
-                        }}
+                        ref={inputRef as React.RefObject<HTMLTextAreaElement>}
                         value={value}
                         onChange={onChange}
                         placeholder={placeholder}
@@ -105,9 +102,7 @@ export default function EditableInputBox({
                     />
                 ) : (
                     <input
-                        ref={(el) => {
-                            inputRef.current = el;
-                        }}
+                        ref={inputRef as React.RefObject<HTMLInputElement>}
                         type={type ?? 'text'}
                         value={value}
                         onChange={onChange}

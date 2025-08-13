@@ -15,12 +15,12 @@ import { useCoreMutation, useCoreQuery } from '@/hooks/customQuery';
 import { changeNickname, changePassword, deleteMember, getMemberGrade, getMemberInfo } from '@/api/auth/account';
 import { resetPreferences } from '@/api/dates/preferences';
 
-export function useAccount() {
-    const QUERY_KEYS = {
-        memberInfo: ['memberInfo'] as const,
-        memberGrade: ['memberGrade'] as const,
-    } as const;
+export const QUERY_KEYS = {
+    memberInfo: ['memberInfo'] as const,
+    memberGrade: ['memberGrade'] as const,
+} as const;
 
+export function useAccount() {
     // 비밀번호 변경
     function useChangePassword(options?: TChangePasswordMutationOptions): TChangePasswordMutationResult {
         return useCoreMutation<void, TChangePasswordPayload>(changePassword, options);
