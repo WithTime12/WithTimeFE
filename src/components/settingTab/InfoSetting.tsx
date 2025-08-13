@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useAccount } from '@/hooks/auth/useAccount';
-import { useUserEmail } from '@/hooks/auth/useEmail';
 
 import EditableInputBox from '../common/EditableInputBox';
 import PasswordEditSection from '../common/PasswordEdit';
@@ -10,24 +10,38 @@ import PasswordEditSection from '../common/PasswordEdit';
 import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?react';
 
 export default function InfoSetting() {
-    const [nickname, setNickname] = useState('');
-    const [initialNickname, setInitialNickname] = useState('');
-
     const TERMS_URL = 'https://continuous-headphones-f4c.notion.site/1ece4447020b8049a727d11c3f853a46?source=copy_link';
     const PRIVACY_URL = 'https://www.notion.so/1ece4447020b80c8befcd2f3886a0350?source=copy_link';
 
-    // 이메일(읽기 전용)
-    const { email } = useUserEmail();
+    const qc = useQueryClient();
 
-    // 닉네임/비밀번호 변경 훅
-    const { useChangeNickname } = useAccount();
+    // 회원정보 조회
+    const { useGetMemberInfo, useChangeNickname } = useAccount();
+    const { data: memberData, isLoading: infoLoading, isError: infoError } = useGetMemberInfo();
 
+    const email = memberData?.result?.email ?? '';
+    const apiNickname = memberData?.result?.username ?? '';
+
+    // 닉네임 편집 상태
+    const [nickname, setNickname] = useState('');
+    const [initialNickname, setInitialNickname] = useState('');
+
+    useEffect(() => {
+        if (apiNickname) {
+            setNickname(apiNickname);
+            setInitialNickname(apiNickname);
+        }
+    }, [apiNickname]);
+
+    // 닉네임 변경
     const { mutate: changeNickname, isPending: nickPending } = useChangeNickname({
         onSuccess: (res) => {
             if (res.isSuccess) {
-                setNickname(res.result.username);
-                setInitialNickname(res.result.username);
-                localStorage.setItem('nickname', res.result.username);
+                const next = res.result.username;
+                setNickname(next);
+                setInitialNickname(next);
+                localStorage.setItem('nickname', next);
+                qc.invalidateQueries({ queryKey: ['memberInfo'] });
                 alert('닉네임이 변경되었습니다.');
             } else {
                 alert(res.message ?? '닉네임 변경에 실패했습니다.');
@@ -39,22 +53,13 @@ export default function InfoSetting() {
         },
     });
 
-    // 초기 닉네임 세팅
-    useEffect(() => {
-        const stored = localStorage.getItem('nickname');
-        if (stored) {
-            setNickname(stored);
-            setInitialNickname(stored);
-        }
-    }, []);
-
-    // 닉네임 저장
     const handleSubmitNickname = () => {
-        if (nickname === initialNickname || nickPending) return;
-        changeNickname({ username: nickname });
+        const trimmed = nickname.trim();
+        if (!trimmed) return alert('닉네임을 입력해 주세요.');
+        if (trimmed === initialNickname || nickPending) return;
+        changeNickname({ username: trimmed });
     };
 
-    // 닉네임 취소
     const handleCancelNickname = () => setNickname(initialNickname);
 
     return (
@@ -67,14 +72,23 @@ export default function InfoSetting() {
                 onChange={(e) => setNickname(e.target.value)}
                 onCancel={handleCancelNickname}
                 onSubmit={handleSubmitNickname}
+                placeholder={infoLoading ? '불러오는 중' : '닉네임'}
             />
 
-            {/* 이메일 (읽기 전용) */}
-            <EditableInputBox label="이메일" value={email} readOnly onChange={() => {}} className="pointer-events-none" placeholder="이메일" />
+            {/* 이메일 */}
+            <EditableInputBox
+                label="이메일"
+                value={infoLoading ? '불러오는 중' : infoError ? '' : email}
+                readOnly
+                onChange={() => {}}
+                className="pointer-events-none"
+                placeholder="이메일"
+            />
 
-            {/* 비밀번호 변경 섹션 */}
+            {/* 비밀번호 변경 */}
             <PasswordEditSection />
 
+            {/* 취향 데이터 초기화 버튼 */}
             <div className="w-full flex mt-6">
                 <button
                     type="button"
@@ -86,7 +100,6 @@ export default function InfoSetting() {
             </div>
 
             <div className="w-full max-w-[360px] mt-10 flex flex-col divide-y divide-default-gray-400">
-                {/* 서비스 이용약관 - 노션페이지 */}
                 <a
                     href={TERMS_URL}
                     target="_blank"
@@ -97,7 +110,6 @@ export default function InfoSetting() {
                     <ChevronForward width={20} height={20} fill="#000000" />
                 </a>
 
-                {/* 개인정보 처리방침 - 노션페이지 */}
                 <a
                     href={PRIVACY_URL}
                     target="_blank"
@@ -108,7 +120,6 @@ export default function InfoSetting() {
                     <ChevronForward width={20} height={20} fill="#000000" />
                 </a>
 
-                {/* 탈퇴하기 */}
                 <Link to="/deleteAccount" className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
                     탈퇴하기
                     <ChevronForward width={20} height={20} fill="#000000" />

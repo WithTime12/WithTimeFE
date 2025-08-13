@@ -20,6 +20,7 @@ export async function deleteMember(): Promise<void> {
     await axiosInstance.delete('/api/v1/members');
 }
 
+// 사용자 정보 조회
 export async function getMemberInfo(): Promise<TCommonResponse<TMemberInfo>> {
     const { data } = await axiosInstance.get<TCommonResponse<TMemberInfo>>('/api/v1/members/infos');
     return data;

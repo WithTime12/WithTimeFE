@@ -45,7 +45,7 @@ export function useNotice() {
     // 공지 상세
     const useGetNoticeDetail = (id: number, options?: Parameters<typeof useCoreQuery<TFetchNoticeDetailResponse>>[2]) =>
         useCoreQuery<TFetchNoticeDetailResponse>(noticeKeys.detail(id), () => getNoticeDetail(id), {
-            enabled: Number.isFinite(id) && id > 0, // 유효한 id일때만 실행
+            enabled: Number.isFinite(id) && id > 0,
             ...options,
         });
 
