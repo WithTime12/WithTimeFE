@@ -22,3 +22,20 @@ export const alarmKeys = createQueryKeys('alarm', {
             queryKey: ['alarm', 'getAlarm', size, cursor] as const,
         }) satisfies UseQueryOptions,
 });
+
+export const HomeKeys = createQueryKeys('home', {
+    all: () => ['home'],
+    getUserGrade: () => ['home', 'user', 'grade'],
+    dateCourseSave: () => ['home', 'date-courses', 'saved-count'],
+    weather: (startDate, regionId) => ['home', 'weather', 'forecast', startDate, regionId],
+    rainyInfo: (startDate, regionId) => ['home', 'rainy', 'forecast', startDate, regionId],
+    keywords: () => ['home', 'keywords'],
+    dateTimes: () => ['home', 'dateTimes'],
+    monthlyPlaceStates: () => ['home', 'monthlyPlaceStates'],
+    userRegion: () => ['home', 'user', 'region'],
+});
+
+export const NoticeKeys = createQueryKeys('notice', {
+    all: () => ['notice'],
+    getAllNotices: (page: number, size: number, noticeCategory: 'SERVICE' | 'SYSTEM') => ['notice', page, size, noticeCategory],
+});

@@ -32,7 +32,7 @@ export default function Notice() {
             try {
                 // 공지사항 목록 요청
                 const response = await fetchNotices({
-                    category: categoryKey,
+                    noticeCategory: categoryKey,
                     page: currentPage - 1,
                     size: itemsPerPage,
                 });
