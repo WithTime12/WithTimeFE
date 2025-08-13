@@ -1,11 +1,10 @@
-import './App.css';
+import '@/App.css';
 
 import { useMemo } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import { DeviceTokenProvider } from './providers/deviceTokenProvider';
-import { alarmKeys } from './queryKey/queryKey';
-
+import { DeviceTokenProvider } from '@/providers/deviceTokenProvider';
+import { alarmKeys } from '@/queryKey/queryKey';
 import router from '@/routes/routes';
 
 function App() {
