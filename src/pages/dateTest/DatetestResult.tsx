@@ -73,8 +73,16 @@ export default function DateTestResultPage() {
     const scores = resultData.partTypeDescriptions.types.slice(0, 4).map((type, idx) => {
         const percentMap = [resultData.aPercentage, resultData.bPercentage, resultData.cPercentage, resultData.dPercentage];
         const rawPercent = percentMap[idx] ?? 0;
+
+        // 0~100 사이로 제한
         const percent = Math.max(0, Math.min(100, rawPercent));
-        const oppositePercent = Math.max(0, 100 - percent);
+
+        // 반대 퍼센트 계산 & 제한
+        const oppositePercent = percent > 0 ? Math.max(0, Math.min(100, 100 - percent)) : 0;
+
+        // 소수점 1자리로 고정
+        const fixedPercent = parseFloat(percent.toFixed(1));
+        const fixedOpposite = parseFloat(oppositePercent.toFixed(1));
 
         const oppositeTypeMap: Record<string, string> = {
             F: 'S',
@@ -101,10 +109,10 @@ export default function DateTestResultPage() {
         return {
             title: type.type,
             tcode: type.typeInitial,
-            percent: percentMap[idx] ?? 0,
+            percent: fixedPercent,
             opposite: oppositeTypeTitle[type.type] || 'Unknown',
             ocode: oppositeTypeMap[type.typeInitial] || 'Unknown',
-            oppositePercent,
+            oppositePercent: fixedOpposite,
         };
     });
 
@@ -162,7 +170,7 @@ export default function DateTestResultPage() {
                                 className="absolute top-0 right-0 h-full flex items-center justify-end pr-3 text-[#212121] font-semibold text-m"
                                 style={{ width: `${item.oppositePercent}%` }}
                             >
-                                {item.ocode} {item.oppositePercent.toFixed(1)}
+                                {item.oppositePercent > 0 && `${item.ocode} ${item.oppositePercent.toFixed(1)}`}
                             </div>
                         </div>
                     </div>
