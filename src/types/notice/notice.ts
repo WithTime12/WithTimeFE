@@ -8,16 +8,7 @@ export type TNoticeItem = {
     createdAt: string;
 };
 
-<<<<<<< HEAD
-export type TRequestGetNoticeRequest = {
-    size?: number;
-    noticeCategory: 'SERVICE' | 'SYSTEM';
-    page: number;
-};
-
-=======
 // 공지사항 목록 조회
->>>>>>> f8aebe8 (fix: CodeRabbit 피드백 일부 수정)
 export type TFetchNoticesResponse = TCommonResponse<{
     noticeList: TNoticeItem[];
     totalPages: number;
