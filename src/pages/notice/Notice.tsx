@@ -1,119 +1,98 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import type { TNoticeItem } from '@/types/notice/notice';
 
+import { formatDateDot } from '@/utils/date';
+
+import { useNotice } from '@/hooks/notice/useNotice';
+
 import EditableInputBox from '@/components/common/EditableInputBox';
 import Navigator from '@/components/common/navigator';
 
-import { fetchNotices } from '@/api/notice/notice';
-
-const categories = ['서비스 안내', '시스템 안내'];
+const categories = ['서비스 안내', '시스템 안내'] as const;
 
 export default function Notice() {
-    const [searchValue, setSearchValue] = useState(''); //검색어 상태
-    const [activeCategory, setActiveCategory] = useState(categories[0]); //선택된 카테고리
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchValue, setSearchValue] = useState('');
+    const [keyword, setKeyword] = useState('');
 
-    const [noticeList, setNoticeList] = useState<TNoticeItem[]>([]); // 공지사항 리스트
-    const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [activeCategory, setActiveCategory] = useState<(typeof categories)[number]>('서비스 안내');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const itemsPerPage = 10;
 
-    // 백엔드에 넘길 카테고리 키 - 영어 변환
-    const categoryKey = activeCategory === '서비스 안내' ? 'SERVICE' : 'SYSTEM';
+    const categoryKey: 'SERVICE' | 'SYSTEM' = activeCategory === '서비스 안내' ? 'SERVICE' : 'SYSTEM';
 
-    // 컴포넌트 마운트 시, 카테고리/페이지 변경 시 -> API 호출
-    useEffect(() => {
-        const getNotices = async () => {
-            setLoading(true);
-            try {
-                // 공지사항 목록 요청
-                const response = await fetchNotices({
-                    noticeCategory: categoryKey,
-                    page: currentPage - 1,
-                    size: itemsPerPage,
-                });
+    // 검색 여부
+    const isSearching = keyword.trim().length > 0;
 
-                console.log('API 응답:', response);
+    const listParams = useMemo(() => ({ category: categoryKey, page: currentPage - 1, size: itemsPerPage }), [categoryKey, currentPage]);
+    const searchParams = useMemo(() => ({ keyword, category: categoryKey, page: currentPage - 1, size: itemsPerPage }), [keyword, categoryKey, currentPage]);
 
-                // 공지 목록과 페이지 수 설정 (빈 배열도 허용)
-                setNoticeList(response.result.noticeList ?? []);
-                setTotalPages(response.result.totalPages ?? 1);
-            } catch (err) {
-                // 오류 처리
-                setError('공지사항을 불러오는 데 실패했습니다.');
-                console.log(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const { useGetNotices, useSearchNotices } = useNotice();
+    const listQuery = useGetNotices(listParams, { enabled: !isSearching });
+    const searchQuery = useSearchNotices(searchParams, { enabled: isSearching });
 
-        getNotices(); // 함수 실행
-    }, [activeCategory, currentPage]); // 의존성 배열 - 카테고리/페이지 변경 시마다 재호출
+    const { data, isLoading, isError } = isSearching ? searchQuery : listQuery;
 
-    // 검색어 필터링 적용된 공지사항
-    const filteredNotices = noticeList.filter((notice) => notice.title.toLowerCase().includes(searchValue.toLowerCase()));
+    const list = (data?.result?.noticeList ?? []) as TNoticeItem[];
+    const totalPages = data?.result?.totalPages ?? 1;
 
     return (
-        <div className="max-w-[1000px] mx-auto px-4 py-10">
+        <div className="max-w-[1000px] mx-auto px-4 py-10 text-default-gray-800">
             <h1 className="mb-8 font-heading2">공지사항</h1>
 
-            {/* 검색 */}
+            {/* 검색창 */}
             <EditableInputBox
                 mode="search"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                onSearchClick={() => console.log('검색 실행:', searchValue)}
-                placeholder="찾으시는 내용을 입력해주세요."
+                onSearchClick={() => {
+                    setKeyword(searchValue.trim());
+                    setCurrentPage(1);
+                }}
+                placeholder="검색어를 입력하세요"
                 className="mb-8"
             />
 
-            {/* 카테고리 */}
+            {/* 카테고리 버튼 */}
             <div className="flex flex-wrap gap-2 mb-8">
-                {categories.map((category) => (
+                {categories.map((c) => (
                     <button
-                        key={category}
+                        key={c}
+                        type="button"
                         onClick={() => {
-                            setActiveCategory(category);
+                            setActiveCategory(c);
                             setCurrentPage(1);
                         }}
                         className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
-                            activeCategory === category ? 'bg-primary-500 text-white' : 'bg-default-gray-400 text-default-gray-700'
+                            activeCategory === c ? 'bg-primary-500 text-white' : 'bg-default-gray-400 text-default-gray-700'
                         }`}
                     >
-                        {category}
+                        {c}
                     </button>
                 ))}
             </div>
 
-            {/* 공지 없을 때 메시지 */}
-            {!loading && !error && filteredNotices.length === 0 && <p className="text-center text-default-gray-500">공지사항이 없습니다.</p>}
+            {/* 상태 */}
+            {isLoading && <p className="text-center font-body1 text-default-gray-500">로딩 중</p>}
+            {isError && <p className="text-center font-body1 text-default-gray-500">불러오기에 실패했습니다.</p>}
+            {!isLoading && !isError && list.length === 0 && <p className="text-center font-body1 text-default-gray-500">등록된 공지사항이 없습니다.</p>}
 
-            {/* 공지 리스트 */}
+            {/* 목록 */}
             <ul className="divide-y divide-default-gray-400 mb-10">
-                {filteredNotices.map((notice) => (
-                    <li key={notice.noticeId} className="py-4">
-                        <Link to={`/notice/${notice.noticeId}`} className="flex items-center justify-between">
-                            <span className="font-body2 text-default-gray-800">{notice.title}</span>
-                            <span className="text-sm text-default-gray-500">{new Date(notice.createdAt).toLocaleDateString()}</span>
+                {list.map((n) => (
+                    <li key={n.noticeId} className="py-4">
+                        <Link to={`/notice/${n.noticeId}`} className="flex items-center justify-between">
+                            <span className="font-body2 text-default-gray-800">{n.title}</span>
+                            <p className="font-body2 text-default-gray-500">{formatDateDot(n.createdAt)}</p>
                         </Link>
                     </li>
                 ))}
             </ul>
 
             {/* 페이지네이션 */}
-            {totalPages > 1 && (
-                <Navigator
-                    current={currentPage}
-                    end={totalPages}
-                    onClick={(page) => {
-                        setCurrentPage(page); //페이지 변경
-                    }}
-                />
-            )}
+            {totalPages > 1 && <Navigator current={currentPage} end={totalPages} onClick={(p) => setCurrentPage(p)} />}
         </div>
     );
 }

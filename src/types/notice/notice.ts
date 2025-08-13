@@ -32,3 +32,26 @@ export type TNoticeDetail = {
 };
 
 export type TFetchNoticeDetailResponse = TCommonResponse<TNoticeDetail | null>;
+
+// 생성 요청
+export type TCreateNoticePayload = {
+    title: string;
+    content: string;
+    isPinned: boolean;
+    noticeCategory: 'SERVICE' | 'SYSTEM';
+};
+
+// 수정 요청
+export type TUpdateNoticePayload = {
+    title: string;
+    content: string;
+    isPinned: boolean;
+};
+
+// 공통 응답 (이미 TCommonResponse가 있다면 생략 가능)
+export type TNoticeCommonResponse = {
+    isSuccess: boolean;
+    code: string;
+    message: string;
+    result: string;
+};

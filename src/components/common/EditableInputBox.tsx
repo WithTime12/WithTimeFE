@@ -15,6 +15,7 @@ interface IEditableInputBoxProps {
     onSearchClick?: () => void;
     className?: string;
     placeholder?: string;
+    readOnly?: boolean;
 }
 
 export default function EditableInputBox({

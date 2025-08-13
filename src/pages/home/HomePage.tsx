@@ -1,7 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-import { useDeviceToken } from '@/hooks/alarm/useDeviceToken';
 import { useUserGrade } from '@/hooks/home/useUserGrade';
 
 import Banner from '@/components/home/banner';
@@ -14,7 +13,7 @@ import Level from '@/components/home/level';
 import WordCloudCard from '@/components/home/wordCloud';
 
 function Home() {
-    useDeviceToken();
+    // useDeviceToken();
 
     const { data: gradeData, isLoading, error } = useUserGrade();
     if (error) return <Navigate to="/error" replace />;

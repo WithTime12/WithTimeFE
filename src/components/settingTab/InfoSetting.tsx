@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useAccount } from '@/hooks/auth/useAccount';
+import { useUserEmail } from '@/hooks/auth/useEmail';
+
 import EditableInputBox from '../common/EditableInputBox';
 import PasswordEditSection from '../common/PasswordEdit';
 
@@ -8,55 +11,80 @@ import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?re
 
 export default function InfoSetting() {
     const [nickname, setNickname] = useState('');
-    const [email, setEmail] = useState('');
+    const [initialNickname, setInitialNickname] = useState('');
 
+    // 이메일(읽기 전용)
+    const { email } = useUserEmail();
+
+    // 닉네임/비밀번호 변경 훅
+    const { useChangeNickname } = useAccount();
+
+    const { mutate: changeNickname, isPending: nickPending } = useChangeNickname({
+        onSuccess: (res) => {
+            if (res.isSuccess) {
+                setNickname(res.result.username);
+                setInitialNickname(res.result.username);
+                localStorage.setItem('nickname', res.result.username);
+                alert('닉네임이 변경되었습니다.');
+            } else {
+                alert(res.message ?? '닉네임 변경에 실패했습니다.');
+            }
+        },
+        onError: (err: any) => {
+            const msg = err?.response?.data?.message ?? (err?.response?.status === 401 ? '로그인이 필요합니다.' : '닉네임 변경에 실패했습니다.');
+            alert(msg);
+        },
+    });
+
+    // 초기 닉네임 세팅
     useEffect(() => {
-        // 예시: 로컬에 저장된 이메일 가져옴
-        const storedEmail = localStorage.getItem('userEmail');
-        if (storedEmail) {
-            setEmail(storedEmail);
+        const stored = localStorage.getItem('nickname');
+        if (stored) {
+            setNickname(stored);
+            setInitialNickname(stored);
         }
     }, []);
 
+    // 닉네임 저장
+    const handleSubmitNickname = () => {
+        if (nickname === initialNickname || nickPending) return;
+        changeNickname({ username: nickname });
+    };
+
+    // 닉네임 취소
+    const handleCancelNickname = () => setNickname(initialNickname);
+
     return (
         <div className="mt-5 flex flex-col items-start gap-5">
-            {/* 닉네임 - 수정가능 */}
+            {/* 닉네임 */}
             <EditableInputBox
                 mode="nickname"
                 label="닉네임"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                onCancel={() => setNickname('')}
-                onSubmit={() => console.log('닉네임 저장:', nickname)}
+                onCancel={handleCancelNickname}
+                onSubmit={handleSubmitNickname}
             />
-            {/* 이메일 - 수정 불가능 */}
-            <EditableInputBox
-                label="이메일"
-                value={email}
-                onChange={() => {}} // 읽기 전용
-                className="pointer-events-none" // 수정도 불가능
-                placeholder="이메일"
-            />
-            {/* 비밀번호 - 수정 가능 */}
+
+            {/* 이메일 (읽기 전용) */}
+            <EditableInputBox label="이메일" value={email} readOnly onChange={() => {}} className="pointer-events-none" placeholder="이메일" />
+
+            {/* 비밀번호 변경 섹션 */}
             <PasswordEditSection />
 
-            {/* 취향 초기화 버튼 */}
             <div className="w-full flex mt-6">
                 <button className="bg-primary-500 px-6 py-2 rounding-32 text-white font-body1">취향 데이터 초기화</button>
             </div>
 
-            {/* 기타 링크 */}
             <div className="w-full max-w-[360px] mt-10 flex flex-col divide-y divide-default-gray-400">
                 <button className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
                     서비스 이용약관
                     <ChevronForward width={20} height={20} fill="#000000" />
                 </button>
-
                 <button className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
                     개인정보 처리방침
                     <ChevronForward width={20} height={20} fill="#000000" />
                 </button>
-
                 <Link to="/deleteAccount" className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800">
                     탈퇴하기
                     <ChevronForward width={20} height={20} fill="#000000" />
