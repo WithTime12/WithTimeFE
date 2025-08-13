@@ -10,7 +10,7 @@ function Level({ grade, nextRequiredPoint }: IGradeInfo) {
     const [percentage, setPercentage] = useState<number>(0);
 
     useEffect(() => {
-        setPercentage(nextRequiredPoint);
+        setPercentage(100 - nextRequiredPoint);
     }, [nextRequiredPoint]);
 
     return (
