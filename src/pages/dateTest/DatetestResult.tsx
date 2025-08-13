@@ -168,7 +168,7 @@ export default function DateTestResultPage() {
                             </div>
                             <div
                                 className="absolute top-0 right-0 h-full flex items-center justify-end pr-3 text-[#212121] font-semibold text-m"
-                                style={{ width: `${item.oppositePercent}%` }}
+                                style={{ width: `${Math.max(item.percent, 5)}%` }}
                             >
                                 {item.oppositePercent > 0 && `${item.ocode} ${item.oppositePercent.toFixed(1)}`}
                             </div>
