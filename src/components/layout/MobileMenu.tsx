@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 
+import { MODAL_TYPES } from '../common/modalProvider';
+
 import ClearIcon from '@/assets/icons/Clear.svg?react';
 import NotificationsIcon from '@/assets/icons/notifications_Blank.svg?react';
 import SettingsIcon from '@/assets/icons/settings_Blank.svg?react';
+import useModalStore from '@/store/useModalStore';
 
 interface IMobileMenuProps {
     onClose: () => void;
@@ -10,9 +13,10 @@ interface IMobileMenuProps {
 }
 
 export default function MobileMenu({ onClose, onOpenSettings }: IMobileMenuProps) {
+    const { openModal } = useModalStore();
     return (
         <>
-            {/* 검정 반투명 배경 오버레이 */}
+            {/* 배경 오버레이 */}
             <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
 
             {/* 사이드 메뉴 */}
@@ -46,9 +50,14 @@ export default function MobileMenu({ onClose, onOpenSettings }: IMobileMenuProps
 
                     {/* 알림, 설정 */}
                     <div className="flex gap-5 mt-10">
-                        <Link to="/" onClick={onClose}>
+                        <button
+                            onClick={() => {
+                                openModal(MODAL_TYPES.AlarmModal);
+                                onClose();
+                            }}
+                        >
                             <NotificationsIcon className="w-5 h-5" fill="none" stroke="#000000" />
-                        </Link>
+                        </button>
                         <button
                             type="button"
                             onClick={() => {

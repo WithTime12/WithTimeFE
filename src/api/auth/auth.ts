@@ -13,7 +13,7 @@ import type {
     TSocialLoginValues,
 } from '@/types/auth/auth';
 
-import { axiosInstance } from '../axiosInstance';
+import { axiosInstance } from '@/api/axiosInstance';
 
 export const defaultSignup = async ({ email, password, username, gender, phoneNumber, birth, socialId }: TSignupValues): Promise<TSignupResponse> => {
     const { data } = await axiosInstance.post('/api/v1/auth/sign-up', { email, password, socialId, username, gender, phoneNumber, birth });

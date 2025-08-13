@@ -1,11 +1,27 @@
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
+
+import { useGetNotices } from '@/hooks/notices/useGetNotices';
 
 import MainCard from './mainCard';
 
 import AddCircleBlank from '@/assets/icons/add-circle_Blank.svg?react';
 
-export default function MainInfo() {
+function MainInfo() {
     const navigate = useNavigate();
+    const { data, error, isLoading } = useGetNotices({ size: 3, page: 0, noticeCategory: 'SERVICE' });
+
+    if (error) {
+        return <Navigate to={'/error'} replace />;
+    }
+    if (isLoading) {
+        return (
+            <MainCard>
+                <ClipLoader className="self-center" />
+            </MainCard>
+        );
+    }
+    const notices = data?.pages.flatMap((page) => page.result.noticeList) ?? [];
     return (
         <MainCard>
             <div className="flex flex-col w-full sm:px-[48px] px-[20px] sm:py-[40px] py-[20px] shadow-default rounded-2xl">
@@ -20,11 +36,30 @@ export default function MainInfo() {
                 </div>
 
                 <ul className="text-default-gray-700 space-y-1 w-full flex flex-col">
-                    <li className="whitespace-nowrap text-ellipsis overflow-hidden">여름 맞이 피서 데이트 코스 추가 업데이트</li>
-                    <li className="whitespace-nowrap text-ellipsis overflow-hidden">슬기로운 데이트를 하고싶은 커플을 위한 이벤트</li>
-                    <li className="whitespace-nowrap text-ellipsis overflow-hidden">위티 사칭 웹사이트 및 보이스피싱 주의 안내</li>
+                    {notices.length === 0 ? (
+                        <li className="text-default-gray-500">공지사항이 없습니다.</li>
+                    ) : (
+                        notices.map((notice) => (
+                            <li key={notice.noticeId}>
+                                <button
+                                    className="whitespace-nowrap text-ellipsis overflow-hidden w-full text-left"
+                                    onClick={() => navigate(`/notice/${notice.noticeId}`)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            navigate(`/notice/${notice.noticeId}`);
+                                        }
+                                    }}
+                                    tabIndex={0}
+                                >
+                                    {notice.title}
+                                </button>
+                            </li>
+                        ))
+                    )}
                 </ul>
             </div>
         </MainCard>
     );
 }
+
+export default MainInfo;

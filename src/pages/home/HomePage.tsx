@@ -1,3 +1,9 @@
+import { Navigate } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
+
+import { useDeviceToken } from '@/hooks/alarm/useDeviceToken';
+import { useUserGrade } from '@/hooks/home/useUserGrade';
+
 import Banner from '@/components/home/banner';
 import DateCourseStore from '@/components/home/dateCourseStore';
 import DateLocation from '@/components/home/dateLocation';
@@ -8,18 +14,29 @@ import Level from '@/components/home/level';
 import WordCloudCard from '@/components/home/wordCloud';
 
 function Home() {
+    useDeviceToken();
+
+    const { data: gradeData, isLoading, error } = useUserGrade();
+    if (error) return <Navigate to="/error" replace />;
+    if (isLoading) {
+        return (
+            <div className="bg-default-gray-100 min-h-screen mb-[40px] w-full flex items-center justify-center">
+                <ClipLoader />
+            </div>
+        );
+    }
     return (
         <div className="bg-default-gray-100 min-h-screen mb-[40px]">
             <Banner />
             <section className="flex flex-col sm:px-10 px-5 gap-[120px] mt-20">
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <span className="font-heading2">Madeleine</span>
+                        <span className="font-heading2">{gradeData?.result.username}</span>
                         <span className="font-heading3">님의 WithTime</span>
                     </div>
                     <div className="max-w-9xl mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6">
                         <div className="flex flex-col gap-[30px] w-full">
-                            <Level />
+                            {gradeData?.result && <Level {...gradeData.result} />}
                             <div className="grid sm:grid-cols-[3fr_2fr] grid-cols-1 h-fit w-full gap-[24px]">
                                 <DateTimes />
                                 <DateCourseStore />

@@ -65,7 +65,7 @@ export default function EditableInputBox({
     `;
 
     return (
-        <div className={`w-[360px] ${className}`}>
+        <div className={`w-full max-w-[360px] ${className}`}>
             {label && <p className="font-body1 text-default-gray-700 mb-1">{label}</p>}
 
             <div className="relative w-full">

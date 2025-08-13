@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import DateCourseSearchFilterModal from '../modal/dateCourseSearchFilterModal';
-import ErrorModal from '../modal/errorModal';
-import SettingsModal from '../modal/SettingModal';
+import AlarmModal from '@/components/modal/alarmModal';
+import DateCourseSearchFilterModal from '@/components/modal/dateCourseSearchFilterModal';
+import ErrorModal from '@/components/modal/errorModal';
+import SettingsModal from '@/components/modal/SettingModal';
+
+import RegionModal from '../modal/regionModal';
 
 import useModalStore from '@/store/useModalStore';
 
@@ -13,12 +16,16 @@ export const MODAL_TYPES = {
     ErrorModal: 'ErrorModal',
     DateCourseSearchFilterModal: 'DateCourseSearchFilterModal',
     SettingsModal: 'SettingsModal', //설정 모달 추가
+    AlarmModal: 'AlarmModal',
+    RegionModal: 'RegionModal',
 };
 
 export const MODAL_COMPONENTS = {
     [MODAL_TYPES.ErrorModal]: ErrorModal,
     [MODAL_TYPES.DateCourseSearchFilterModal]: DateCourseSearchFilterModal,
     [MODAL_TYPES.SettingsModal]: SettingsModal,
+    [MODAL_TYPES.AlarmModal]: AlarmModal,
+    [MODAL_TYPES.RegionModal]: RegionModal,
 };
 
 export default function ModalProvider() {
