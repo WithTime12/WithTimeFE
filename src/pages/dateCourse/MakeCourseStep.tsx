@@ -18,8 +18,11 @@ import Button from '@/components/common/Button';
 import GraySvgButton from '@/components/common/graySvgButton';
 import DateCourseSearchFilterOption from '@/components/dateCourse/dateCourseSearchFilterOption';
 
+import useFilterStore from '@/store/useFilterStore';
+
 const TOTAL_QUESTIONS = 8;
 
+// 7개 문항(1~7)만 사용, 8은 결과 화면으로 가정
 const Questions: IQuestion[] = Array.isArray(DateCourseQuestion)
     ? DateCourseQuestion.slice(0, TOTAL_QUESTIONS - 1).map((q) => ({
           ...q,
@@ -37,34 +40,93 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
 }
 
 export default function MakeCourseStep() {
-    const [answers, setAnswers] = useState<(string | string[] | null)[]>(Array(TOTAL_QUESTIONS).fill(null));
     const { step } = useParams<{ step: string }>();
     const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState<null | string>('');
+
+    // 전역 필터 + setter
+    const { budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime, setField } = useFilterStore();
+
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     const currentStep = Number(step);
     const question = Questions[currentStep - 1];
 
     useEffect(() => {
-        document.documentElement.scrollTo({ top: 0 }); // <html>
-        document.body.scrollTo({ top: 0 }); // <body>
+        if (!step) navigate('/makeCourse/1', { replace: true });
+    }, []);
+
+    useEffect(() => {
+        document.documentElement.scrollTo({ top: 0 });
+        document.body.scrollTo({ top: 0 });
     }, [currentStep, errorMessage]);
 
     const handlePrev = () => {
-        if (currentStep > 1) {
-            navigate(`/makeCourse/${currentStep - 1}`);
-        } else {
-            navigate('/makeCourse');
+        if (currentStep > 1) navigate(`/makeCourse/${currentStep - 1}`);
+        else navigate('/makeCourse');
+    };
+
+    const valueByStep = (idx: number): string | string[] | null => {
+        switch (idx) {
+            case 1:
+                return budget;
+            case 2:
+                return datePlaces;
+            case 3:
+                return dateDurationTime;
+            case 4:
+                return mealTypes;
+            case 5:
+                return transportation;
+            case 6:
+                return userPreferredKeywords;
+            case 7:
+                return startTime;
+            default:
+                return null;
         }
     };
 
-    const handleNext = () => {
-        const answer = answers[currentStep - 1];
-        const isValid = typeof answer === 'string' ? answer.trim().length > 0 : Array.isArray(answer) && answer.length > 0;
-        if (currentStep == 4) {
-            navigate(`/makeCourse/${currentStep + 1}`);
+    const updateByStep = (idx: number, v: any) => {
+        switch (idx) {
+            case 1:
+                setField('budget', v ?? null);
+                break;
+            case 2:
+                setField('datePlaces', Array.isArray(v) ? v : []);
+                break;
+            case 3:
+                setField('dateDurationTime', v ?? null);
+                break;
+            case 4:
+                setField('mealTypes', Array.isArray(v) ? v : []);
+                break;
+            case 5:
+                setField('transportation', v ?? null);
+                break;
+            case 6:
+                setField('userPreferredKeywords', Array.isArray(v) ? v : []);
+                break;
+            case 7:
+                setField('startTime', v ?? null);
+                break;
         }
-        if (!isValid) return;
+    };
+
+    const currentAnswer = valueByStep(currentStep);
+
+    const isDisabled =
+        currentStep !== 4 &&
+        (currentAnswer === null ||
+            (Array.isArray(currentAnswer) && currentAnswer.length === 0) ||
+            (typeof currentAnswer === 'string' && currentAnswer.trim().length === 0));
+
+    const handleNext = () => {
+        if (currentStep === 4) {
+            navigate(`/makeCourse/${currentStep + 1}`);
+            return;
+        }
+
+        if (isDisabled) return;
 
         if (currentStep < TOTAL_QUESTIONS - 1) {
             navigate(`/makeCourse/${currentStep + 1}`);
@@ -73,84 +135,60 @@ export default function MakeCourseStep() {
         }
     };
 
-    const checkError = () => {
+    useEffect(() => {
+        let msg = '';
         if (currentStep === 3) {
-            setErrorMessage(BudgetTimeValidation({ budget: answers[0] as string, totalTime: answers[2] as string }));
+            msg = BudgetTimeValidation({ budget: budget as any, totalTime: dateDurationTime as any }) || '';
         }
         if (currentStep === 4) {
-            setErrorMessage(TotalTimeMealValidation({ totalTime: answers[2] as string, meal: Array.isArray(answers[3]) ? answers[3] : [] }));
+            msg = TotalTimeMealValidation({ totalTime: dateDurationTime as any, meal: mealTypes ?? [] }) || '';
         }
         if (currentStep === 6) {
-            setErrorMessage(
-                KeywordMealValidation({ meal: Array.isArray(answers[3]) ? answers[3] : [], keywords: Array.isArray(answers[5]) ? answers[5] : [] }) ||
-                    KeywordGroupOverValidation({ keywords: Array.isArray(answers[5]) ? answers[5] : [] }),
-            );
+            msg =
+                KeywordMealValidation({ meal: mealTypes ?? [], keywords: userPreferredKeywords ?? [] }) ||
+                KeywordGroupOverValidation({ keywords: userPreferredKeywords ?? [] }) ||
+                '';
         }
         if (currentStep === 7) {
-            setErrorMessage(
-                MealTimeValidation({
-                    meal: Array.isArray(answers[3]) ? answers[3] : [],
-                    time: answers[6] as string,
-                    totalTime: answers[2] as string,
-                }) ||
-                    DateTimeStartValidation({
-                        time: answers[6] as string,
-                        totalTime: answers[2] as string,
-                    }),
-            );
+            msg =
+                MealTimeValidation({ meal: mealTypes ?? [], time: startTime as any, totalTime: dateDurationTime as any }) ||
+                DateTimeStartValidation({ time: startTime as any, totalTime: dateDurationTime as any }) ||
+                '';
         }
-    };
+        setErrorMessage(msg);
+    }, [currentStep, budget, dateDurationTime, mealTypes, userPreferredKeywords, startTime]);
 
-    if (!question) {
-        return <div>질문을 불러올 수 없습니다.</div>;
-    }
+    if (!question) return <div>질문을 불러올 수 없습니다.</div>;
 
-    const setAnswer = (value: string | string[]) => {
-        const updated = [...answers];
-        updated[currentStep - 1] = value;
-        setAnswers(updated);
-    };
-
-    const currentAnswer = answers[currentStep - 1];
-
-    useEffect(() => {
-        checkError();
-    }, [currentStep, answers]);
-
-    useEffect(() => {
-        navigate('/makeCourse/1');
-    }, []);
     return (
         <div className="flex flex-col px-6 max-w-[90vw] w-[1000px] mx-auto pt-[50px] pb-[150px] gap-[10px] min-h-[90vh] h-fit">
             <div className="w-full">
                 <GraySvgButton type="backward" onClick={handlePrev} />
             </div>
+
             <div className="flex flex-col w-full mb:px-[50px] gap-[20px]">
                 <div className="w-full mb-8">
                     <ProgressBar step={currentStep} total={TOTAL_QUESTIONS} />
                 </div>
+
                 <div className="text-left w-full text-sm text-gray-500">
                     {currentStep} / {TOTAL_QUESTIONS}
                 </div>
+
                 <DateCourseSearchFilterOption
                     title={question.title}
                     type={question.type}
                     subTitle={question.subTitle}
                     options={question.options}
-                    value={answers[currentStep - 1]}
-                    onChange={setAnswer}
+                    value={valueByStep(currentStep)}
+                    onChange={(v) => updateByStep(currentStep, v)}
                     errorMessage={errorMessage}
+                    apiRequestValue={question.apiRequestValue}
+                    autoInit={question.type === 'time' && currentStep === 7}
                 />
+
                 <div className="mt-[120px] flex w-full items-center justify-center">
-                    <Button
-                        className="w-fit px-[100px] items-center self-center"
-                        onClick={handleNext}
-                        variant="mint"
-                        size="big-16"
-                        disabled={
-                            (currentAnswer === null && currentStep !== 4) || (Array.isArray(currentAnswer) && currentAnswer.length === 0 && currentStep !== 4)
-                        }
-                    >
+                    <Button className="w-fit px-[100px] items-center self-center" onClick={handleNext} variant="mint" size="big-16" disabled={isDisabled}>
                         {currentStep === TOTAL_QUESTIONS ? '결과 보기' : '다음'}
                     </Button>
                 </div>

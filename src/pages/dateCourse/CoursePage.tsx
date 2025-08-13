@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import type { TGetBookmarkedDateCourseResponse } from '@/types/dateCourse/dateCourse';
+
+import useCourse from '@/hooks/course/useCourse';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider';
 import Navigator from '@/components/common/navigator';
@@ -7,12 +11,38 @@ import DateCourse from '@/components/dateCourse/dateCourse';
 
 import FileTray from '@/assets/icons/file_tray_empty_Fill.svg?react';
 import Filter from '@/assets/icons/filter_Blank.svg?react';
+import useFilterStore from '@/store/useFilterStore';
 import useModalStore from '@/store/useModalStore';
 
 export default function Course() {
     const navigate = useNavigate();
     const { openModal } = useModalStore();
     const [current, setCurrent] = useState(1);
+    const [courseData, setCourseData] = useState<TGetBookmarkedDateCourseResponse>();
+
+    const { useGetBookmarkedCourse } = useCourse();
+    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    const { mutate: getBookmarkedDateCourse } = useGetBookmarkedCourse;
+    useEffect(() => {
+        getBookmarkedDateCourse(
+            {
+                page: current,
+                size: 5,
+                budget,
+                dateDurationTime,
+                datePlaces,
+                mealTypes,
+                transportation,
+                userPreferredKeywords,
+                startTime,
+            },
+            {
+                onSuccess: (data) => {
+                    setCourseData(data);
+                },
+            },
+        );
+    }, [current]);
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
@@ -51,11 +81,9 @@ export default function Course() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[24px] ">
-                        <DateCourse />
-                        <DateCourse />
-                        <DateCourse />
-                        <DateCourse />
-                        <DateCourse />
+                        {courseData?.result.dateCourseList.map((course) => {
+                            return <DateCourse key={course.dateCourseId} {...course} />;
+                        })}
                     </div>
                     <Navigator current={current} end={14} onClick={setCurrent} />
                 </div>

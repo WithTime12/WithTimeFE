@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+// DateCourseSearchFilterModal.tsx
+import { useEffect, useMemo, useState } from 'react';
 
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
@@ -11,114 +12,136 @@ import {
     TotalTimeMealValidation,
 } from '@/utils/dateCourseValidation';
 
+import useCourse from '@/hooks/course/useCourse';
+
 import Button from '../common/Button';
 import Modal from '../common/modal';
 import DateCourseSearchFilterOption from '../dateCourse/dateCourseSearchFilterOption';
 
-type TDateCourseSearchFilterModalProps = {
-    onClose: () => void;
-};
+import useFilterStore from '@/store/useFilterStore';
 
-interface IQuestion {
-    id: number;
-    title: string;
-    options: string[] | null;
-    keyword: string | null;
-    subTitle: string | null;
-    filterTitle: string;
-    type: 'choice' | 'search' | 'time' | 'choices' | 'keyword';
-}
+type TProps = { onClose: () => void };
 
-// ✅ 질문 리스트 (0~6개만 필터링)
-const Questions: IQuestion[] = Array.isArray(DateCourseQuestion)
-    ? DateCourseQuestion.slice(0, 7).map((q) => ({
-          ...q,
-          type: q.type as IQuestion['type'],
-      }))
-    : [];
-
-export default function DateCourseSearchFilterModal({ onClose }: TDateCourseSearchFilterModalProps) {
-    const [answers, setAnswers] = useState<(string | string[] | null)[]>(Array(7).fill(null));
-    const num = 5325; // 예시용
+export default function DateCourseSearchFilterModal({ onClose }: TProps) {
+    const { setField, ...filters } = useFilterStore();
     const [errorMessages, setErrorMessages] = useState<string[]>(Array(7).fill(''));
+    const { useGetBookmarkedCourse } = useCourse();
+    const { mutate: getBookmarkedDateCourse } = useGetBookmarkedCourse;
+    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    const Questions = useMemo(
+        () =>
+            (Array.isArray(DateCourseQuestion) ? DateCourseQuestion.slice(0, 7) : [])
+                .map((q) => ({ ...q, type: q.type as 'choice' | 'search' | 'time' | 'choices' | 'keyword' }))
+                .filter((q) => q.filterTitle !== ''),
+        [],
+    );
 
-    const handleSearch = () => {
-        console.log('선택된 필터:', answers);
-        onClose();
+    const valueByIndex = (idx: number) => {
+        switch (idx) {
+            case 0:
+                return filters.budget;
+            case 1:
+                return filters.datePlaces;
+            case 2:
+                return filters.dateDurationTime;
+            case 3:
+                return filters.mealTypes;
+            case 4:
+                return filters.transportation;
+            case 5:
+                return filters.userPreferredKeywords;
+            case 6:
+                return filters.startTime;
+            default:
+                return null;
+        }
     };
 
-    const checkError = () => {
-        const newErrors = [...errorMessages];
-
-        newErrors[0] =
-            BudgetTimeValidation({
-                budget: answers[0] as string,
-                totalTime: answers[2] as string,
-            }) || '';
-
-        newErrors[2] =
-            TotalTimeMealValidation({
-                totalTime: answers[2] as string,
-                meal: Array.isArray(answers[3]) ? answers[3] : [],
-            }) || '';
-
-        newErrors[3] =
-            KeywordMealValidation({
-                meal: Array.isArray(answers[3]) ? answers[3] : [],
-                keywords: Array.isArray(answers[5]) ? answers[5] : [],
-            }) || '';
-
-        newErrors[5] =
-            KeywordGroupOverValidation({
-                keywords: Array.isArray(answers[5]) ? answers[5] : [],
-            }) || '';
-
-        newErrors[6] =
-            MealTimeValidation({
-                meal: Array.isArray(answers[3]) ? answers[3] : [],
-                time: answers[6] as string,
-                totalTime: answers[2] as string,
-            }) ||
-            DateTimeStartValidation({
-                time: answers[6] as string,
-                totalTime: answers[2] as string,
-            }) ||
+    const runValidation = () => {
+        const errs = [...errorMessages];
+        errs[0] = BudgetTimeValidation({ budget: filters.budget as any, totalTime: filters.dateDurationTime as any }) || '';
+        errs[2] = TotalTimeMealValidation({ totalTime: filters.dateDurationTime as any, meal: filters.mealTypes ?? [] }) || '';
+        errs[3] = KeywordMealValidation({ meal: filters.mealTypes ?? [], keywords: filters.userPreferredKeywords ?? [] }) || '';
+        errs[5] = KeywordGroupOverValidation({ keywords: filters.userPreferredKeywords ?? [] }) || '';
+        errs[6] =
+            MealTimeValidation({ meal: filters.mealTypes ?? [], time: filters.startTime as any, totalTime: filters.dateDurationTime as any }) ||
+            DateTimeStartValidation({ time: filters.startTime as any, totalTime: filters.dateDurationTime as any }) ||
             '';
-
-        setErrorMessages(newErrors);
+        setErrorMessages(errs);
+        return errs.every((e) => !e);
     };
 
+    const updateByIndex = (idx: number, v: any) => {
+        const apply = () => {
+            switch (idx) {
+                case 0:
+                    setField('budget', v ?? null);
+                    break;
+                case 1:
+                    setField('datePlaces', Array.isArray(v) ? v : []);
+                    break;
+                case 2:
+                    setField('dateDurationTime', v ?? null);
+                    break;
+                case 3:
+                    setField('mealTypes', Array.isArray(v) ? v : []);
+                    break;
+                case 4:
+                    setField('transportation', v ?? null);
+                    break;
+                case 5:
+                    setField('userPreferredKeywords', Array.isArray(v) ? v : []);
+                    break;
+                case 6:
+                    setField('startTime', v ?? null);
+                    break;
+            }
+        };
+
+        apply();
+        runValidation();
+    };
     useEffect(() => {
-        checkError();
-    }, [answers]);
+        getBookmarkedDateCourse(
+            {
+                page: 1,
+                size: 5,
+                budget: filters.budget,
+                dateDurationTime: filters.dateDurationTime,
+                datePlaces: filters.datePlaces,
+                mealTypes: filters.datePlaces,
+                transportation: filters.transportation,
+                userPreferredKeywords: filters.userPreferredKeywords,
+                startTime: filters.startTime,
+            },
+            {
+                onSuccess: () => {
+                    // 추후 데이터 추가되면 총 개수 불러와서 밑에 추가할 예정
+                },
+            },
+        );
+    }, [budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime]);
 
     return (
         <Modal onClose={onClose} title="검색 필터">
             <div className="flex flex-col w-full max-w-[80vw] px-[10%] gap-10 py-10">
-                {Questions.map(
-                    (question, idx) =>
-                        question.filterTitle !== '' && (
-                            <DateCourseSearchFilterOption
-                                key={question.id}
-                                title={question.filterTitle}
-                                subTitle={question.subTitle}
-                                options={question.options}
-                                value={answers[idx]}
-                                onChange={(value) => {
-                                    setAnswers((prev) => {
-                                        const updated = [...prev];
-                                        updated[idx] = value;
-                                        return updated;
-                                    });
-                                }}
-                                type={question.type}
-                                errorMessage={errorMessages[idx] ?? ''}
-                            />
-                        ),
-                )}
+                {Questions.map((q, idx) => (
+                    <DateCourseSearchFilterOption
+                        key={q.id}
+                        title={q.filterTitle}
+                        subTitle={q.subTitle}
+                        options={q.options}
+                        value={valueByIndex(idx)}
+                        onChange={(v) => updateByIndex(idx, v)} // ← 즉시 적용
+                        type={q.type}
+                        apiRequestValue={q.apiRequestValue}
+                        errorMessage={errorMessages[idx] ?? ''}
+                    />
+                ))}
+
                 <div className="flex w-full justify-end">
-                    <Button size="big-16" variant="mint" className="w-fit text-center px-[30px] font-body1" onClick={handleSearch}>
-                        데이트 코스 {num}개 보기
+                    <Button size="big-16" variant="mint" className="w-fit text-center px-[30px] font-body1" onClick={onClose}>
+                        닫기
                     </Button>
                 </div>
             </div>

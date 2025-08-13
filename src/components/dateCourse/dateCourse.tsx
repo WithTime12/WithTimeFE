@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+import type { TDateCourse } from '@/types/dateCourse/dateCourse';
+
 import Info from './info';
 import Timeline from './timeline';
 import DeleteBookmarkModal from '../modal/deleteBookmarkModal';
@@ -8,19 +10,23 @@ import BookmarkBlank from '@/assets/icons/Bookmark_Blank.svg?react';
 import BookmarkFill from '@/assets/icons/Bookmark_Fill.svg?react';
 import KeyboardArrowDown from '@/assets/icons/keyboard_arrow_down_False.svg?react';
 
-function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
+type TDateCourseProps = TDateCourse & {
+    defaultOpen?: boolean;
+};
+
+function DateCourse({ defaultOpen = false, name, datePlaces }: TDateCourseProps) {
     const [open, setOpen] = useState(defaultOpen || false);
     const [openEdit, setOpenEdit] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const moreRef = useRef<HTMLDivElement>(null);
+
     const clickBookmark = () => {
         if (isBookmarked) {
             setOpenModal(true);
         } else {
             setIsBookmarked(!isBookmarked);
         }
-        // console.log('북마크 해제');
     };
 
     useEffect(() => {
@@ -29,7 +35,6 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                 setOpenEdit(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [openEdit]);
@@ -46,7 +51,8 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                         {open ? <KeyboardArrowDown /> : <KeyboardArrowDown className="rotate-270" />}
 
                         <div className="text-default-gray-800 gap-[4px] select-none flex flex-col sm:flex-row pl-[4px]">
-                            <span>2025.06.01</span> <span>데이트코스</span>
+                            <span>{name}</span>
+                            <span>데이트 코스</span>
                         </div>
                     </div>
                     <div className="flex">
@@ -63,22 +69,19 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
                 <div className="w-full flex h-fit bg-default-gray-100 rounding-32 justify-center items-start self-stretch">
                     <div className="w-full lg:px-[48px] px-[24px] py-[40px] gap-[48px] flex justify-between h-fit lg:flex-row flex-col">
                         <div className="flex flex-col lg:w-[60%] gap-[16px]">
-                            <Timeline
-                                title="브리비트 성수"
-                                time="12:00"
-                                address="서울 성동구 왕십리로2길 30 1층"
-                                price="평균 5000원"
-                                tags={['감성 카페', '디저트 맛집']}
-                                menu="카라멜 밀크"
-                            />
-                            <Timeline
-                                title="라블랑 성수"
-                                time="13:00"
-                                address="서울 성동구 왕십리로2길 30 1층"
-                                price="평균 5000원"
-                                tags={['감성 카페', '디저트 맛집']}
-                                menu="카라멜 밀크"
-                            />
+                            {datePlaces.map((place, idx) => {
+                                return (
+                                    <Timeline
+                                        key={idx}
+                                        title={place.name}
+                                        time="12:00"
+                                        address={place.roadNameAddress}
+                                        price="평균 5000원"
+                                        tags={['감성 카페', '디저트 맛집']}
+                                        menu={place.information}
+                                    />
+                                );
+                            })}
                             <Timeline end={true} time="14:00" />
                         </div>
                         <div className="border-[0.5px] border-default-gray-700 w-full lg:w-[1px]" />

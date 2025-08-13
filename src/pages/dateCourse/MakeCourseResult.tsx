@@ -1,4 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+
+import type { TPostDateCourseResponse } from '@/types/dateCourse/dateCourse';
+
+import useCourse from '@/hooks/course/useCourse';
 
 import DateCourse from '@/components/dateCourse/dateCourse';
 import DateCourseLoading from '@/components/dateCourse/dateCourseLoading';
@@ -7,12 +12,39 @@ import Button from '../../components/common/Button';
 
 import Reload from '@/assets/icons/arrow_spin.svg?react';
 import Logo from '@/assets/withTimeLogo//logo_Blank.svg?react';
+import useFilterStore from '@/store/useFilterStore';
 
 export default function MakeCourseResult() {
     const navigate = useNavigate();
-    const isLoading = false;
-    if (isLoading) {
+    const [courseData, setCourseData] = useState<TPostDateCourseResponse>();
+    const { useMakeCourse } = useCourse();
+    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    const { mutate: makeCourseMutate, isPending } = useMakeCourse;
+
+    useEffect(() => {
+        makeCourseMutate(
+            {
+                budget: budget!,
+                dateDurationTime: dateDurationTime!,
+                datePlaces,
+                mealPlan: mealTypes,
+                transportation: transportation!,
+                userPreferredKeywords,
+                startTime: startTime!,
+            },
+            {
+                onSuccess: (data) => {
+                    setCourseData(data);
+                },
+            },
+        );
+    }, []);
+
+    if (isPending) {
         return <DateCourseLoading />;
+    }
+    if (!courseData) {
+        return <Navigate to="/error" />;
     }
     return (
         <div className="flex w-full justify-center items-center min-h-[66vh] p-[40px]">
@@ -22,7 +54,7 @@ export default function MakeCourseResult() {
                     <Logo className="w-[41px] h-[36px] sm:flex hidden" />
                 </div>
                 <div className="flex flex-col gap-[24px] ">
-                    <DateCourse defaultOpen={true} />
+                    <DateCourse defaultOpen={true} {...courseData?.result} />
                 </div>
                 <Button size="big-16" variant="mint" className="flex mt-[40px] self-center px-[32px] items-center gap-[8px]">
                     <Reload />
