@@ -1,5 +1,4 @@
-import type { PropsWithChildren } from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider';
 
@@ -27,19 +26,6 @@ import NoticeDetail from '@/pages/notice/NoticeDetail';
 import Question from '@/pages/question/Question';
 import DeleteConfirmPage from '@/pages/setting/DeleteConfirmPage';
 import DeleteReasonPage from '@/pages/setting/DeleteReasonPage.tsx';
-import PaymentHistory from '@/pages/setting/PaymentHistory';
-import SettingEntryPage from '@/pages/setting/SettingEntryPage';
-
-function ProtectedRoute({ children }: PropsWithChildren) {
-    //추후 실제 로그인 여부로 대체 필요
-    const isLoggedIn = true;
-
-    if (!isLoggedIn) {
-        return <Navigate to="/" replace />;
-    }
-
-    return children;
-}
 
 const router = createBrowserRouter([
     {
@@ -76,10 +62,10 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: (
-            <ProtectedRoute>
+            <>
                 <ModalProvider />
                 <Layout />
-            </ProtectedRoute>
+            </>
         ),
         errorElement: <Error />,
         children: [
@@ -138,15 +124,6 @@ const router = createBrowserRouter([
         ],
     },
 
-    // Setting page 연결
-    {
-        path: '/setting',
-        element: <SettingEntryPage />,
-    },
-    {
-        path: '/paymentHistory',
-        element: <PaymentHistory />, // 결제 내역 확인
-    },
     {
         path: '/deleteAccount',
         element: <DeleteReasonPage />, // 탈퇴 사유 선택
@@ -157,11 +134,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/withdraw',
-        element: (
-            <ProtectedRoute>
-                <Withdraw />
-            </ProtectedRoute>
-        ),
+        element: <Withdraw />,
         errorElement: <Error />,
     },
 ]);

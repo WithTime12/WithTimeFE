@@ -33,6 +33,7 @@ function LoginRedirect() {
                             setSocialId(data.result.socialId);
                             navigate('/userSetting');
                         } else {
+                            setEmail(data.result.email);
                             navigate('/home');
                         }
                     },
@@ -41,7 +42,7 @@ function LoginRedirect() {
                         if (err.response?.data.message === '사용자 정보를 가져오는 데 실패했습니다.')
                             // 로그인 실패 시 에러 페이지로 리다이렉트
                             navigate('/Join');
-                        else navigate('/error');
+                        // else navigate('/error');
                     },
                 },
             );
