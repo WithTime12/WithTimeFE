@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-import { useDeviceToken } from '@/hooks/alarm/useDeviceToken';
 import { useUserGrade } from '@/hooks/home/useUserGrade';
 
 import Banner from '@/components/home/banner';
