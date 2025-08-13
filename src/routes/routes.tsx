@@ -95,7 +95,7 @@ const router = createBrowserRouter([
                 element: <Notice />,
             },
             {
-                path: '/notice/:noticeId',
+                path: 'notice/:noticeId',
                 element: <NoticeDetail />,
             },
             {
@@ -138,15 +138,27 @@ const router = createBrowserRouter([
     },
     {
         path: '/paymentHistory',
-        element: <PaymentHistory />, // 결제 내역 확인
+        element: (
+            <ProtectedRoute>
+                <PaymentHistory />
+            </ProtectedRoute>
+        ),
     },
     {
         path: '/deleteAccount',
-        element: <DeleteReasonPage />, // 탈퇴 사유 선택
+        element: (
+            <ProtectedRoute>
+                <DeleteReasonPage />
+            </ProtectedRoute>
+        ),
     },
     {
         path: '/deleteAccount/confirm',
-        element: <DeleteConfirmPage />, // 탈퇴 확정
+        element: (
+            <ProtectedRoute>
+                <DeleteConfirmPage />
+            </ProtectedRoute>
+        ),
     },
     {
         path: '/withdraw',

@@ -40,8 +40,8 @@ export default function DeleteConfirmPage() {
             localStorage.removeItem('accessToken');
             navigate('/', { replace: true });
         },
-        onError: (e) => {
-            const msg = (e as any)?.response?.data?.message || '회원 탈퇴에 실패했습니다.';
+        onError: (error) => {
+            const msg = error?.response?.data?.message || '회원 탈퇴에 실패했습니다.';
             alert(msg);
         },
     });
@@ -54,7 +54,6 @@ export default function DeleteConfirmPage() {
         deleteAccount();
     };
 
-    // 체크박스 토글
     const toggleCheckbox = (index: number) => {
         const updated = [...checked];
         updated[index] = !updated[index];

@@ -1,7 +1,7 @@
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import type { TUseMutationCustomOptions } from '@/types/common/common';
+import type { TCommonResponse, TUseMutationCustomOptions } from '@/types/common/common';
 
 export type TChangePasswordPayload = {
     currentPassword: string;
@@ -38,3 +38,14 @@ export type TMemberInfo = {
     role: string;
     point: number;
 };
+
+// 사용자 등급
+export type TMemberGrade = {
+    username: string;
+    grade: string;
+    level: string;
+    description: string;
+    nextRequiredPoint: number;
+};
+
+export type TGetMemberGradeResponse = TCommonResponse<TMemberGrade>;

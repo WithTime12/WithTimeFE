@@ -1,4 +1,4 @@
-import type { TChangeNicknamePayload, TChangeNicknameResponse, TChangePasswordPayload, TMemberInfo } from '@/types/auth/account';
+import type { TChangeNicknamePayload, TChangeNicknameResponse, TChangePasswordPayload, TGetMemberGradeResponse, TMemberInfo } from '@/types/auth/account';
 import type { TCommonResponse } from '@/types/common/common';
 
 import { axiosInstance } from '@/api/axiosInstance';
@@ -23,5 +23,11 @@ export async function deleteMember(): Promise<void> {
 // 사용자 정보 조회
 export async function getMemberInfo(): Promise<TCommonResponse<TMemberInfo>> {
     const { data } = await axiosInstance.get<TCommonResponse<TMemberInfo>>('/api/v1/members/infos');
+    return data;
+}
+
+// 사용자 등급 조회
+export async function getMemberGrade(): Promise<TGetMemberGradeResponse> {
+    const { data } = await axiosInstance.get<TGetMemberGradeResponse>('/api/v1/members/grade');
     return data;
 }

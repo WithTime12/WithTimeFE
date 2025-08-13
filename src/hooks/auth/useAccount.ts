@@ -1,4 +1,3 @@
-// src/hooks/auth/useAccount.ts
 import type {
     TChangeNicknameMutationOptions,
     TChangeNicknameMutationResult,
@@ -10,10 +9,12 @@ import type {
     TChangePasswordResponse,
 } from '@/types/auth/account';
 import type { TUseMutationCustomOptions } from '@/types/common/common';
+import type { TResetPreferencesResponse } from '@/types/dates/preferences';
 
 import { useCoreMutation, useCoreQuery } from '@/hooks/customQuery';
 
-import { changeNickname, changePassword, deleteMember, getMemberInfo } from '@/api/auth/account';
+import { changeNickname, changePassword, deleteMember, getMemberGrade, getMemberInfo } from '@/api/auth/account';
+import { resetPreferences } from '@/api/dates/preferences';
 
 export function useAccount() {
     // 비밀번호 변경
@@ -31,10 +32,20 @@ export function useAccount() {
         return useCoreMutation<void, void>(deleteMember, options);
     }
 
-    // 사용자 정보 가져오기
+    // 사용자 정보 조회
     function useGetMemberInfo() {
         return useCoreQuery(['memberInfo'], getMemberInfo);
     }
 
-    return { useChangePassword, useChangeNickname, useDeleteMember, useGetMemberInfo };
+    // 사용자 등급 조회
+    function useGetMemberGrade() {
+        return useCoreQuery(['memberGrade'], getMemberGrade);
+    }
+
+    // 취향 데이터 초기화
+    function useResetPreferences(options?: TUseMutationCustomOptions<TResetPreferencesResponse, void>) {
+        return useCoreMutation<TResetPreferencesResponse, void>(() => resetPreferences(), options);
+    }
+
+    return { useChangePassword, useChangeNickname, useDeleteMember, useGetMemberInfo, useGetMemberGrade, useResetPreferences };
 }
