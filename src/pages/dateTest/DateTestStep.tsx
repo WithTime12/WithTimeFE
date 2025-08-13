@@ -1,18 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
-interface IQuestion {
-    id: number;
-    title: string;
-    options: string[];
-}
+import type { IDateTestQuestion } from '@/types/datetest/datetest';
+
+import { getDateQuestions, submitDateTestAnswers } from '@/api/datetest/datetest';
 
 const TOTAL_QUESTIONS = 40;
-const dummyQuestions: IQuestion[] = Array.from({ length: TOTAL_QUESTIONS }, (_, i) => ({
-    id: i + 1,
-    title: `당신의 데이트 스타일은 어떤가요?`,
-    options: ['야외 활동 좋아해요', '집에서 쉬는 게 좋아요'],
-}));
 
 function ProgressBar({ step, total }: { step: number; total: number }) {
     const percentage = (step / total) * 100;
@@ -26,19 +20,29 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
 export default function DateTestStep() {
     const { step } = useParams<{ step: string }>();
     const navigate = useNavigate();
-
-    const currentStep = Number(step);
-    const question = dummyQuestions[currentStep - 1];
+    const currentStep = parseInt(step ?? '1', 10);
 
     const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+    const [allAnswers, setAllAnswers] = useState<number[]>(Array(TOTAL_QUESTIONS).fill(0));
+
+    const { data, isLoading, isError } = useQuery<IDateTestQuestion[]>({
+        queryKey: ['dateTestQuestions'],
+        queryFn: getDateQuestions,
+        staleTime: 1000 * 60 * 5,
+    });
 
     useEffect(() => {
-        setSelectedOptions([]);
+        const prevAnswer = allAnswers[currentStep - 1];
+        setSelectedOptions(prevAnswer ? [prevAnswer - 1] : []);
         window.scrollTo(0, 0);
     }, [currentStep]);
 
     const handleSelect = (idx: number) => {
-        setSelectedOptions([idx]); // 항상 하나만 선택되도록
+        const answerValue = idx + 1; // 0 -> 1, 1 -> 2
+        const updatedAnswers = [...allAnswers];
+        updatedAnswers[currentStep - 1] = answerValue;
+        setAllAnswers(updatedAnswers);
+        setSelectedOptions([idx]);
     };
 
     const handlePrev = () => {
@@ -49,18 +53,27 @@ export default function DateTestStep() {
         }
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (selectedOptions.length !== 1) return;
+
         if (currentStep < TOTAL_QUESTIONS) {
             navigate(`/datetest/${currentStep + 1}`);
         } else {
-            navigate('/datetest/result');
+            try {
+                const response = await submitDateTestAnswers({ answers: allAnswers });
+                console.log('결과 응답:', response);
+                navigate('/datetest/result', { state: response.result });
+            } catch (error) {
+                console.error('결과 제출 실패:', error);
+                alert('결과를 제출하는 중 오류가 발생했습니다.');
+            }
         }
     };
 
-    if (!question) {
-        return <div>질문을 불러올 수 없습니다.</div>;
-    }
+    if (isLoading) return <div className="text-center mt-20">질문을 불러오는 중입니다...</div>;
+    if (isError || !data || !data[currentStep - 1]) return <div>질문을 불러올 수 없습니다.</div>;
+
+    const question = data[currentStep - 1];
 
     return (
         <div className="flex flex-col px-6 max-w-3xl mx-auto py-[156px]">
@@ -88,16 +101,19 @@ export default function DateTestStep() {
             </div>
 
             {/* 질문 */}
-            <h2 className="text-2xl font-bold mb-6 text-left w-full">{question.title}</h2>
+            <h2 className="text-2xl font-bold mb-6 text-left w-full">{question.question}</h2>
 
             {/* 선택지 */}
             <div className="flex flex-col gap-4 w-full">
-                {question.options.map((opt, idx) => (
+                {[question.firstAnswer, question.secondAnswer].map((opt, idx) => (
                     <button
                         key={idx}
                         onClick={() => handleSelect(idx)}
-                        className={`w-full text-left px-5 py-3 rounded-lg border border-[#C3C3C3]
-            ${selectedOptions.includes(idx) ? 'bg-primary-700 text-white border-primary-700' : 'bg-white text-gray-800 hover:bg-primary-100 border border-[#c3c3c3]'}`}
+                        className={`w-full text-left px-5 py-3 rounded-lg border ${
+                            selectedOptions.includes(idx)
+                                ? 'bg-primary-700 text-white border-primary-700'
+                                : 'bg-white text-gray-800 hover:bg-primary-100 border-[#c3c3c3]'
+                        }`}
                         aria-pressed={selectedOptions.includes(idx)}
                         type="button"
                     >
