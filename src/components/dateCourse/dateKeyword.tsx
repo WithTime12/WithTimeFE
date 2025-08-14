@@ -17,12 +17,12 @@ export default function DateKeyword<T>({ category, tags, setState, state }: TDat
                 {tags.map((tag) => {
                     return (
                         <KeywordButton
-                            selected={Array.isArray(state) && state.includes(tag.code)}
+                            selected={Array.isArray(state) && state.includes(tag.label)}
                             isButton={true}
                             key={tag.id}
                             tag={tag.label}
                             onClick={() => {
-                                toggleItem(tag.code);
+                                toggleItem(tag.label);
                             }}
                         />
                     );

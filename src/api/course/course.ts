@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 import type {
     TDeleteBookmarkRequest,
     TDeleteBookmarkResponse,
@@ -9,6 +11,8 @@ import type {
     TPostBookmarkResponse,
     TPostDateCourseRequest,
     TPostDateCourseResponse,
+    TPostMakeBookmarkRequest,
+    TPostMakeBookmarkResponse,
     TSearchRegionResponse,
     TSearchRegionValues,
 } from '@/types/dateCourse/dateCourse';
@@ -28,17 +32,21 @@ export const postDateCourse = async ({
     budget,
     datePlaces,
     mealPlan,
+    dateDurationTime,
     transportation,
     userPreferredKeywords,
     startTime,
+    excludedCourseSignatures,
 }: TPostDateCourseRequest): Promise<TPostDateCourseResponse> => {
     const { data } = await axiosInstance.post('/api/v1/date-courses/', {
         budget,
         datePlaces,
+        dateDurationTime,
         mealPlan,
         transportation,
         userPreferredKeywords,
         startTime,
+        excludedCourseSignatures,
     });
     return data;
 };
@@ -47,7 +55,10 @@ export const postBookmark = async ({ dateCourseId }: TPostBookmarkRequest): Prom
     const { data } = await axiosInstance.post(`/api/v1/date-courses/${dateCourseId}/bookmarks`);
     return data;
 };
-
+export const postMakeBookmark = async ({ datePlaceIds, name }: TPostMakeBookmarkRequest): Promise<TPostMakeBookmarkResponse> => {
+    const { data } = await axiosInstance.post(`/api/v1/date-courses/bookmarks`, { datePlaceIds, name });
+    return data;
+};
 export const deleteBookmark = async ({ dateCourseId }: TDeleteBookmarkRequest): Promise<TDeleteBookmarkResponse> => {
     const { data } = await axiosInstance.delete(`/api/v1/date-courses/${dateCourseId}/bookmarks`);
     return data;
@@ -62,7 +73,7 @@ export const getDateCourse = async ({
     page,
     size,
 }: TGetDateCourseRequest): Promise<TGetDateCourseResponse> => {
-    const { data } = await axiosInstance.get('/api/v1/date-courses/search', {
+    const { data } = await axiosInstance.get('/api/v1/date-courses', {
         params: {
             page,
             size,
@@ -72,6 +83,7 @@ export const getDateCourse = async ({
             transportation,
             userPreferredKeywords,
         },
+        paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
     });
     return data;
 };

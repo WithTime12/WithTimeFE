@@ -44,7 +44,7 @@ function BookmarkedDateCourse() {
                     </div>
                     <div className="flex flex-col gap-[24px] ">
                         {data?.result.dateCourseList.map((course) => {
-                            return <DateCourse key={course.dateCourseId} {...course} />;
+                            return <DateCourse defaultOpen={false} key={course.dateCourseId} {...course} />;
                         })}
                     </div>
                     <Navigator current={current} end={data?.result.totalPages ?? 5} onClick={setCurrent} />

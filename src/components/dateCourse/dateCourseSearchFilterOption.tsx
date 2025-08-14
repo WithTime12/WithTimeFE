@@ -88,7 +88,17 @@ export default function DateCourseSearchFilterOption({
             <div className="flex w-full gap-[16px] flex-wrap sm:justify-start justify-center">
                 {type === 'choice' &&
                     items?.map(({ label, value: apiValue }, idx) => {
-                        return <DateCourseOptionButton key={idx} option={label} isSelected={value === apiValue} onClick={() => onChange(apiValue!)} />;
+                        return (
+                            <DateCourseOptionButton
+                                key={idx}
+                                option={label}
+                                isSelected={value === apiValue}
+                                onClick={() => {
+                                    onChange(apiValue!);
+                                    console.log('click');
+                                }}
+                            />
+                        );
                     })}
 
                 {type === 'choices' &&
@@ -188,7 +198,7 @@ export default function DateCourseSearchFilterOption({
                                     onChange={(e) => {
                                         const val = e.target.value;
                                         setTime(val);
-                                        if (date) onChange(`${date}T${val}:00`);
+                                        if (date) onChange(`${date}T${val}:00.000Z`);
                                     }}
                                     className="absolute top-0 left-0 w-full h-full opacity-0"
                                 />

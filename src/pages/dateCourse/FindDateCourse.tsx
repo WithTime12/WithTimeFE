@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
+import useGetCourse from '@/hooks/course/useGetCourse';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider';
 import Navigator from '@/components/common/navigator';
@@ -15,12 +15,12 @@ function FindDateCourse() {
     const [current, setCurrent] = useState(1);
 
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
-    const { data: courseData } = useGetBookmarkedCourse({
+    const { data: courseData } = useGetCourse({
         page: current,
         size: 5,
         budget,
         dateDurationTime,
-        datePlaces,
+        datePlaces: ['서울 종로구 인사동'],
         mealTypes,
         transportation,
         userPreferredKeywords,
@@ -46,7 +46,7 @@ function FindDateCourse() {
                             return <DateCourse key={course.dateCourseId} {...course} />;
                         })}
                     </div>
-                    <Navigator current={current} end={14} onClick={setCurrent} />
+                    <Navigator current={current} end={courseData?.result.totalPages!} onClick={setCurrent} />
                 </div>
             </div>
         </div>

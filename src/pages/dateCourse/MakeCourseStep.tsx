@@ -157,7 +157,9 @@ export default function MakeCourseStep() {
         }
         setErrorMessage(msg);
     }, [currentStep, budget, dateDurationTime, mealTypes, userPreferredKeywords, startTime]);
-
+    useEffect(() => {
+        console.log(budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime);
+    }, [budget, dateDurationTime, mealTypes, userPreferredKeywords, startTime, transportation]);
     if (!question) return <div>질문을 불러올 수 없습니다.</div>;
 
     return (

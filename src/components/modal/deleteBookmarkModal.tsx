@@ -1,23 +1,36 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import useBookmark from '@/hooks/course/useBookmark';
+
 type TDeleteBookmarkModal = {
     onClose: () => void;
     isOpen: boolean;
     changeState: (state: boolean) => void;
+    dateCourseId: number;
 };
 
-function DeleteBookmarkModal({ onClose, isOpen, changeState }: TDeleteBookmarkModal) {
+function DeleteBookmarkModal({ onClose, dateCourseId, isOpen, changeState }: TDeleteBookmarkModal) {
     const [isVisible, setIsVisible] = useState(isOpen);
-
+    const { useDeleteBookmark } = useBookmark();
+    const { mutate: deleteBookmarkMutate } = useDeleteBookmark;
     useEffect(() => {
         setIsVisible(isOpen);
     }, [isOpen]);
 
     const handleDelete = () => {
-        // Logic to delete the bookmarked date course
-        changeState(false);
-        onClose();
+        deleteBookmarkMutate(
+            { dateCourseId },
+            {
+                onSuccess: () => {
+                    changeState(false);
+                    onClose();
+                },
+                onError: () => {
+                    alert('북마크 삭제에 실패했습니다. 잠시후 다시 시도해주세요.');
+                },
+            },
+        );
     };
 
     return createPortal(

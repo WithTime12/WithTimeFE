@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import type { TPostDateCourseResponse } from '@/types/dateCourse/dateCourse';
+
+import { toKSTISOString } from '@/utils/timeZoneChange';
 
 import { useCourse } from '@/hooks/course/useCourse';
 
@@ -22,19 +24,25 @@ export default function MakeCourseResult() {
     const { mutate: makeCourseMutate, isPending } = useMakeCourse;
 
     useEffect(() => {
+        const date = new Date(startTime!);
         makeCourseMutate(
             {
                 budget: budget!,
                 dateDurationTime: dateDurationTime!,
-                datePlaces,
+                // datePlaces: datePlaces,
+                datePlaces: ['서울 종로구 인사동'],
                 mealPlan: mealTypes,
                 transportation: transportation!,
                 userPreferredKeywords,
-                startTime: startTime!,
+                startTime: toKSTISOString(date),
+                excludedCourseSignatures: [],
             },
             {
                 onSuccess: (data) => {
                     setCourseData(data);
+                },
+                onError: () => {
+                    navigate('/makeCourse');
                 },
             },
         );
@@ -43,9 +51,7 @@ export default function MakeCourseResult() {
     if (isPending) {
         return <DateCourseLoading />;
     }
-    if (!courseData) {
-        return <Navigate to="/error" />;
-    }
+
     return (
         <div className="flex w-full justify-center items-center min-h-[66vh] p-[40px]">
             <div className="flex-col flex h-fit max-w-[95vw] w-[1000px] shadow-default rounding-16 px-[10px] sm:px-[40px] py-[24px] shadow-default">
@@ -54,7 +60,11 @@ export default function MakeCourseResult() {
                     <Logo className="w-[41px] h-[36px] sm:flex hidden" />
                 </div>
                 <div className="flex flex-col gap-[24px] ">
-                    <DateCourse defaultOpen={true} {...courseData?.result} />
+                    {courseData?.result?.datePlaces && courseData?.result?.datePlaces?.length > 0 ? (
+                        <DateCourse make={true} defaultOpen={true} {...courseData?.result} />
+                    ) : (
+                        <div />
+                    )}
                 </div>
                 <Button size="big-16" variant="mint" className="flex mt-[40px] self-center px-[32px] items-center gap-[8px]">
                     <Reload />
@@ -62,7 +72,6 @@ export default function MakeCourseResult() {
                         <div className="font-heading3 select-none" onClick={() => navigate('/makeCourse')}>
                             다시 만들기
                         </div>
-                        <div className="font-body1 select-none">3회 가능</div>
                     </div>
                 </Button>
             </div>

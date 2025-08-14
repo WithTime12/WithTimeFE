@@ -66,7 +66,6 @@ export function MealTimeValidation({ meal, time, totalTime }: { meal: string[]; 
 
     // 아무것도 안겹치면 첫 번째 식사를 기준으로 안내
     const first = meal[0];
-    console.log(first);
     const [mealStartStr, mealEndStr] = mealTimeRanges[first];
 
     return `선택하신 시간에는 ${mealTimeKorean[first]} 식사를 하기 어려워요. (가능 시간: ${mealStartStr}~${mealEndStr})`;

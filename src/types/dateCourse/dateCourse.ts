@@ -7,16 +7,16 @@ export type TTimeline = {
     title?: string;
     time: string;
     address?: string;
-    price?: string;
+    price?: number;
     tags?: string[];
     menu?: string;
 };
 export type TInfo = {
-    cashTag: string;
-    locationTag: string;
-    timeTag: string;
-    MealTag: string;
-    keywordTags: string[];
+    cashTag?: string;
+    locationTag?: string[];
+    timeTag?: string;
+    MealTag?: string[];
+    keywordTags?: string[];
 };
 export type TTag = {
     id: number;
@@ -34,7 +34,7 @@ export type TDateKeyword<T> = {
 };
 
 export type TKeywordButtonProps = {
-    tag: string;
+    tag?: string;
     selected?: boolean;
     onClick?: () => void;
     isButton?: boolean;
@@ -94,8 +94,7 @@ export type TRegion = {
     createdAt: string;
     updatedAt: string;
 };
-
-export type TPostDateCourseRequest = {
+export type TDateCourseSearchCondInfo = {
     budget: string;
     datePlaces: string[];
     dateDurationTime: string;
@@ -104,14 +103,20 @@ export type TPostDateCourseRequest = {
     userPreferredKeywords: string[];
     startTime: string;
 };
+export type TPostDateCourseRequest = TDateCourseSearchCondInfo & {
+    excludedCourseSignatures: string[];
+};
 
 export type TPostDateCourseResponse = TCommonResponse<TDateCourse>;
 
 export type TDatePlaces = {
     name: string;
+    datePlaceId: number;
+    startTime: string;
+    endTime: string;
     image: string;
     tel: string;
-    averagePrive: number;
+    averagePrice: number;
     information: string;
     latitude: number;
     longitude: number;
@@ -120,15 +125,28 @@ export type TDatePlaces = {
     placeType: string;
 };
 export type TDateCourse = {
-    dateCourseId: number;
     name: string;
+    dateCourseId?: number;
     datePlaces: TDatePlaces[];
+    dateCourseSearchCondInfo: TDateCourseSearchCondInfo;
+    isBookmarked: boolean;
+    signature: string;
 };
+
 export type TPostBookmarkRequest = {
     dateCourseId: number;
 };
 
 export type TPostBookmarkResponse = TCommonResponse<{
+    dateCourseId: number;
+}>;
+
+export type TPostMakeBookmarkRequest = {
+    datePlaceIds: number[];
+    name: string;
+};
+
+export type TPostMakeBookmarkResponse = TCommonResponse<{
     dateCourseId: number;
 }>;
 
@@ -151,6 +169,7 @@ export type TGetDateCourseResponse = TCommonResponse<{
     currentPage: number;
     currentSize: number;
     hasNextPage: boolean;
+    totalCount: number;
 }>;
 
 export type TGetBookmarkedDateCourseRequest = TCourseFilter & {

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import type { TDateCourse } from '@/types/dateCourse/dateCourse';
+import type { TDateCourse, TDateCourseSearchCondInfo } from '@/types/dateCourse/dateCourse';
+
+import useBookmark from '@/hooks/course/useBookmark';
 
 import Info from './info';
 import Timeline from './timeline';
@@ -12,20 +14,47 @@ import KeyboardArrowDown from '@/assets/icons/keyboard_arrow_down_False.svg?reac
 
 type TDateCourseProps = TDateCourse & {
     defaultOpen?: boolean;
+    isBookmarked: boolean;
+    signature: string;
+    make?: boolean;
+    dateCourseSearchCondInfo: TDateCourseSearchCondInfo;
 };
 
-function DateCourse({ defaultOpen = false, name, datePlaces }: TDateCourseProps) {
+function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarked, datePlaces, dateCourseSearchCondInfo }: TDateCourseProps) {
     const [open, setOpen] = useState(defaultOpen || false);
     const [openEdit, setOpenEdit] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [bookmarked, setBookmarked] = useState(isBookmarked);
+    const [dateCourseID, setDateCourseID] = useState<number | undefined>(dateCourseId);
     const moreRef = useRef<HTMLDivElement>(null);
+    const { usePostBookmark, usePostMakeBookmark } = useBookmark();
+    const { mutate: postBookmark } = usePostBookmark;
+    const { mutate: postMakeBookmark } = usePostMakeBookmark;
+    const ids = (datePlaces ?? []).map((p) => p.datePlaceId);
 
     const clickBookmark = () => {
-        if (isBookmarked) {
+        if (bookmarked) {
             setOpenModal(true);
+        } else if (make === true) {
+            postMakeBookmark(
+                {
+                    datePlaceIds: ids,
+                    name: name,
+                },
+                {
+                    onSuccess: (response) => {
+                        setDateCourseID(response.result.dateCourseId);
+                        setBookmarked(true);
+                    },
+                    onError: () => {
+                        console.error('북마크 도중 에러가 발생하였습니다.');
+                    },
+                },
+            );
         } else {
-            setIsBookmarked(!isBookmarked);
+            postBookmark({
+                dateCourseId: dateCourseID!,
+            });
         }
     };
 
@@ -56,7 +85,7 @@ function DateCourse({ defaultOpen = false, name, datePlaces }: TDateCourseProps)
                         </div>
                     </div>
                     <div className="flex">
-                        {isBookmarked ? (
+                        {bookmarked ? (
                             <BookmarkFill fill="#4b4b4b" className="hover:cursor-pointer" onClick={clickBookmark} />
                         ) : (
                             <BookmarkBlank stroke="#212121" className="hover:cursor-pointer" onClick={clickBookmark} />
@@ -74,9 +103,9 @@ function DateCourse({ defaultOpen = false, name, datePlaces }: TDateCourseProps)
                                     <Timeline
                                         key={idx}
                                         title={place.name}
-                                        time="12:00"
+                                        time={place.startTime}
                                         address={place.roadNameAddress}
-                                        price="평균 5000원"
+                                        price={place.averagePrice}
                                         tags={['감성 카페', '디저트 맛집']}
                                         menu={place.information}
                                     />
@@ -87,24 +116,11 @@ function DateCourse({ defaultOpen = false, name, datePlaces }: TDateCourseProps)
                         <div className="border-[0.5px] border-default-gray-700 w-full lg:w-[1px]" />
                         <div className="flex flex-col lg:w-[50%]">
                             <Info
-                                cashTag={'3만원 이상'}
-                                locationTag={'서울 성수동'}
-                                timeTag={'3~4시간'}
-                                MealTag={'점심'}
-                                keywordTags={[
-                                    '감성 카페',
-                                    '디저트 맛집',
-                                    '디저트 맛집',
-                                    '로컬 푸드',
-                                    '감성 카페',
-                                    '디저트',
-                                    '감성',
-                                    '디저트 맛집',
-                                    '감성 카페',
-                                    '디저트 맛집',
-                                    '감성 카페',
-                                    '디저트 맛집',
-                                ]}
+                                cashTag={dateCourseSearchCondInfo?.budget}
+                                locationTag={dateCourseSearchCondInfo?.datePlaces}
+                                timeTag={dateCourseSearchCondInfo?.dateDurationTime}
+                                MealTag={dateCourseSearchCondInfo?.mealPlan}
+                                keywordTags={dateCourseSearchCondInfo?.userPreferredKeywords}
                             />
                         </div>
                     </div>
@@ -112,11 +128,12 @@ function DateCourse({ defaultOpen = false, name, datePlaces }: TDateCourseProps)
             )}
             {openModal && (
                 <DeleteBookmarkModal
+                    dateCourseId={dateCourseID!}
                     onClose={() => {
                         setOpenModal(false);
                     }}
                     changeState={(state: boolean) => {
-                        setIsBookmarked(state);
+                        setBookmarked(state);
                     }}
                     isOpen={openModal}
                 />

@@ -1,6 +1,6 @@
 export const DateCourseQuestion = [
     {
-        id: 1,
+        id: 0,
         filterTitle: '예산 범위',
         title: '오늘 데이트, 얼마나 쓰실 생각이세요?',
         subTitle: '(1인당)',
@@ -10,7 +10,7 @@ export const DateCourseQuestion = [
         type: 'choice',
     },
     {
-        id: 2,
+        id: 1,
         title: '어디에서 만날까요?',
         subTitle: null,
         keyword: '만날 장소',
@@ -20,7 +20,7 @@ export const DateCourseQuestion = [
         filterTitle: '만날 장소',
     },
     {
-        id: 3,
+        id: 2,
         title: '얼마나 함께할 예정인가요?',
         subTitle: '(1개만 선택 가능)',
         keyword: '데이트 시간',
@@ -30,7 +30,7 @@ export const DateCourseQuestion = [
         filterTitle: '데이트 시간',
     },
     {
-        id: 4,
+        id: 3,
         title: '어떤 식사를 함께할 계획인가요?',
         subTitle: null,
         keyword: '식사 구성',
@@ -40,7 +40,7 @@ export const DateCourseQuestion = [
         filterTitle: '식사 구성',
     },
     {
-        id: 5,
+        id: 4,
         title: '어떻게 이동하실 건가요?',
         subTitle: null,
         keyword: '이동 수단',
@@ -50,7 +50,7 @@ export const DateCourseQuestion = [
         filterTitle: '',
     },
     {
-        id: 6,
+        id: 5,
         title: '오늘은 어떤 분위기의 데이트를 원하시나요?',
         subTitle: null,
         keyword: '데이트 키워드',
@@ -60,7 +60,7 @@ export const DateCourseQuestion = [
         filterTitle: '데이트 키워드',
     },
     {
-        id: 7,
+        id: 6,
         title: '데이트 시작 시간을 알려주세요!',
         subTitle: '24:00 기준',
         keyword: null,

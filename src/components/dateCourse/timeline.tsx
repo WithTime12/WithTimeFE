@@ -42,7 +42,7 @@ function Timeline({ end = false, title, time, address, price, tags, menu }: TTim
                         </div>
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 items-center select-none">
                             <Cash stroke="#000000" className="min-w-[24px]" />
-                            {price}
+                            {price}원
                         </div>
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 lg:items-start">
                             <Blub stroke="#000000" className="min-w-[24px] pt-[4px]" />
