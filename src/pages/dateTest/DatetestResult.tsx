@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import type IDateTestResult from '@/types/datetest/datetest';
 import type { TRelationTypeResponse } from '@/types/datetest/datetest';
 
+import { useUserGrade } from '@/hooks/home/useUserGrade';
+
 import { getRelationTypes } from '@/api/datetest/datetest';
 
 const resultImages = import.meta.glob('../../images/testResults/*.png', {
@@ -116,6 +118,8 @@ export default function DateTestResultPage() {
         };
     });
 
+    const { data: gradeData } = useUserGrade();
+
     return (
         <div className="flex flex-col p-6 max-w-3xl mx-auto">
             <div className="rounded-[32px] px-[16px] py-[8px] font-bold text-sm text-center mt-[88px] mb-[16px] w-[143px]" style={{ backgroundColor: bgColor }}>
@@ -131,7 +135,7 @@ export default function DateTestResultPage() {
             </div>
 
             <h1 className="text-3xl font-bold mb-[40px]">
-                {resultData.typeDescription.preferenceType} 님의
+                {gradeData?.result.username} 님의
                 <br />
                 데이트 취향 유형 결과
             </h1>
