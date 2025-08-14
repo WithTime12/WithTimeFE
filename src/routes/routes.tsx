@@ -4,6 +4,7 @@ import ModalProvider from '@/components/common/modalProvider';
 
 import AuthLayout from '@/layout/authLayout';
 import Layout from '@/layout/layout';
+import MinimalLayout from '@/layout/minimalLayout';
 import FindPw from '@/pages/auth/FindPw';
 import Join from '@/pages/auth/JoinPage';
 import Login from '@/pages/auth/LoginPage';
@@ -125,26 +126,27 @@ const router = createBrowserRouter([
         ],
     },
     {
-        path: '/paymentHistory',
-        element: (
-            <>
-                <Layout />
-                <PaymentHistory />
-            </>
-        ),
-    },
-    {
-        path: '/deleteAccount',
-        element: <DeleteReasonPage />,
-    },
-    {
-        path: '/deleteAccount/confirm',
-        element: <DeleteConfirmPage />,
-    },
-    {
-        path: '/withdraw',
-        element: <Withdraw />,
+        path: '/',
+        element: <MinimalLayout />,
         errorElement: <Error />,
+        children: [
+            {
+                path: '/paymentHistory',
+                element: <PaymentHistory />,
+            },
+            {
+                path: '/deleteAccount',
+                element: <DeleteReasonPage />,
+            },
+            {
+                path: '/deleteAccount/confirm',
+                element: <DeleteConfirmPage />,
+            },
+            {
+                path: '/withdraw',
+                element: <Withdraw />,
+            },
+        ],
     },
 ]);
 
