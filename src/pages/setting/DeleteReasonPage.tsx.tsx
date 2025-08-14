@@ -29,7 +29,7 @@ export default function DeleteReasonPage() {
                 <div className="mt-15 w-full max-w-[530px]">
                     {/* 뒤로가기 */}
                     <div className="mb-5">
-                        <button onClick={() => navigate('/setting', { state: { openSettingTab: '정보' } })}>
+                        <button onClick={() => navigate('/home')}>
                             <ArrowLeftCircle className="fill-current text-default-gray-500" />
                         </button>
                     </div>

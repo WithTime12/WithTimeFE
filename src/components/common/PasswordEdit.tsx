@@ -1,28 +1,25 @@
 import { useState } from 'react';
 import { z } from 'zod';
 
+import { useAccount } from '@/hooks/auth/useAccount';
+
 import AlertCircle from '@/assets/icons/alert-circle_Fill.svg?react';
 
-// 유효성 스키마
+// 비밀번호 유효성 스키마
 const passwordSchema = z.string().min(8, '8자 이상이어야 합니다.').max(32, '32자 이하로 입력해주세요.');
 
 export default function PasswordEditSection() {
-    // 상태 : 편집 여부
-    const [isEditing, setIsEditing] = useState(false);
+    const { useChangePassword } = useAccount();
 
-    // 상태 : 비밀번호 입력값
+    const [isEditing, setIsEditing] = useState(false);
     const [currentPw, setCurrentPw] = useState('');
     const [newPw, setNewPw] = useState('');
     const [confirmPw, setConfirmPw] = useState('');
+    const [errors, setErrors] = useState<{ currentPw?: string; newPw?: string; confirmPw?: string }>({});
 
-    // 상태 : 각 필드별 에러 메시지
-    const [errors, setErrors] = useState<{
-        currentPw?: string;
-        newPw?: string;
-        confirmPw?: string;
-    }>({});
+    const MASK = '********';
 
-    // 취소 버튼
+    // 입력값 초기화
     const handleCancel = () => {
         setCurrentPw('');
         setNewPw('');
@@ -31,39 +28,43 @@ export default function PasswordEditSection() {
         setIsEditing(false);
     };
 
-    // 저장하기 버튼
+    const { mutate: changePw, isPending } = useChangePassword({
+        onSuccess: () => {
+            alert('비밀번호가 변경되었습니다.');
+            handleCancel();
+        },
+        onError: (err) => {
+            const msg = (err as any)?.response?.data?.message ?? '비밀번호 변경에 실패했습니다.';
+            alert(msg);
+        },
+    });
+
+    // 제출
     const handleSubmit = () => {
-        const newErrors: typeof errors = {};
+        const nextErrors: typeof errors = {};
 
-        // 현재 비밀번호 검사
-        if (!currentPw || currentPw.trim().length < 8) {
-            newErrors.currentPw = '8자 이상이어야 합니다.';
+        if (!currentPw) nextErrors.currentPw = '현재 비밀번호를 입력하세요.';
+
+        const newPwCheck = passwordSchema.safeParse(newPw);
+        if (!newPwCheck.success) {
+            nextErrors.newPw = newPwCheck.error.issues[0]?.message ?? '유효하지 않은 비밀번호입니다.';
         }
 
-        // 새 비밀번호 검사
-        const result = passwordSchema.safeParse(newPw);
-        if (!result.success) {
-            newErrors.newPw = result.error.errors[0].message;
-        } else if (newPw === currentPw) {
-            newErrors.newPw = '이전에 사용한 적이 없는 비밀번호여야 합니다.';
-        }
-
-        // 비밀번호 확인 일치
         if (newPw !== confirmPw) {
-            newErrors.confirmPw = '비밀번호가 일치하지 않습니다';
+            nextErrors.confirmPw = '비밀번호가 일치하지 않습니다.';
         }
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
+        setErrors(nextErrors);
+        if (Object.keys(nextErrors).length > 0) return;
 
-        console.log('비밀번호 변경 요청:', { currentPw, newPw });
-        setIsEditing(false);
-        setErrors({});
+        // 제출
+        changePw({
+            currentPassword: currentPw,
+            newPassword: newPw,
+        });
     };
 
-    // input 스타일
+    // 공통 인풋 스타일
     const inputClass = (hasError: boolean) =>
         `w-full h-12 pl-4 pr-10 font-body1 text-black placeholder:text-default-gray-500 rounded-2xl border ${
             hasError ? 'border-warning' : 'border-primary-500'
@@ -71,25 +72,32 @@ export default function PasswordEditSection() {
 
     return (
         <div className="w-full max-w-[360px]">
-            {/* 헤더 - 비밀번호 / 취소 */}
+            {/* 헤더 */}
             <div className="flex justify-between items-center mb-2">
                 <p className="font-body1 text-default-gray-700">비밀번호</p>
                 {isEditing && (
-                    <button onClick={handleCancel} className="px-4 py-1.5 rounding-16 bg-default-gray-400 text-default-gray-700 font-body1">
+                    <button
+                        onClick={handleCancel}
+                        className="px-4 py-1.5 rounding-16 bg-default-gray-400 text-default-gray-700 font-body1 disabled:opacity-60"
+                        disabled={isPending}
+                    >
                         취소
                     </button>
                 )}
             </div>
-            {/* 비편집 모드 - 현재 비밀번호 + 수정 */}
+
+            {/* 비편집 모드 */}
             {!isEditing ? (
                 <div className="relative w-full">
                     <input
                         type="password"
-                        value={currentPw}
+                        value={MASK}
                         readOnly
+                        autoComplete="new-password"
                         className="w-full h-12 pl-4 pr-20 border border-primary-500 rounded-[16px] font-body1 text-black bg-white"
                     />
                     <button
+                        type="button"
                         onClick={() => setIsEditing(true)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1 rounding-32 font-body1 bg-default-gray-400 text-default-gray-700"
                     >
@@ -97,7 +105,7 @@ export default function PasswordEditSection() {
                     </button>
                 </div>
             ) : (
-                // 편집 모드 - 현재/새/확인 비밀번호
+                // 편집 모드
                 <div className="flex flex-col gap-4">
                     {/* 현재 비밀번호 */}
                     <div className="relative">
@@ -107,13 +115,16 @@ export default function PasswordEditSection() {
                             value={currentPw}
                             onChange={(e) => setCurrentPw(e.target.value)}
                             className={inputClass(!!errors.currentPw)}
+                            disabled={isPending}
                         />
                         {errors.currentPw && (
-                            <div className="absolute right-3 top-[20%]">
-                                <AlertCircle className="w-[18px] h-[18px] text-warning" />
-                            </div>
+                            <>
+                                <div className="absolute right-3 top-[20%]">
+                                    <AlertCircle className="w-[18px] h-[18px] text-warning" />
+                                </div>
+                                <p className="mt-1 text-sm text-warning pl-2">{errors.currentPw}</p>
+                            </>
                         )}
-                        {errors.currentPw && <p className="mt-1 text-sm text-warning pl-2">{errors.currentPw}</p>}
                     </div>
 
                     {/* 새 비밀번호 */}
@@ -124,13 +135,16 @@ export default function PasswordEditSection() {
                             value={newPw}
                             onChange={(e) => setNewPw(e.target.value)}
                             className={inputClass(!!errors.newPw)}
+                            disabled={isPending}
                         />
                         {errors.newPw && (
-                            <div className="absolute right-3 top-[20%]">
-                                <AlertCircle className="w-[18px] h-[18px] text-warning" />
-                            </div>
+                            <>
+                                <div className="absolute right-3 top-[20%]">
+                                    <AlertCircle className="w-[18px] h-[18px] text-warning" />
+                                </div>
+                                <p className="mt-1 text-sm text-warning pl-2">{errors.newPw}</p>
+                            </>
                         )}
-                        {errors.newPw && <p className="mt-1 text-sm text-warning pl-2">{errors.newPw}</p>}
                     </div>
 
                     {/* 비밀번호 확인 */}
@@ -141,19 +155,27 @@ export default function PasswordEditSection() {
                             value={confirmPw}
                             onChange={(e) => setConfirmPw(e.target.value)}
                             className={inputClass(!!errors.confirmPw)}
+                            disabled={isPending}
                         />
                         {errors.confirmPw && (
-                            <div className="absolute right-3 top-[20%]">
-                                <AlertCircle className="w-[18px] h-[18px] text-warning" />
-                            </div>
+                            <>
+                                <div className="absolute right-3 top-[20%]">
+                                    <AlertCircle className="w-[18px] h-[18px] text-warning" />
+                                </div>
+                                <p className="mt-1 text-sm text-warning pl-2">{errors.confirmPw}</p>
+                            </>
                         )}
-                        {errors.confirmPw && <p className="mt-1 text-sm text-warning pl-2">{errors.confirmPw}</p>}
                     </div>
 
                     {/* 저장 버튼 */}
                     <div className="flex justify-end">
-                        <button onClick={handleSubmit} className="mt-2 px-6 py-2 rounding-32 font-body1 bg-default-gray-400 text-default-gray-700">
-                            저장하기
+                        <button
+                            type="button"
+                            onClick={handleSubmit}
+                            disabled={isPending}
+                            className="mt-2 px-6 py-2 rounding-32 font-body1 bg-default-gray-400 text-default-gray-700 disabled:opacity-60"
+                        >
+                            {isPending ? '저장 중…' : '저장하기'}
                         </button>
                     </div>
                 </div>

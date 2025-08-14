@@ -1,5 +1,4 @@
-//setting - common input box
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import SearchIcon from '@/assets/icons/Search_Blank.svg?react';
 
@@ -15,10 +14,14 @@ interface IEditableInputBoxProps {
     onSearchClick?: () => void;
     className?: string;
     placeholder?: string;
+    readOnly?: boolean;
+    onEditStart?: () => void;
+    onFocus?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
 export default function EditableInputBox({
     mode = 'default',
+    type,
     label = '',
     value,
     onChange,
@@ -28,11 +31,28 @@ export default function EditableInputBox({
     onSearchClick,
     className = '',
     placeholder = '',
+    readOnly = false,
+    onEditStart,
+    onFocus,
 }: IEditableInputBoxProps) {
     const [isEditing, setIsEditing] = useState(false);
 
     const isNickname = mode === 'nickname';
     const isSearch = mode === 'search';
+
+    const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+
+    // 편집 모드 - 자동 포커스 + 전체 선택
+    useEffect(() => {
+        const el = inputRef.current;
+        if (isNickname && isEditing && el) {
+            const frameId = requestAnimationFrame(() => {
+                el.focus();
+                (el as HTMLInputElement | HTMLTextAreaElement).select();
+            });
+            return () => cancelAnimationFrame(frameId);
+        }
+    }, [isNickname, isEditing]);
 
     const handleCancel = () => {
         setIsEditing(false);
@@ -69,40 +89,54 @@ export default function EditableInputBox({
             {label && <p className="font-body1 text-default-gray-700 mb-1">{label}</p>}
 
             <div className="relative w-full">
-                {/* 닉네임 - 수정 중일 때 textarea */}
+                {/* 닉네임 */}
                 {isNickname && isEditing ? (
-                    <textarea value={value} onChange={onChange} placeholder={placeholder} maxLength={maxLength} className={`${sharedClassName} resize-none`} />
-                ) : (
-                    <input
-                        type="text"
+                    <textarea
+                        ref={inputRef as React.RefObject<HTMLTextAreaElement>}
                         value={value}
                         onChange={onChange}
-                        readOnly={isNickname ? !isEditing : false}
+                        placeholder={placeholder}
+                        maxLength={maxLength}
+                        className={`${sharedClassName} resize-none`}
+                        onFocus={onFocus}
+                    />
+                ) : (
+                    <input
+                        ref={inputRef as React.RefObject<HTMLInputElement>}
+                        type={type ?? 'text'}
+                        value={value}
+                        onChange={onChange}
+                        readOnly={readOnly || (isNickname ? !isEditing : false)}
                         placeholder={placeholder}
                         maxLength={maxLength}
                         onKeyDown={handleKeyDown}
                         className={sharedClassName}
+                        onFocus={onFocus}
                     />
                 )}
 
-                {/* 수정 버튼 */}
+                {/* 수정 */}
                 {isNickname && !isEditing && (
                     <button
-                        onClick={() => setIsEditing(true)}
+                        type="button"
+                        onClick={() => {
+                            setIsEditing(true);
+                            onEditStart?.();
+                        }}
                         className="absolute right-3 top-1/2 -translate-y-1/2 font-body1 px-3 py-1 rounded-full bg-default-gray-400 text-default-gray-700"
                     >
                         수정
                     </button>
                 )}
 
-                {/* 글자 수 표시 */}
+                {/* 글자 수 */}
                 {isNickname && isEditing && (
                     <span className="absolute bottom-2 right-4 font-body1 text-default-gray-500">
                         {value.length} / {maxLength}
                     </span>
                 )}
 
-                {/* 검색 버튼 */}
+                {/* 검색 */}
                 {isSearch && (
                     <button type="button" onClick={onSearchClick} className="absolute right-3 top-1/2 -translate-y-1/2 p-1">
                         <SearchIcon className="w-5 h-5 text-primary-500" stroke="currentColor" />
@@ -110,7 +144,7 @@ export default function EditableInputBox({
                 )}
             </div>
 
-            {/* 취소, 완료 버튼 */}
+            {/* 취소, 완료 */}
             {isNickname && isEditing && (
                 <div className="flex justify-end gap-2 mt-3">
                     <button onClick={handleCancel} className="font-body1 px-4 py-1.5 rounded-full bg-default-gray-400 text-default-gray-700">
