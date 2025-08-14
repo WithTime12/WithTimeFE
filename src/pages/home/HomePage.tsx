@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
+import { useAccount } from '@/hooks/auth/useAccount';
 import { useUserGrade } from '@/hooks/home/useUserGrade';
 
 import Banner from '@/components/home/banner';
@@ -32,6 +33,9 @@ function Home() {
     }, [requestAndRegister]);
 
     const { data: gradeData, isLoading, error } = useUserGrade();
+    const { useGetMemberInfo } = useAccount();
+    const { data: memberInfo } = useGetMemberInfo();
+
     if (error) return <Navigate to="/error" replace />;
     if (isLoading) {
         return (
@@ -40,13 +44,14 @@ function Home() {
             </div>
         );
     }
+
     return (
         <div className="bg-default-gray-100 min-h-screen mb-[40px]">
             <Banner />
             <section className="flex flex-col sm:px-10 px-5 gap-[120px] mt-20">
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <span className="font-heading2">{gradeData?.result.username}</span>
+                        <span className="font-heading2">{memberInfo?.result?.username}</span>
                         <span className="font-heading3">님의 WithTime</span>
                     </div>
                     <div className="max-w-9xl mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6">

@@ -28,7 +28,6 @@ import Question from '@/pages/question/Question';
 import DeleteConfirmPage from '@/pages/setting/DeleteConfirmPage';
 import DeleteReasonPage from '@/pages/setting/DeleteReasonPage.tsx';
 import PaymentHistory from '@/pages/setting/PaymentHistory';
-import SettingEntryPage from '@/pages/setting/SettingEntryPage';
 
 function ProtectedRoute({ children }: PropsWithChildren) {
     //추후 실제 로그인 여부로 대체 필요
@@ -96,7 +95,7 @@ const router = createBrowserRouter([
                 element: <Notice />,
             },
             {
-                path: 'notice/:id',
+                path: 'notice/:noticeId',
                 element: <NoticeDetail />,
             },
             {
@@ -137,23 +136,29 @@ const router = createBrowserRouter([
             },
         ],
     },
-
-    // Setting page 연결
-    {
-        path: '/setting',
-        element: <SettingEntryPage />,
-    },
     {
         path: '/paymentHistory',
-        element: <PaymentHistory />, // 결제 내역 확인
+        element: (
+            <ProtectedRoute>
+                <PaymentHistory />
+            </ProtectedRoute>
+        ),
     },
     {
         path: '/deleteAccount',
-        element: <DeleteReasonPage />, // 탈퇴 사유 선택
+        element: (
+            <ProtectedRoute>
+                <DeleteReasonPage />
+            </ProtectedRoute>
+        ),
     },
     {
         path: '/deleteAccount/confirm',
-        element: <DeleteConfirmPage />, // 탈퇴 확정
+        element: (
+            <ProtectedRoute>
+                <DeleteConfirmPage />
+            </ProtectedRoute>
+        ),
     },
     {
         path: '/withdraw',

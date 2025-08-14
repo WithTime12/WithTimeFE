@@ -1,66 +1,46 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import type { TNoticeDetail } from '@/types/notice/notice';
+import { formatDateDot } from '@/utils/date';
 
-import { fetchNoticeDetail } from '@/api/notice/notice';
+import { useNotice } from '@/hooks/notice/useNotice';
 
 export default function NoticeDetail() {
     const navigate = useNavigate();
-    const location = useLocation();
-    const noticeId = location.state?.noticeId;
+    const { noticeId } = useParams<{ noticeId: string }>(); // URL에서 noticeId 추출
+    const id = Number(noticeId);
+    const isValidId = Number.isInteger(id) && id > 0; // Id 유효성 계산
 
-    const [notice, setNotice] = useState<TNoticeDetail | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const { useGetNoticeDetail } = useNotice();
+    const { data, isLoading, isError } = useGetNoticeDetail(id);
 
-    useEffect(() => {
-        if (!noticeId) {
-            setError('공지사항 ID가 없습니다.');
-            return;
-        }
-
-        const loadNotice = async () => {
-            setLoading(true);
-            try {
-                const res = await fetchNoticeDetail(noticeId);
-
-                if (!res.isSuccess || !res.result) {
-                    throw new Error(res.message);
-                }
-
-                setNotice(res.result);
-            } catch (err) {
-                console.error('📛 공지사항 상세 조회 오류:', err);
-                setError('공지사항을 불러오는 데 실패했습니다.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadNotice();
-    }, [noticeId]);
-
-    if (loading) return <div className="text-center mt-10">로딩 중...</div>;
-    if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
+    // Id 유효성 검사 -> 훅 호출
+    if (!isValidId) {
+        return <div className="text-center font-body1 text-default-gray-500 py-50">잘못된 공지사항 ID입니다.</div>;
+    }
+    if (isLoading) {
+        return <div className="text-center font-body1 text-default-gray-500 py-50">로딩 중</div>;
+    }
+    if (isError || !data?.result) {
+        return <div className="text-center font-body1 text-default-gray-500 py-50">공지사항을 불러오는 데 실패했습니다.</div>;
+    }
+    const notice = data?.result ?? null;
 
     return (
         <div className="max-w-[1000px] mx-auto px-4 py-10">
-            {/* 타이틀 */}
             <h1 className="mb-8 font-heading2">공지사항</h1>
 
-            {/* 공지 제목 + 날짜 */}
+            {/* 제목 + 작성일 */}
             <div className="border-y border-default-gray-400 py-4 mb-8">
-                <p className="font-heading3 mb-1">{notice?.title}</p>
-                <p className="font-body1 text-default-gray-500">{new Date(notice?.createdAt || '').toLocaleDateString()}</p>
+                <p className="font-heading3 text-default-gray-800 mb-2">{notice.title}</p>
+                <p className="font-body1 text-default-gray-500">{formatDateDot(notice.createdAt)}</p>
             </div>
 
-            {/* 본문 */}
-            <div className="whitespace-pre-line leading-relaxed mb-12 font-body2">{notice?.content || '내용이 없습니다.'}</div>
+            {/* 내용 */}
+            <div className="whitespace-pre-line leading-relaxed mb-12 font-body2">{notice.content || '내용이 없습니다.'}</div>
 
-            {/* 목록으로 돌아가기 */}
+            {/* 목록으로 돌아가기 버튼 */}
             <div>
-                <button onClick={() => navigate('/notice')} className="px-6 py-2 rounded-full bg-primary-500 text-white">
+                <button onClick={() => navigate('/notice')} className="px-6 py-2 rounded-full font-body1 bg-primary-500 text-white">
                     목록으로 돌아가기
                 </button>
             </div>

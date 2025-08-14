@@ -4,13 +4,13 @@ import type { Messaging } from 'firebase/messaging';
 import { deleteToken, getMessaging, getToken, isSupported } from 'firebase/messaging';
 
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_MESSAGE_SENDER_ID,
-    appId: import.meta.env.VITE_APP_ID,
-    measurementId: import.meta.env.VITE_MEASUREMENT_ID,
+    apiKey: 'AIzaSyAjZqK2lhCOeX_P2Sf-_2IGEFlORchcO5w',
+    authDomain: 'withtime-ff471.firebaseapp.com',
+    projectId: 'withtime-ff471',
+    storageBucket: 'withtime-ff471.firebasestorage.app',
+    messagingSenderId: '47995224236',
+    appId: '1:47995224236:web:85371605ce4a6659529f09',
+    measurementId: 'G-5E8Q23LL4H',
 };
 
 const app = initializeApp(firebaseConfig);
