@@ -12,7 +12,7 @@ export default function Error() {
                     요청하신 페이지를 찾을 수 없습니다 <br /> 경로가 잘못되었거나, 인터넷 연결이 불안정할 수 있습니다
                 </p>
 
-                <Button onClick={() => window.history.back()} size={'big-16'} variant={'mint'} className="text-[22px]">
+                <Button onClick={() => window.history.back()} size={'big-16'} variant={'mint'}>
                     이전 페이지로 돌아가기
                 </Button>
             </div>
