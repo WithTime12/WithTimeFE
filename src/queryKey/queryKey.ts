@@ -17,9 +17,9 @@ export const homeKeys = createQueryKeys('home', {
     dateCourseSave: () => ['date-courses', 'saved-count'],
     weather: (startDate: string, regionId: number) => ['weather', 'forecast', startDate, regionId],
     rainyInfo: (startDate: string, regionId: number) => ['rainy', 'forecast', startDate, regionId],
-    keywords: () => ['keywords'],
-    dateTimes: () => ['dateTimes'],
-    monthlyPlaceStates: () => ['monthlyPlaceStates'],
+    keywords: null,
+    dateTimes: null,
+    monthlyPlaceStates: null,
     userRegion: () => ['user', 'region'],
 });
 

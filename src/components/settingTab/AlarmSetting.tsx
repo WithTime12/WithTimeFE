@@ -39,25 +39,24 @@ export default function AlarmSetting() {
 
     // 토글 핸들러
     const handleToggle = (key: TAlarmType) => {
-        const prev = alarmSetting;
-        const next = { ...prev, [key]: !prev[key] };
-        setAlarmSetting(next);
-
-        patchAlarm(
-            {
-                emailAlarm: next.email,
-                pushAlarm: next.push,
-                smsAlarm: next.sms,
-            },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: alarmKeys.alarmSettings().queryKey });
+        setAlarmSetting((prev) => {
+            const next = { ...prev, [key]: !prev[key] };
+            patchAlarm(
+                {
+                    emailAlarm: next.email,
+                    pushAlarm: next.push,
+                    smsAlarm: next.sms,
                 },
-                onError: () => setAlarmSetting(prev),
-            },
-        );
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({ queryKey: alarmKeys.alarmSettings().queryKey });
+                    },
+                    onError: () => setAlarmSetting(prev),
+                },
+            );
+            return next;
+        });
     };
-
     const items: { label: string; key: TAlarmType }[] = [
         { label: 'Email 알람', key: 'email' },
         { label: '푸쉬 알람', key: 'push' },

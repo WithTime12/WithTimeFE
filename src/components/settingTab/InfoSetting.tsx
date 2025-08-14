@@ -53,8 +53,9 @@ export default function InfoSetting() {
                         localStorage.setItem('nickname', next);
 
                         queryClient.invalidateQueries({ queryKey: memberKeys.all.queryKey });
-
-                        queryClient.setQueryData(['userGrade'], (old: any) => (old ? { ...old, result: { ...old.result, username: next } } : old));
+                        queryClient.setQueryData(memberKeys.memberGrade().queryKey, (old: any) =>
+                            old ? { ...old, result: { ...old.result, username: next } } : old,
+                        );
                     } else {
                         alert(res?.message ?? '닉네임 변경에 실패했습니다.');
                     }

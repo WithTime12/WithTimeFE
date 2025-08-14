@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import GraySvgButton from '@/components/common/graySvgButton';
 import Navigator from '@/components/common/navigator';
 import Header from '@/components/layout/Header';
 import PaymentRow from '@/components/payment/PaymentRow';
-
-import ArrowLeftCircle from '@/assets/icons/Arrow_left_circle.svg?react';
 
 const dummyData = [
     { orderNumber: '202219486', date: '2024.01.15', amount: '₩2,900', method: '카카오페이', status: '환불처리' },
@@ -31,18 +30,16 @@ export default function PaymentHistory() {
     }, [currentPage, itemsPerPage]);
 
     return (
-        <div>
+        <div className="h-[100vh]">
             {/* 헤더 */}
             <Header mode="minimal" />
 
-            <div className="max-w-[960px] mx-auto font-body1 text-default-gray-800">
-                {/* 뒤로가기*/}
-                <button onClick={() => navigate('/home')}>
-                    <ArrowLeftCircle className="fill-current text-default-gray-500 mb-5" />
-                </button>
-
-                {/* 제목 */}
-                <h1 className="mb-10 font-heading2">결제 내역 확인</h1>
+            <div className="max-w-[960px] px-[20px] mx-auto font-body1 text-default-gray-800 mt-[30px]">
+                <div className="w-full flex flex-col gap-[10px]">
+                    <GraySvgButton onClick={() => navigate('/home')} type="backward" />
+                    {/* 제목 */}
+                    <h1 className="mb-10 font-heading2">결제 내역 확인</h1>
+                </div>
 
                 {/* 테이블 */}
                 <div className="overflow-x-auto">
@@ -71,7 +68,9 @@ export default function PaymentHistory() {
                 </div>
 
                 {/* 페이지네이션*/}
-                <Navigator current={currentPage} end={totalPages} onClick={setCurrentPage} />
+                <div className="mt-auto">
+                    <Navigator current={currentPage} end={totalPages} onClick={setCurrentPage} />
+                </div>
             </div>
         </div>
     );
