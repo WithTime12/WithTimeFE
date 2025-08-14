@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -13,8 +14,23 @@ import MainInfo from '@/components/home/info';
 import Level from '@/components/home/level';
 import WordCloudCard from '@/components/home/wordCloud';
 
+import { useDeviceTokenContext } from '@/providers/deviceTokenProvider';
+
 function Home() {
-    // useDeviceToken();
+    const { requestAndRegister } = useDeviceTokenContext();
+
+    useEffect(() => {
+        const fire = () => {
+            requestAndRegister().catch((err) => {
+                console.error('Device token 등록 실패:', err);
+            });
+        };
+
+        window.addEventListener('pointerdown', fire, { once: true });
+        return () => {
+            window.removeEventListener('pointerdown', fire);
+        };
+    }, [requestAndRegister]);
 
     const { data: gradeData, isLoading, error } = useUserGrade();
     const { useGetMemberInfo } = useAccount();

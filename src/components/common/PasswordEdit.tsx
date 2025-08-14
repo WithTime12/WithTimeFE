@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { useAccount } from '@/hooks/auth/useAccount';
@@ -28,16 +29,7 @@ export default function PasswordEditSection() {
         setIsEditing(false);
     };
 
-    const { mutate: changePw, isPending } = useChangePassword({
-        onSuccess: () => {
-            alert('비밀번호가 변경되었습니다.');
-            handleCancel();
-        },
-        onError: (err) => {
-            const msg = (err as any)?.response?.data?.message ?? '비밀번호 변경에 실패했습니다.';
-            alert(msg);
-        },
-    });
+    const { mutate: changePw, isPending } = useChangePassword();
 
     // 제출
     const handleSubmit = () => {
@@ -58,10 +50,22 @@ export default function PasswordEditSection() {
         if (Object.keys(nextErrors).length > 0) return;
 
         // 제출
-        changePw({
-            currentPassword: currentPw,
-            newPassword: newPw,
-        });
+        changePw(
+            {
+                currentPassword: currentPw,
+                newPassword: newPw,
+            },
+            {
+                onSuccess: () => {
+                    alert('비밀번호가 변경되었습니다.');
+                    handleCancel();
+                },
+                onError: (err: AxiosError) => {
+                    const msg = (err as any)?.response?.data?.message ?? '비밀번호 변경에 실패했습니다.';
+                    alert(msg);
+                },
+            },
+        );
     };
 
     // 공통 인풋 스타일

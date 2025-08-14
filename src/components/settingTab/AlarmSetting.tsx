@@ -4,6 +4,9 @@ import { useGetAlarmSettings, usePatchAlarmSettings } from '@/hooks/settingAlarm
 
 import ToggleSwitch from '@/components/common/ToggleSwitch';
 
+import { queryClient } from '@/api/queryClient';
+import { alarmKeys } from '@/queryKey/queryKey';
+
 type TAlarmType = 'email' | 'push' | 'sms';
 
 interface IAlarmSettingState {
@@ -36,22 +39,24 @@ export default function AlarmSetting() {
 
     // 토글 핸들러
     const handleToggle = (key: TAlarmType) => {
-        const prev = alarmSetting;
-        const next = { ...prev, [key]: !prev[key] };
-        setAlarmSetting(next);
-
-        patchAlarm(
-            {
-                emailAlarm: next.email,
-                pushAlarm: next.push,
-                smsAlarm: next.sms,
-            },
-            {
-                onError: () => setAlarmSetting(prev),
-            },
-        );
+        setAlarmSetting((prev) => {
+            const next = { ...prev, [key]: !prev[key] };
+            patchAlarm(
+                {
+                    emailAlarm: next.email,
+                    pushAlarm: next.push,
+                    smsAlarm: next.sms,
+                },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({ queryKey: alarmKeys.alarmSettings().queryKey });
+                    },
+                    onError: () => setAlarmSetting(prev),
+                },
+            );
+            return next;
+        });
     };
-
     const items: { label: string; key: TAlarmType }[] = [
         { label: 'Email 알람', key: 'email' },
         { label: '푸쉬 알람', key: 'push' },
@@ -59,9 +64,9 @@ export default function AlarmSetting() {
     ];
 
     return (
-        <div className="mt-5 flex flex-col gap-10 p-8">
+        <div className="mt-5 flex flex-col gap-10">
             {items.map(({ label, key }) => (
-                <div key={key} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6 w-full">
+                <div key={key} className="flex sm:items-center justify-between gap-3 sm:gap-6 w-full sm:px-0 px-[20px]">
                     <p className="font-heading3 text-default-gray-800 truncate overflow-hidden">{label}</p>
                     <ToggleSwitch value={alarmSetting[key]} onChange={() => handleToggle(key)} onLabel="ON" offLabel="OFF" />
                 </div>

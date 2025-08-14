@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { TERMS_URL } from '@/constants/policies';
 
-import { QUERY_KEYS, useAccount } from '@/hooks/auth/useAccount';
+import { useAccount } from '@/hooks/auth/useAccount';
 
 import EditableInputBox from '../common/EditableInputBox';
 import PasswordEditSection from '../common/PasswordEdit';
 
+import { queryClient } from '@/api/queryClient';
 import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?react';
-
-const getApiErrorMessage = (err: any, fallback: string) => err?.response?.data?.message ?? (err?.response?.status === 401 ? '로그인이 필요합니다.' : fallback);
+import { memberKeys } from '@/queryKey/queryKey';
 
 export default function InfoSetting() {
-    const qc = useQueryClient();
     const { useGetMemberInfo, useChangeNickname, useResetPreferences } = useAccount();
 
     const { data: memberData, isLoading: infoLoading, isError: infoError } = useGetMemberInfo();
@@ -32,40 +30,32 @@ export default function InfoSetting() {
         }
     }, [apiNickname]);
 
-    const { mutate: changeNickname, isPending: nickPending } = useChangeNickname({
-        onSuccess: (res) => {
-            if (res?.isSuccess) {
-                const next = res.result.username;
-                setNickname(next);
-                setInitialNickname(next);
-                localStorage.setItem('nickname', next);
+    const { mutate: changeNickname, isPending: nickPending } = useChangeNickname();
 
-                qc.invalidateQueries({ queryKey: QUERY_KEYS.memberInfo });
-                qc.invalidateQueries({ queryKey: QUERY_KEYS.memberGrade });
-                qc.setQueryData(['userGrade'], (old: any) => (old ? { ...old, result: { ...old.result, username: next } } : old));
-            } else {
-                alert(res?.message ?? '닉네임 변경에 실패했습니다.');
-            }
-        },
-        onError: (err: any) => alert(getApiErrorMessage(err, '닉네임 변경에 실패했습니다.')),
-    });
-
-    const { mutate: resetPref, isPending: resetPending } = useResetPreferences({
-        onSuccess: (res) => {
-            if (res?.isSuccess) {
-                alert('취향 데이터가 초기화되었습니다.');
-            } else {
-                alert(res?.message ?? '초기화에 실패했습니다.');
-            }
-        },
-        onError: (err: any) => alert(getApiErrorMessage(err, '초기화에 실패했습니다.')),
-    });
+    const { mutate: resetPref, isPending: resetPending } = useResetPreferences();
 
     const handleSubmitNickname = () => {
         const trimmed = nickname.trim();
         if (!trimmed) return alert('닉네임을 입력해 주세요.');
         if (trimmed === initialNickname || nickPending) return;
-        changeNickname({ username: trimmed });
+        changeNickname(
+            { username: trimmed },
+            {
+                onSuccess: (res) => {
+                    if (res?.isSuccess) {
+                        const next = res.result.username;
+                        setNickname(next);
+                        setInitialNickname(next);
+                        localStorage.setItem('nickname', next);
+
+                        queryClient.invalidateQueries({ queryKey: memberKeys._def });
+                    } else {
+                        alert(res?.message ?? '닉네임 변경에 실패했습니다.');
+                    }
+                },
+                onError: () => alert('닉네임 변경에 실패했습니다.'),
+            },
+        );
     };
 
     const handleCancelNickname = () => {
@@ -75,11 +65,20 @@ export default function InfoSetting() {
     const handleResetPreferences = () => {
         if (resetPending) return;
         if (!confirm('정말 초기화할까요? 되돌릴 수 없습니다.')) return;
-        resetPref();
+        resetPref(undefined, {
+            onSuccess: (res: any) => {
+                if (res?.isSuccess) {
+                    alert('취향 데이터가 초기화되었습니다.');
+                } else {
+                    alert(res?.message ?? '초기화에 실패했습니다.');
+                }
+            },
+            onError: () => alert('초기화에 실패했습니다.'),
+        });
     };
 
     return (
-        <div className="mt-5 flex flex-col items-start gap-5 p-5">
+        <div className="mt-5 flex flex-col items-start gap-5 px-[2px]">
             {/* 닉네임 */}
             <EditableInputBox
                 mode="nickname"
@@ -93,14 +92,18 @@ export default function InfoSetting() {
             />
 
             {/* 이메일 */}
-            <EditableInputBox
-                label="이메일"
-                value={infoLoading ? '불러오는 중' : infoError ? '' : email}
-                readOnly
-                onChange={() => {}}
-                className="pointer-events-none"
-                placeholder="이메일"
-            />
+            <div className={`w-full max-w-[360px] flex flex-col`}>
+                <p className="font-body1 text-default-gray-700 mb-1">{'이메일'}</p>
+                <div
+                    className="text-ellipsis overflow-hidden whitespace-nowrap
+                                max-w-[360px] text-center flex items-center
+                                w-full pl-4 border border-primary-500 rounding-16
+                                text-base font-medium h-12 pr-16 text-black
+                                caret-primary-500"
+                >
+                    {infoLoading ? '불러오는 중' : infoError ? '' : email}
+                </div>
+            </div>
 
             {/* 비밀번호 변경 */}
             <PasswordEditSection />

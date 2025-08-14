@@ -1,15 +1,13 @@
 // hooks/settingAlarm/useAlarms.ts
-import { useQueryClient } from '@tanstack/react-query';
-
-import type { TAlarmSettings, TGetAlarmSettingsResp, TPatchAlarmSettingsResp } from '@/types/settingAlarm/alarm';
 
 import { useCoreMutation, useCoreQuery } from '@/hooks/customQuery';
 
 import { getAlarmSettings, patchAlarmSettings } from '@/api/settingAlarm/alarm';
+import { alarmKeys } from '@/queryKey/queryKey';
 
 // 조회
 export function useGetAlarmSettings() {
-    return useCoreQuery<TGetAlarmSettingsResp, TAlarmSettings>(['alarmSettings'], getAlarmSettings, {
+    return useCoreQuery(alarmKeys.alarmSettings().queryKey, getAlarmSettings, {
         select: (resp) => resp.result,
         refetchOnWindowFocus: false,
     });
@@ -17,10 +15,5 @@ export function useGetAlarmSettings() {
 
 // 업데이트
 export function usePatchAlarmSettings() {
-    const qc = useQueryClient();
-    return useCoreMutation<TPatchAlarmSettingsResp, TAlarmSettings>(patchAlarmSettings, {
-        onSuccess: () => {
-            qc.invalidateQueries({ queryKey: ['alarmSettings'] });
-        },
-    });
+    return useCoreMutation(patchAlarmSettings);
 }

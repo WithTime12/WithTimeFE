@@ -1,54 +1,38 @@
-import type {
-    TChangeNicknameMutationOptions,
-    TChangeNicknameMutationResult,
-    TChangeNicknamePayload,
-    TChangeNicknameResponse,
-    TChangePasswordMutationOptions,
-    TChangePasswordMutationResult,
-    TChangePasswordPayload,
-} from '@/types/auth/account';
-import type { TUseMutationCustomOptions } from '@/types/common/common';
-import type { TResetPreferencesResponse } from '@/types/dates/preferences';
-
 import { useCoreMutation, useCoreQuery } from '@/hooks/customQuery';
 
 import { changeNickname, changePassword, deleteMember, getMemberGrade, getMemberInfo } from '@/api/auth/account';
 import { resetPreferences } from '@/api/dates/preferences';
-
-export const QUERY_KEYS = {
-    memberInfo: ['memberInfo'] as const,
-    memberGrade: ['memberGrade'] as const,
-} as const;
+import { memberKeys } from '@/queryKey/queryKey';
 
 export function useAccount() {
     // 비밀번호 변경
-    function useChangePassword(options?: TChangePasswordMutationOptions): TChangePasswordMutationResult {
-        return useCoreMutation<void, TChangePasswordPayload>(changePassword, options);
+    function useChangePassword() {
+        return useCoreMutation(changePassword);
     }
 
     // 닉네임 변경
-    function useChangeNickname(options?: TChangeNicknameMutationOptions): TChangeNicknameMutationResult {
-        return useCoreMutation<TChangeNicknameResponse, TChangeNicknamePayload>(changeNickname, options);
+    function useChangeNickname() {
+        return useCoreMutation(changeNickname);
     }
 
     // 회원 탈퇴
-    function useDeleteMember(options?: TUseMutationCustomOptions<void, void>) {
-        return useCoreMutation<void, void>(deleteMember, options);
+    function useDeleteMember() {
+        return useCoreMutation(deleteMember);
     }
 
     // 사용자 정보 조회
     function useGetMemberInfo() {
-        return useCoreQuery(QUERY_KEYS.memberInfo, getMemberInfo);
+        return useCoreQuery(memberKeys.memberInfo.queryKey, getMemberInfo);
     }
 
     // 사용자 등급 조회
     function useGetMemberGrade() {
-        return useCoreQuery(QUERY_KEYS.memberGrade, getMemberGrade);
+        return useCoreQuery(memberKeys.memberGrade.queryKey, getMemberGrade);
     }
 
     // 취향 데이터 초기화
-    function useResetPreferences(options?: TUseMutationCustomOptions<TResetPreferencesResponse, void>) {
-        return useCoreMutation<TResetPreferencesResponse, void>(resetPreferences, options);
+    function useResetPreferences() {
+        return useCoreMutation(resetPreferences);
     }
 
     return { useChangePassword, useChangeNickname, useDeleteMember, useGetMemberInfo, useGetMemberGrade, useResetPreferences };

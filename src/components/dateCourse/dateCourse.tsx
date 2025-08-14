@@ -20,7 +20,6 @@ function DateCourse({ defaultOpen = false }: { defaultOpen?: boolean }) {
         } else {
             setIsBookmarked(!isBookmarked);
         }
-        // console.log('북마크 해제');
     };
 
     useEffect(() => {

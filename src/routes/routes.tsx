@@ -1,10 +1,10 @@
-import type { PropsWithChildren } from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider';
 
 import AuthLayout from '@/layout/authLayout';
 import Layout from '@/layout/layout';
+import MinimalLayout from '@/layout/minimalLayout';
 import FindPw from '@/pages/auth/FindPw';
 import Join from '@/pages/auth/JoinPage';
 import Login from '@/pages/auth/LoginPage';
@@ -28,17 +28,6 @@ import Question from '@/pages/question/Question';
 import DeleteConfirmPage from '@/pages/setting/DeleteConfirmPage';
 import DeleteReasonPage from '@/pages/setting/DeleteReasonPage.tsx';
 import PaymentHistory from '@/pages/setting/PaymentHistory';
-
-function ProtectedRoute({ children }: PropsWithChildren) {
-    //추후 실제 로그인 여부로 대체 필요
-    const isLoggedIn = true;
-
-    if (!isLoggedIn) {
-        return <Navigate to="/" replace />;
-    }
-
-    return children;
-}
 
 const router = createBrowserRouter([
     {
@@ -75,10 +64,10 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: (
-            <ProtectedRoute>
+            <>
                 <ModalProvider />
                 <Layout />
-            </ProtectedRoute>
+            </>
         ),
         errorElement: <Error />,
         children: [
@@ -137,37 +126,27 @@ const router = createBrowserRouter([
         ],
     },
     {
-        path: '/paymentHistory',
-        element: (
-            <ProtectedRoute>
-                <PaymentHistory />
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: '/deleteAccount',
-        element: (
-            <ProtectedRoute>
-                <DeleteReasonPage />
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: '/deleteAccount/confirm',
-        element: (
-            <ProtectedRoute>
-                <DeleteConfirmPage />
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: '/withdraw',
-        element: (
-            <ProtectedRoute>
-                <Withdraw />
-            </ProtectedRoute>
-        ),
+        path: '/',
+        element: <MinimalLayout />,
         errorElement: <Error />,
+        children: [
+            {
+                path: 'paymentHistory',
+                element: <PaymentHistory />,
+            },
+            {
+                path: 'deleteAccount',
+                element: <DeleteReasonPage />,
+            },
+            {
+                path: 'deleteAccount/confirm',
+                element: <DeleteConfirmPage />,
+            },
+            {
+                path: 'withdraw',
+                element: <Withdraw />,
+            },
+        ],
     },
 ]);
 
