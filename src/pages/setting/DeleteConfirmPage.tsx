@@ -6,7 +6,9 @@ import { useAccount } from '@/hooks/auth/useAccount';
 import CommonAuthInput from '@/components/auth/commonAuthInput';
 import Header from '@/components/layout/Header';
 
+import { queryClient } from '@/api/queryClient';
 import ArrowLeftCircle from '@/assets/icons/Arrow_left_circle.svg?react';
+import useAuthStore from '@/store/useAuthStore';
 
 // 탈퇴 안내 배열
 const withdrawNotices = [
@@ -32,6 +34,7 @@ export default function DeleteConfirmPage() {
 
     // 사용자 정보 가져오기
     const { data: memberData, isLoading: infoLoading, isError: infoError } = useGetMemberInfo();
+    const { setEmail, setPassword, setSocialId } = useAuthStore();
     const userEmail = memberData?.result?.email ?? ''; // ← 여기서 이메일 사용
 
     const { mutate: deleteAccount, isPending } = useDeleteMember();
@@ -46,7 +49,10 @@ export default function DeleteConfirmPage() {
             {
                 onSuccess: () => {
                     alert('회원 탈퇴가 완료되었습니다.');
-                    localStorage.removeItem('accessToken');
+                    setEmail('');
+                    setPassword('');
+                    setSocialId(-1);
+                    queryClient.clear();
                     navigate('/', { replace: true });
                 },
                 onError: (error) => {

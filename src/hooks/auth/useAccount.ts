@@ -2,11 +2,7 @@ import { useCoreMutation, useCoreQuery } from '@/hooks/customQuery';
 
 import { changeNickname, changePassword, deleteMember, getMemberGrade, getMemberInfo } from '@/api/auth/account';
 import { resetPreferences } from '@/api/dates/preferences';
-
-export const QUERY_KEYS = {
-    memberInfo: ['memberInfo'] as const,
-    memberGrade: ['memberGrade'] as const,
-} as const;
+import { memberKeys } from '@/queryKey/queryKey';
 
 export function useAccount() {
     // 비밀번호 변경
@@ -26,12 +22,12 @@ export function useAccount() {
 
     // 사용자 정보 조회
     function useGetMemberInfo() {
-        return useCoreQuery(QUERY_KEYS.memberInfo, getMemberInfo);
+        return useCoreQuery(memberKeys.memberInfo().queryKey, getMemberInfo);
     }
 
     // 사용자 등급 조회
     function useGetMemberGrade() {
-        return useCoreQuery(QUERY_KEYS.memberGrade, getMemberGrade);
+        return useCoreQuery(memberKeys.memberGrade().queryKey, getMemberGrade);
     }
 
     // 취향 데이터 초기화

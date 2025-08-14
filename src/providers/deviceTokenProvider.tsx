@@ -25,7 +25,6 @@ type TProps = {
 };
 
 export function DeviceTokenProvider({ children, refetchKeys = [], onForegroundMessage }: TProps) {
-    const qc = queryClient;
     const [token, setToken] = useState<string | null>(null);
     const [supported, setSupported] = useState<boolean | null>(null);
     const [permission, setPermission] = useState<NotificationPermission | null>(null);
@@ -45,12 +44,12 @@ export function DeviceTokenProvider({ children, refetchKeys = [], onForegroundMe
         if (!messaging || messageUnsubRef.current) return;
         const unsub = onMessage(messaging, (payload) => {
             refetchKeys.forEach((key) => {
-                qc.invalidateQueries({ queryKey: key });
+                void queryClient.invalidateQueries({ queryKey: key });
             });
             onForegroundMessage?.(payload);
         });
         messageUnsubRef.current = unsub;
-    }, [onForegroundMessage, qc, refetchKeys]);
+    }, [onForegroundMessage, queryClient, refetchKeys]);
 
     const requestAndRegister = useCallback(async () => {
         if (supported === false) {
@@ -98,9 +97,9 @@ export function DeviceTokenProvider({ children, refetchKeys = [], onForegroundMe
             initOnceRef.current = false;
             messageUnsubRef.current?.();
             messageUnsubRef.current = null;
-            for (const key of refetchKeys) qc.invalidateQueries({ queryKey: key });
+            for (const key of refetchKeys) void queryClient.invalidateQueries({ queryKey: key });
         }
-    }, [qc, refetchKeys]);
+    }, [queryClient, refetchKeys]);
 
     useEffect(() => {
         return () => {

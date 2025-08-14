@@ -1,18 +1,19 @@
-import { getPrecipitation, getWeeklyWeatherRecommendation } from '../../api/home/weather';
-import { useCoreQuery } from '../customQuery';
+import { useCoreQuery } from '@/hooks/customQuery';
 
-import { HomeKeys } from '@/queryKey/queryKey';
+import { getPrecipitation, getWeeklyWeatherRecommendation } from '../../api/home/weather';
+
+import { homeKeys } from '@/queryKey/queryKey';
 
 // 주간 날씨 추천 훅
 export const useWeatherForecast = ({ startDate, regionId }: { startDate: string; regionId: number }) => {
-    return useCoreQuery(HomeKeys.weather(startDate, regionId).queryKey, () => getWeeklyWeatherRecommendation({ startDate, regionId: regionId! }), {
+    return useCoreQuery(homeKeys.weather(startDate, regionId).queryKey, () => getWeeklyWeatherRecommendation({ startDate, regionId: regionId! }), {
         staleTime: 1000 * 60 * 30,
         enabled: !!startDate && !!regionId,
     });
 };
 
 export const useRainyInfo = ({ startDate, regionId }: { startDate: string; regionId: number }) => {
-    return useCoreQuery(HomeKeys.rainyInfo(startDate, regionId).queryKey, () => getPrecipitation({ startDate, regionId: regionId! }), {
+    return useCoreQuery(homeKeys.rainyInfo(startDate, regionId).queryKey, () => getPrecipitation({ startDate, regionId: regionId! }), {
         staleTime: 1000 * 60 * 30,
         enabled: !!startDate && !!regionId,
     });

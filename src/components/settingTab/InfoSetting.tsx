@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import type { TResponseError } from '@/types/common/common';
 import { TERMS_URL } from '@/constants/policies';
 
-import { QUERY_KEYS, useAccount } from '@/hooks/auth/useAccount';
+import { useAccount } from '@/hooks/auth/useAccount';
 
 import EditableInputBox from '../common/EditableInputBox';
 import PasswordEditSection from '../common/PasswordEdit';
 
 import { queryClient } from '@/api/queryClient';
 import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?react';
+import { memberKeys } from '@/queryKey/queryKey';
 
-const getApiErrorMessage = (err: any, fallback: string) => err?.response?.data?.message ?? (err?.response?.status === 401 ? '로그인이 필요합니다.' : fallback);
+const getApiErrorMessage = (err: TResponseError, fallback: string) =>
+    err?.response?.data?.message ?? (err?.response?.status === 401 ? '로그인이 필요합니다.' : fallback);
 
 export default function InfoSetting() {
     const { useGetMemberInfo, useChangeNickname, useResetPreferences } = useAccount();
@@ -49,8 +52,8 @@ export default function InfoSetting() {
                         setInitialNickname(next);
                         localStorage.setItem('nickname', next);
 
-                        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memberInfo });
-                        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memberGrade });
+                        queryClient.invalidateQueries({ queryKey: memberKeys.all.queryKey });
+
                         queryClient.setQueryData(['userGrade'], (old: any) => (old ? { ...old, result: { ...old.result, username: next } } : old));
                     } else {
                         alert(res?.message ?? '닉네임 변경에 실패했습니다.');
@@ -68,7 +71,7 @@ export default function InfoSetting() {
     const handleResetPreferences = () => {
         if (resetPending) return;
         if (!confirm('정말 초기화할까요? 되돌릴 수 없습니다.')) return;
-        resetPref({
+        resetPref(undefined, {
             onSuccess: (res: any) => {
                 if (res?.isSuccess) {
                     alert('취향 데이터가 초기화되었습니다.');

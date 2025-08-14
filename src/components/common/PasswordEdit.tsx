@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { useAccount } from '@/hooks/auth/useAccount';
@@ -59,7 +60,7 @@ export default function PasswordEditSection() {
                     alert('비밀번호가 변경되었습니다.');
                     handleCancel();
                 },
-                onError: (err: any) => {
+                onError: (err: AxiosError) => {
                     const msg = (err as any)?.response?.data?.message ?? '비밀번호 변경에 실패했습니다.';
                     alert(msg);
                 },
