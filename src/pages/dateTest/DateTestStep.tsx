@@ -61,7 +61,6 @@ export default function DateTestStep() {
         } else {
             try {
                 const response = await submitDateTestAnswers({ answers: allAnswers });
-                console.log('결과 응답:', response);
                 navigate('/datetest/result', { state: response.result });
             } catch (error) {
                 console.error('결과 제출 실패:', error);

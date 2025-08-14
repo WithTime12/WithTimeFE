@@ -7,8 +7,6 @@ export interface IDateTestQuestion {
 }
 
 export default interface IDateTestResult {
-    result: any;
-    preferenceType: string;
     aPercentage: number;
     bPercentage: number;
     cPercentage: number;

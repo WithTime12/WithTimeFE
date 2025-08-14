@@ -53,8 +53,8 @@ export default function DateTestResultPage() {
         );
     }
 
-    // URL에서 preferenceType 추출하는 부분입니다
-    const typeParam = resultData?.preferenceType || resultData?.typeDescription?.preferenceType || '';
+    //URL에서 preferenceType 추출하는 부분입니다
+    const typeParam = resultData?.typeDescription?.preferenceType || '';
 
     const {
         data: relationData,
