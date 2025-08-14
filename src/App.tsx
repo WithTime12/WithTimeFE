@@ -8,7 +8,7 @@ import { alarmKeys } from '@/queryKey/queryKey';
 import router from '@/routes/routes';
 
 function App() {
-    const refetchKeys = useMemo(() => [alarmKeys.all.queryKey], []);
+    const refetchKeys = useMemo(() => [alarmKeys._def], []);
     return (
         <DeviceTokenProvider refetchKeys={refetchKeys}>
             <RouterProvider router={router} />

@@ -48,10 +48,7 @@ export default function InfoSetting() {
                         setInitialNickname(next);
                         localStorage.setItem('nickname', next);
 
-                        queryClient.invalidateQueries({ queryKey: memberKeys.all.queryKey });
-                        queryClient.setQueryData(memberKeys.memberGrade.queryKey, (old: any) =>
-                            old?.result ? { ...old, result: { ...old.result, username: next } } : old,
-                        );
+                        queryClient.invalidateQueries({ queryKey: memberKeys._def });
                     } else {
                         alert(res?.message ?? '닉네임 변경에 실패했습니다.');
                     }
@@ -81,7 +78,7 @@ export default function InfoSetting() {
     };
 
     return (
-        <div className="mt-5 flex flex-col items-start gap-5">
+        <div className="mt-5 flex flex-col items-start gap-5 px-[2px]">
             {/* 닉네임 */}
             <EditableInputBox
                 mode="nickname"

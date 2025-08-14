@@ -1,18 +1,15 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
 
 export const regionKeys = createQueryKeys('region', {
-    all: null,
     search: (keyword: string) => ['search', keyword],
 });
 
 export const alarmKeys = createQueryKeys('alarm', {
-    all: null,
     getAlarm: (size: number, cursor?: number) => ['getAlarm', size, cursor],
     alarmSettings: () => ['alarmSettings'],
 });
 
 export const homeKeys = createQueryKeys('home', {
-    all: null,
     getUserGrade: () => ['user', 'grade'],
     dateCourseSave: () => ['date-courses', 'saved-count'],
     weather: (startDate: string, regionId: number) => ['weather', 'forecast', startDate, regionId],
@@ -24,11 +21,10 @@ export const homeKeys = createQueryKeys('home', {
 });
 
 export const noticeKeys = createQueryKeys('notice', {
-    all: null,
     getAllNotices: (page: number, size: number, noticeCategory: 'SERVICE' | 'SYSTEM') => [page, size, noticeCategory],
 });
 export const memberKeys = createQueryKeys('member', {
-    all: null,
     memberInfo: null,
     memberGrade: null,
+    // memberKeys안에 있는 걸 모두 초기화 하고 싶으면 alarmKeys._def로 호출하면 됩니다!
 });

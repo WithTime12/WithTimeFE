@@ -64,7 +64,7 @@ export default function SettingsModal({ onClose, defaultTab = '알람' }: ISetti
                     </button>
                 </div>
                 <MobileSettingTab setActiveTab={setActiveTab} activeTab={activeTab} handleLogout={handleLogout} logoutPending={logoutPending} />
-                <div className="flex-1 sm:pl-6 overflow-y-auto min-w-[298px]">
+                <div className="flex-1 sm:pl-6 overflow-y-auto min-w-[300px]">
                     {activeTab === '알람' && <AlarmSetting />}
                     {activeTab === '멤버십' && <MembershipSetting />}
                     {activeTab === '정보' && <InfoSetting />}
