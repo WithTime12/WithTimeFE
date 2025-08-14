@@ -1,14 +1,3 @@
-import type {
-    TChangeNicknameMutationOptions,
-    TChangeNicknameMutationResult,
-    TChangeNicknamePayload,
-    TChangeNicknameResponse,
-    TChangePasswordMutationOptions,
-    TChangePasswordMutationResult,
-    TChangePasswordPayload,
-} from '@/types/auth/account';
-import type { TResetPreferencesResponse } from '@/types/dates/preferences';
-
 import { useCoreMutation, useCoreQuery } from '@/hooks/customQuery';
 
 import { changeNickname, changePassword, deleteMember, getMemberGrade, getMemberInfo } from '@/api/auth/account';
@@ -21,13 +10,13 @@ export const QUERY_KEYS = {
 
 export function useAccount() {
     // 비밀번호 변경
-    function useChangePassword(options?: TChangePasswordMutationOptions): TChangePasswordMutationResult {
-        return useCoreMutation<void, TChangePasswordPayload>(changePassword, options);
+    function useChangePassword() {
+        return useCoreMutation(changePassword);
     }
 
     // 닉네임 변경
-    function useChangeNickname(options?: TChangeNicknameMutationOptions): TChangeNicknameMutationResult {
-        return useCoreMutation<TChangeNicknameResponse, TChangeNicknamePayload>(changeNickname, options);
+    function useChangeNickname() {
+        return useCoreMutation(changeNickname);
     }
 
     // 회원 탈퇴
@@ -47,7 +36,7 @@ export function useAccount() {
 
     // 취향 데이터 초기화
     function useResetPreferences() {
-        return useCoreMutation<TResetPreferencesResponse, void>(resetPreferences);
+        return useCoreMutation(resetPreferences);
     }
 
     return { useChangePassword, useChangeNickname, useDeleteMember, useGetMemberInfo, useGetMemberGrade, useResetPreferences };

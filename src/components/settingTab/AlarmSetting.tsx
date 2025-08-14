@@ -4,6 +4,8 @@ import { useGetAlarmSettings, usePatchAlarmSettings } from '@/hooks/settingAlarm
 
 import ToggleSwitch from '@/components/common/ToggleSwitch';
 
+import { queryClient } from '@/api/queryClient';
+
 type TAlarmType = 'email' | 'push' | 'sms';
 
 interface IAlarmSettingState {
@@ -47,6 +49,9 @@ export default function AlarmSetting() {
                 smsAlarm: next.sms,
             },
             {
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ['alarmSettings'] });
+                },
                 onError: () => setAlarmSetting(prev),
             },
         );

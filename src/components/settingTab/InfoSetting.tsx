@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { TERMS_URL } from '@/constants/policies';
 
@@ -9,12 +8,12 @@ import { QUERY_KEYS, useAccount } from '@/hooks/auth/useAccount';
 import EditableInputBox from '../common/EditableInputBox';
 import PasswordEditSection from '../common/PasswordEdit';
 
+import { queryClient } from '@/api/queryClient';
 import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?react';
 
 const getApiErrorMessage = (err: any, fallback: string) => err?.response?.data?.message ?? (err?.response?.status === 401 ? '로그인이 필요합니다.' : fallback);
 
 export default function InfoSetting() {
-    const qc = useQueryClient();
     const { useGetMemberInfo, useChangeNickname, useResetPreferences } = useAccount();
 
     const { data: memberData, isLoading: infoLoading, isError: infoError } = useGetMemberInfo();
@@ -32,40 +31,34 @@ export default function InfoSetting() {
         }
     }, [apiNickname]);
 
-    const { mutate: changeNickname, isPending: nickPending } = useChangeNickname({
-        onSuccess: (res) => {
-            if (res?.isSuccess) {
-                const next = res.result.username;
-                setNickname(next);
-                setInitialNickname(next);
-                localStorage.setItem('nickname', next);
+    const { mutate: changeNickname, isPending: nickPending } = useChangeNickname();
 
-                qc.invalidateQueries({ queryKey: QUERY_KEYS.memberInfo });
-                qc.invalidateQueries({ queryKey: QUERY_KEYS.memberGrade });
-                qc.setQueryData(['userGrade'], (old: any) => (old ? { ...old, result: { ...old.result, username: next } } : old));
-            } else {
-                alert(res?.message ?? '닉네임 변경에 실패했습니다.');
-            }
-        },
-        onError: (err: any) => alert(getApiErrorMessage(err, '닉네임 변경에 실패했습니다.')),
-    });
-
-    const { mutate: resetPref, isPending: resetPending } = useResetPreferences({
-        onSuccess: (res) => {
-            if (res?.isSuccess) {
-                alert('취향 데이터가 초기화되었습니다.');
-            } else {
-                alert(res?.message ?? '초기화에 실패했습니다.');
-            }
-        },
-        onError: (err: any) => alert(getApiErrorMessage(err, '초기화에 실패했습니다.')),
-    });
+    const { mutate: resetPref, isPending: resetPending } = useResetPreferences();
 
     const handleSubmitNickname = () => {
         const trimmed = nickname.trim();
         if (!trimmed) return alert('닉네임을 입력해 주세요.');
         if (trimmed === initialNickname || nickPending) return;
-        changeNickname({ username: trimmed });
+        changeNickname(
+            { username: trimmed },
+            {
+                onSuccess: (res: any) => {
+                    if (res?.isSuccess) {
+                        const next = res.result.username;
+                        setNickname(next);
+                        setInitialNickname(next);
+                        localStorage.setItem('nickname', next);
+
+                        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memberInfo });
+                        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.memberGrade });
+                        queryClient.setQueryData(['userGrade'], (old: any) => (old ? { ...old, result: { ...old.result, username: next } } : old));
+                    } else {
+                        alert(res?.message ?? '닉네임 변경에 실패했습니다.');
+                    }
+                },
+                onError: (err: any) => alert(getApiErrorMessage(err, '닉네임 변경에 실패했습니다.')),
+            },
+        );
     };
 
     const handleCancelNickname = () => {
@@ -75,7 +68,16 @@ export default function InfoSetting() {
     const handleResetPreferences = () => {
         if (resetPending) return;
         if (!confirm('정말 초기화할까요? 되돌릴 수 없습니다.')) return;
-        resetPref();
+        resetPref({
+            onSuccess: (res: any) => {
+                if (res?.isSuccess) {
+                    alert('취향 데이터가 초기화되었습니다.');
+                } else {
+                    alert(res?.message ?? '초기화에 실패했습니다.');
+                }
+            },
+            onError: (err: any) => alert(getApiErrorMessage(err, '초기화에 실패했습니다.')),
+        });
     };
 
     return (

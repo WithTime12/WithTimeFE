@@ -34,24 +34,27 @@ export default function DeleteConfirmPage() {
     const { data: memberData, isLoading: infoLoading, isError: infoError } = useGetMemberInfo();
     const userEmail = memberData?.result?.email ?? ''; // ← 여기서 이메일 사용
 
-    const { mutate: deleteAccount, isPending } = useDeleteMember({
-        onSuccess: () => {
-            alert('회원 탈퇴가 완료되었습니다.');
-            localStorage.removeItem('accessToken');
-            navigate('/', { replace: true });
-        },
-        onError: (error) => {
-            const msg = error?.response?.data?.message || '회원 탈퇴에 실패했습니다.';
-            alert(msg);
-        },
-    });
+    const { mutate: deleteAccount, isPending } = useDeleteMember();
 
     const allAgreed = checked.every(Boolean);
 
     const handleDelete = () => {
         if (!allAgreed) return alert('유의사항에 모두 동의해 주세요.');
         if (!confirm('정말 탈퇴하시겠습니까?')) return;
-        deleteAccount();
+        deleteAccount(
+            {},
+            {
+                onSuccess: () => {
+                    alert('회원 탈퇴가 완료되었습니다.');
+                    localStorage.removeItem('accessToken');
+                    navigate('/', { replace: true });
+                },
+                onError: (error) => {
+                    const msg = error?.response?.data?.message || '회원 탈퇴에 실패했습니다.';
+                    alert(msg);
+                },
+            },
+        );
     };
 
     const toggleCheckbox = (index: number) => {
