@@ -15,7 +15,6 @@ function DeleteBookmarkModal({ onClose, isOpen, changeState }: TDeleteBookmarkMo
     }, [isOpen]);
 
     const handleDelete = () => {
-        // Logic to delete the bookmarked date course
         changeState(false);
         onClose();
     };

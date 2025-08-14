@@ -47,14 +47,14 @@ export default function MembershipSetting() {
     };
 
     return (
-        <div className="mt-5 flex flex-col gap-4 p-6">
+        <div className="mt-5 flex flex-col gap-4">
             <p className="font-heading3">
                 현재 등급은 <span className="text-primary-700 font-heading2">{gradeText}</span> 입니다.
             </p>
 
             <p className="font-body1 text-default-gray-700">다음 결제 예정일 : 2025.06.14</p>
 
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 mt-6">
+            <div className="flex flex-row sm:items-center gap-2 sm:gap-6 mt-6">
                 <p className="font-heading3 text-default-gray-800">자동 결제</p>
                 <ToggleSwitch value={autoPay} onChange={setAutoPay} onLabel="ON" offLabel="OFF" />
             </div>

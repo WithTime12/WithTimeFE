@@ -81,7 +81,7 @@ export default function InfoSetting() {
     };
 
     return (
-        <div className="mt-5 flex flex-col items-start gap-5 p-5">
+        <div className="mt-5 flex flex-col items-start gap-5">
             {/* 닉네임 */}
             <EditableInputBox
                 mode="nickname"
@@ -95,14 +95,18 @@ export default function InfoSetting() {
             />
 
             {/* 이메일 */}
-            <EditableInputBox
-                label="이메일"
-                value={infoLoading ? '불러오는 중' : infoError ? '' : email}
-                readOnly
-                onChange={() => {}}
-                className="pointer-events-none"
-                placeholder="이메일"
-            />
+            <div className={`w-full max-w-[360px] flex flex-col`}>
+                <p className="font-body1 text-default-gray-700 mb-1">{'이메일'}</p>
+                <div
+                    className="text-ellipsis overflow-hidden whitespace-nowrap
+                                max-w-[360px] text-center flex items-center
+                                w-full pl-4 border border-primary-500 rounding-16
+                                text-base font-medium h-12 pr-16 text-black
+                                caret-primary-500"
+                >
+                    {infoLoading ? '불러오는 중' : infoError ? '' : email}
+                </div>
+            </div>
 
             {/* 비밀번호 변경 */}
             <PasswordEditSection />

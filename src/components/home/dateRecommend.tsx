@@ -99,7 +99,7 @@ function DateRecommend() {
             <div className="flex flex-col sm:px-[40px] px-[20px] py-[40px] justify-center h-full gap-[30px] sm:gap-[20px] w-full">
                 {/* 상단 텍스트 */}
                 <div className="flex items-center justify-between sm:flex-row flex-col">
-                    <div className="text-2xl font-bold whitespace-nowrap">이번 주 {forecastData?.result?.region?.regionName ?? '지역'} 데이트 추천</div>
+                    <div className="text-2xl font-bold break-keep text-center">이번 주 {forecastData?.result?.region?.regionName ?? '지역'} 데이트 추천</div>
                     <button
                         type="button"
                         className="sm:mt-1 mt-4 text-sm text-black underline sm:self-center self-end"
