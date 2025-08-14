@@ -131,19 +131,19 @@ const router = createBrowserRouter([
         errorElement: <Error />,
         children: [
             {
-                path: '/paymentHistory',
+                path: 'paymentHistory',
                 element: <PaymentHistory />,
             },
             {
-                path: '/deleteAccount',
+                path: 'deleteAccount',
                 element: <DeleteReasonPage />,
             },
             {
-                path: '/deleteAccount/confirm',
+                path: 'deleteAccount/confirm',
                 element: <DeleteConfirmPage />,
             },
             {
-                path: '/withdraw',
+                path: 'withdraw',
                 element: <Withdraw />,
             },
         ],
