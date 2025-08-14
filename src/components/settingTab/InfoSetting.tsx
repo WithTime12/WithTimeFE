@@ -76,7 +76,7 @@ export default function InfoSetting() {
     };
 
     return (
-        <div className="mt-5 flex flex-col items-start gap-5">
+        <div className="mt-5 flex flex-col items-start gap-5 p-5">
             {/* 닉네임 */}
             <EditableInputBox
                 mode="nickname"

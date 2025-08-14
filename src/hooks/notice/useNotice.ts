@@ -50,7 +50,6 @@ export function useNotice() {
 
     // 공지 검색
     const useSearchNotices = (params: TSearchParams, options?: Parameters<typeof useCoreQuery<TFetchNoticesResponse>>[2]) => {
-        // keyword를 전처리하고, 파라미터 객체를 안정화
         const stable = useMemo(() => ({ ...params, keyword: params.keyword.trim() }), [params.keyword, params.page, params.size, params.category]);
 
         return useCoreQuery<TFetchNoticesResponse>(noticeKeys.search(stable), () => searchNotices(stable), {

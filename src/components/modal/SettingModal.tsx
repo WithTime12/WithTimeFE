@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '@/hooks/auth/useAuth';
 
 import AlarmSetting from '@/components/settingTab/AlarmSetting';
 import InfoSetting from '@/components/settingTab/InfoSetting';
@@ -14,11 +17,24 @@ interface ISettingsModalProps {
 }
 
 export default function SettingsModal({ onClose, defaultTab = '알람' }: ISettingsModalProps) {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'알람' | '멤버십' | '정보'>(defaultTab);
+    const { useLogout } = useAuth();
+    const { mutate: logoutMutate, isPending: logoutPending } = useLogout;
 
-    useEffect(() => {
-        setActiveTab(defaultTab);
-    }, [defaultTab]);
+    const handleLogout = () => {
+        logoutMutate(undefined, {
+            onSuccess: () => {
+                localStorage.removeItem('accessToken');
+                navigate('/');
+            },
+            onError: () => {
+                alert('로그아웃 중 문제가 발생했어요.');
+            },
+        });
+    };
+
+    useEffect(() => setActiveTab(defaultTab), [defaultTab]);
 
     return (
         <Modal onClose={onClose} position="main" title="설정">
@@ -30,21 +46,23 @@ export default function SettingsModal({ onClose, defaultTab = '알람' }: ISetti
                             key={tab}
                             onClick={() => setActiveTab(tab as '알람' | '멤버십' | '정보')}
                             className={`w-full h-[35px] px-4 rounding-16 font-body1 text-left transition 
-                                    ${activeTab === tab ? 'bg-primary-500 text-white' : 'bg-default-gray-400 text-default-gray-700'}`}
+                ${activeTab === tab ? 'bg-primary-500 text-white' : 'bg-default-gray-400 text-default-gray-700'}`}
                         >
                             {tab} 설정
                         </button>
                     ))}
                 </div>
 
-                {/* 로그아웃 */}
-                <div className="font-body2 text-default-gray-800 cursor-pointer flex items-center space-x-2 mt-6">
+                <button
+                    onClick={handleLogout}
+                    disabled={logoutPending}
+                    className="font-body2 text-default-gray-800 cursor-pointer flex items-center space-x-2 mt-6 disabled:opacity-60"
+                >
                     <LogoutSvg className="w-4 h-4" fill="none" stroke="CurrentColor" />
-                    <span>로그아웃</span>
-                </div>
+                    <span>{logoutPending ? '로그아웃 중...' : '로그아웃'}</span>
+                </button>
             </div>
 
-            {/* 콘텐츠 영역 */}
             <div className="flex-1 pl-6 overflow-y-auto">
                 {activeTab === '알람' && <AlarmSetting />}
                 {activeTab === '멤버십' && <MembershipSetting />}

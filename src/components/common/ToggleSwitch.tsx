@@ -35,7 +35,7 @@ export default function ToggleSwitch({ value, onChange, onLabel = 'ON', offLabel
             </span>
 
             {/* 텍스트 OFF */}
-            <span className={`absolute right-[36px] font-heading3 text-white transition-opacity duration-200 ${!isOn ? 'opacity-100' : 'opacity-0'}`}>
+            <span className={`absolute right-[33px] font-heading3 text-white transition-opacity duration-200 ${!isOn ? 'opacity-100' : 'opacity-0'}`}>
                 {offLabel}
             </span>
 
