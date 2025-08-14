@@ -12,6 +12,9 @@ export const getDateQuestions = async () => {
 
 export const submitDateTestAnswers = async (payload: { answers: number[] }) => {
     const { data } = await axiosInstance.post('/api/v1/dates/preferences/tests', payload);
+    if (!data.isSuccess) {
+        throw new Error(data.message || '답변 제출에 실패했습니다');
+    }
     return data;
 };
 
