@@ -28,7 +28,7 @@ export default function PaymentHistory() {
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         return dummyData.slice(start, end);
-    }, [currentPage]);
+    }, [currentPage, itemsPerPage]);
 
     return (
         <div>
@@ -57,9 +57,15 @@ export default function PaymentHistory() {
                             </tr>
                         </thead>
                         <tbody>
-                            {pageData.map((item, index) => (
-                                <PaymentRow key={`${item.orderNumber}-${index}`} data={item} />
-                            ))}
+                            {pageData.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="py-10 text-default-gray-500">
+                                        결제 내역이 없습니다.
+                                    </td>
+                                </tr>
+                            ) : (
+                                pageData.map((item, index) => <PaymentRow key={`${item.orderNumber}-${index}`} data={item} />)
+                            )}
                         </tbody>
                     </table>
                 </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { PRIVACY_URL, TERMS_URL } from '@/constants/policies';
+import { TERMS_URL } from '@/constants/policies';
 
 import { QUERY_KEYS, useAccount } from '@/hooks/auth/useAccount';
 
@@ -39,7 +39,10 @@ export default function InfoSetting() {
                 setNickname(next);
                 setInitialNickname(next);
                 localStorage.setItem('nickname', next);
+
                 qc.invalidateQueries({ queryKey: QUERY_KEYS.memberInfo });
+                qc.invalidateQueries({ queryKey: QUERY_KEYS.memberGrade });
+                qc.setQueryData(['userGrade'], (old: any) => (old ? { ...old, result: { ...old.result, username: next } } : old));
             } else {
                 alert(res?.message ?? '닉네임 변경에 실패했습니다.');
             }
@@ -126,9 +129,11 @@ export default function InfoSetting() {
                 </a>
 
                 <a
-                    href={PRIVACY_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        alert('해당 기능은 추후 제공 예정입니다.');
+                    }}
                     className="w-full flex items-center justify-between py-3 px-1 text-left font-body2 text-default-gray-800"
                 >
                     개인정보 처리방침
