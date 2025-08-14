@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import type { TResponseError } from '@/types/common/common';
 import { TERMS_URL } from '@/constants/policies';
 
 import { useAccount } from '@/hooks/auth/useAccount';
@@ -12,9 +11,6 @@ import PasswordEditSection from '../common/PasswordEdit';
 import { queryClient } from '@/api/queryClient';
 import ChevronForward from '@/assets/icons/default_arrows/chevron_forward.svg?react';
 import { memberKeys } from '@/queryKey/queryKey';
-
-const getApiErrorMessage = (err: TResponseError, fallback: string) =>
-    err?.response?.data?.message ?? (err?.response?.status === 401 ? '로그인이 필요합니다.' : fallback);
 
 export default function InfoSetting() {
     const { useGetMemberInfo, useChangeNickname, useResetPreferences } = useAccount();
@@ -45,7 +41,7 @@ export default function InfoSetting() {
         changeNickname(
             { username: trimmed },
             {
-                onSuccess: (res: any) => {
+                onSuccess: (res) => {
                     if (res?.isSuccess) {
                         const next = res.result.username;
                         setNickname(next);
@@ -53,14 +49,14 @@ export default function InfoSetting() {
                         localStorage.setItem('nickname', next);
 
                         queryClient.invalidateQueries({ queryKey: memberKeys.all.queryKey });
-                        queryClient.setQueryData(memberKeys.memberGrade().queryKey, (old: any) =>
-                            old ? { ...old, result: { ...old.result, username: next } } : old,
+                        queryClient.setQueryData(memberKeys.memberGrade.queryKey, (old: any) =>
+                            old?.result ? { ...old, result: { ...old.result, username: next } } : old,
                         );
                     } else {
                         alert(res?.message ?? '닉네임 변경에 실패했습니다.');
                     }
                 },
-                onError: (err: any) => alert(getApiErrorMessage(err, '닉네임 변경에 실패했습니다.')),
+                onError: () => alert('닉네임 변경에 실패했습니다.'),
             },
         );
     };
@@ -80,7 +76,7 @@ export default function InfoSetting() {
                     alert(res?.message ?? '초기화에 실패했습니다.');
                 }
             },
-            onError: (err: any) => alert(getApiErrorMessage(err, '초기화에 실패했습니다.')),
+            onError: () => alert('초기화에 실패했습니다.'),
         });
     };
 

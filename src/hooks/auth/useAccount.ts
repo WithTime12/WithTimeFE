@@ -22,12 +22,12 @@ export function useAccount() {
 
     // 사용자 정보 조회
     function useGetMemberInfo() {
-        return useCoreQuery(memberKeys.memberInfo().queryKey, getMemberInfo);
+        return useCoreQuery(memberKeys.memberInfo.queryKey, getMemberInfo);
     }
 
     // 사용자 등급 조회
     function useGetMemberGrade() {
-        return useCoreQuery(memberKeys.memberGrade().queryKey, getMemberGrade);
+        return useCoreQuery(memberKeys.memberGrade.queryKey, getMemberGrade);
     }
 
     // 취향 데이터 초기화

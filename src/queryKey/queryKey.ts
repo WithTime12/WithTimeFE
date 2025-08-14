@@ -29,6 +29,6 @@ export const noticeKeys = createQueryKeys('notice', {
 });
 export const memberKeys = createQueryKeys('member', {
     all: null,
-    memberInfo: () => ['memberInfo'],
-    memberGrade: () => ['memberGrade'],
+    memberInfo: null,
+    memberGrade: null,
 });
