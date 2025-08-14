@@ -95,7 +95,6 @@ export default function DateCourseSearchFilterOption({
                                 isSelected={value === apiValue}
                                 onClick={() => {
                                     onChange(apiValue!);
-                                    console.log('click');
                                 }}
                             />
                         );

@@ -97,16 +97,14 @@ export const getBookmarkedDateCourse = async ({
     page,
     size,
 }: TGetBookmarkedDateCourseRequest): Promise<TGetBookmarkedDateCourseResponse> => {
-    const { data } = await axiosInstance.get('/api/v1/date-courses/search', {
-        params: {
-            page,
-            size,
-            budget,
-            datePlaces,
-            mealTypes,
-            transportation,
-            userPreferredKeywords,
-        },
+    const { data } = await axiosInstance.post('/api/v1/date-courses/bookmarks/search', {
+        page,
+        size,
+        budget,
+        datePlaces,
+        mealTypes,
+        transportation,
+        userPreferredKeywords,
     });
     return data;
 };

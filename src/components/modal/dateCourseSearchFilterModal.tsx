@@ -1,5 +1,6 @@
 // DateCourseSearchFilterModal.tsx
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
@@ -22,7 +23,6 @@ import useFilterStore from '@/store/useFilterStore';
 
 type TProps = { onClose: () => void };
 
-// 공통 검증 함수: 특정 필드들만 받아 에러 배열 생성
 function computeErrors(f: { budget: any; dateDurationTime: any; mealTypes?: any[]; userPreferredKeywords?: any[]; startTime: any }): string[] {
     const e: string[] = Array(7).fill('');
 
@@ -65,9 +65,17 @@ function computeErrors(f: { budget: any; dateDurationTime: any; mealTypes?: any[
 }
 
 export default function DateCourseSearchFilterModal({ onClose }: TProps) {
-    // ✅ 하나의 훅 호출로 필요한 값/액션 모두 가져오기
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords, setField } = useFilterStore();
+    const [bookmarkedValue, setBookmarkedValue] = useState(false);
 
+    const location = useLocation();
+    useEffect(() => {
+        if (location.pathname === '/bookmarkedCourse') {
+            setBookmarkedValue(true);
+        } else {
+            setBookmarkedValue(false);
+        }
+    }, [location]);
     // API 데이터 (현재 필터 기준)
     const { data } = useGetCourse({
         budget,

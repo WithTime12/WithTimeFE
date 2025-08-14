@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { IGradeInfo } from '@/types/home/level';
+import { getProgressToNextGrade } from '@/constants/level';
 
 import MainCard from '@/components/home/mainCard';
 
@@ -10,7 +11,7 @@ function Level({ grade, nextRequiredPoint }: IGradeInfo) {
     const [percentage, setPercentage] = useState<number>(0);
 
     useEffect(() => {
-        setPercentage(100 - nextRequiredPoint);
+        setPercentage(getProgressToNextGrade(grade, nextRequiredPoint));
     }, [nextRequiredPoint]);
 
     return (

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
+import { useUserGrade } from '@/hooks/home/useUserGrade';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider';
 import Navigator from '@/components/common/navigator';
@@ -18,6 +19,7 @@ export default function Course() {
     const [current, setCurrent] = useState(1);
 
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    // 수정 예정
     const { data } = useGetBookmarkedCourse({
         page: current,
         size: 5,
@@ -29,7 +31,7 @@ export default function Course() {
         userPreferredKeywords,
         startTime,
     });
-
+    const { data: gradeData } = useUserGrade();
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
@@ -49,7 +51,9 @@ export default function Course() {
                 </div>
                 <div className="flex flex-col shadow-default rounding-16 px-[10px] sm:px-[40px] py-[24px]">
                     <div className="flex w-full justify-between py-[24px] gap-[12px] lg:flex-row flex-col">
-                        <div className="font-heading3 sm:w-fit w-full text-center justify-center select-none">Madeleine 님만의 데이트 코스</div>
+                        <div className="font-heading3 sm:w-fit w-full text-center justify-center select-none">
+                            {gradeData?.result.username} 님만의 데이트 코스
+                        </div>
                         <div className="flex gap-[12px] justify-center items-center sm:justify-end flex-col sm:flex-row">
                             <div
                                 onClick={() => navigate('/bookmarkedCourse')}
