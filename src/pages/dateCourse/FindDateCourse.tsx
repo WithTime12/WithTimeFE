@@ -31,6 +31,7 @@ function FindDateCourse() {
         transportation,
         userPreferredKeywords,
         startTime,
+        isBookmarked: false,
     });
 
     return (

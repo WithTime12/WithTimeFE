@@ -26,6 +26,7 @@ function BookmarkedDateCourse() {
         transportation,
         userPreferredKeywords,
         startTime,
+        isBookmarked: true,
     });
 
     (useEffect(() => {

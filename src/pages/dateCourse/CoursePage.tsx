@@ -29,6 +29,7 @@ export default function Course() {
         transportation,
         userPreferredKeywords,
         startTime,
+        isBookmarked: true,
     });
     const { data: gradeData } = useUserGrade();
     return (
