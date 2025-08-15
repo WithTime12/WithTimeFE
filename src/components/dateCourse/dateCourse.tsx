@@ -100,7 +100,7 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
                     <div className="w-full lg:px-[48px] px-[24px] py-[40px] gap-[48px] flex justify-between h-fit lg:flex-row flex-col">
                         <div className="flex flex-col lg:w-[60%] gap-[16px]">
                             {datePlaces.map((place, idx) => {
-                                return <Timeline key={idx} time={place.startTime} tags={['감성 카페', '디저트 맛집']} {...place} />;
+                                return <Timeline key={idx} time={place.startTime} {...place} />;
                             })}
                             <Timeline end={true} time={lastEndTime} />
                         </div>
