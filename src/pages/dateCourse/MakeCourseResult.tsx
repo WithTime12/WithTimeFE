@@ -17,7 +17,7 @@ import useFilterStore from '@/store/useFilterStore';
 
 export default function MakeCourseResult() {
     const navigate = useNavigate();
-    const { setAll, resetDateCourseResultStore, ...courseData } = useDateCourseResultStore();
+    const { setAll, ...courseData } = useDateCourseResultStore();
     const { useMakeCourse } = useCourse();
     const { budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime } = useFilterStore();
     const { mutate: makeCourseMutate, isPending } = useMakeCourse;
