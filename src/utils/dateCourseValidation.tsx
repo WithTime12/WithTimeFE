@@ -1,5 +1,6 @@
 export const timeMap: Record<string, number> = {
     ONETOTWO: 1.5,
+    TWOTOTHREE: 2.5,
     THREETOFOUR: 3.5,
     HALFDAY: 5.0,
     ALLDAY: 8.0,

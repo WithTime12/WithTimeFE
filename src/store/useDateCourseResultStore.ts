@@ -26,7 +26,7 @@ const INITIAL_DATA: TDataState = {
 const useDateCourseResultStore = create<IDateCourseResultStoreState>((set) => ({
     ...INITIAL_DATA,
 
-    resetDateCourseResultStore: () => set(INITIAL_DATA),
+    resetDateCourseResultStore: () => set({ ...INITIAL_DATA }),
     setAll: (payload) => set((prev) => ({ ...prev, ...payload })),
 }));
 

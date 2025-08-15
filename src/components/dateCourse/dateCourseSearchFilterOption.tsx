@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { TDateCourseSearchFilterOption, TRegion } from '@/types/dateCourse/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
@@ -38,7 +38,7 @@ export default function DateCourseSearchFilterOption({
         if (type === 'time' && autoInit && (value == null || value === '')) {
             onChange(`${date} ${time}`);
         }
-    }, []);
+    }, [type, autoInit, value]);
 
     const handleDateClick = () => {
         dateInputRef.current?.showPicker?.();
@@ -66,17 +66,14 @@ export default function DateCourseSearchFilterOption({
         refetch();
     };
 
-    let items = options?.map((label, idx) => ({
-        label,
-        value: apiRequestValue && apiRequestValue[idx],
-    }));
-
-    useEffect(() => {
-        items = options?.map((label, idx) => ({
-            label,
-            value: apiRequestValue && apiRequestValue[idx],
-        }));
-    }, [options]);
+    const items = useMemo(
+        () =>
+            options?.map((label, idx) => ({
+                label,
+                value: apiRequestValue && apiRequestValue[idx],
+            })),
+        [options, apiRequestValue],
+    );
 
     return (
         <div className="flex w-full gap-[24px] flex-col h-fit">

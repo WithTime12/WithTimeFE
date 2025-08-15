@@ -12,7 +12,7 @@ function Level({ grade, nextRequiredPoint }: IGradeInfo) {
 
     useEffect(() => {
         setPercentage(getProgressToNextGrade(grade, nextRequiredPoint));
-    }, [nextRequiredPoint]);
+    }, [nextRequiredPoint, grade]);
 
     return (
         <MainCard>

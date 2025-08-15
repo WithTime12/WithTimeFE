@@ -8,6 +8,7 @@ import { dateCourseKeys } from '@/queryKey/queryKey';
 type TUseGetCourseProps = TCourseFilter & {
     size: number;
     page: number;
+    isBookmarked: boolean;
 };
 export default function useGetCourse({
     budget,
@@ -19,10 +20,14 @@ export default function useGetCourse({
     startTime,
     size,
     page,
+    isBookmarked,
 }: TUseGetCourseProps) {
     return useCoreQuery(
         dateCourseKeys.getDateCourse({ budget, datePlaces, mealTypes, dateDurationTime, transportation, userPreferredKeywords, startTime, size, page })
             .queryKey,
         () => getDateCourse({ budget, datePlaces, mealTypes, dateDurationTime, transportation, userPreferredKeywords, startTime, size, page }),
+        {
+            enabled: !isBookmarked,
+        },
     );
 }

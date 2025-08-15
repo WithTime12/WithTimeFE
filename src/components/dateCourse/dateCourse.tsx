@@ -32,6 +32,11 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
     const { mutate: postMakeBookmark } = usePostMakeBookmark;
     const ids = (datePlaces ?? []).map((p) => p.datePlaceId);
 
+    useEffect(() => {
+        setBookmarked(isBookmarked);
+        setDateCourseID(dateCourseId);
+    }, [isBookmarked, dateCourseId]);
+
     const clickBookmark = () => {
         if (bookmarked) {
             setOpenModal(true);
@@ -52,6 +57,10 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
                 },
             );
         } else {
+            if (dateCourseID == null) {
+                console.error('dateCourseId가 없어 북마크를 생성할 수 없습니다');
+                return;
+            }
             postBookmark({
                 dateCourseId: dateCourseID!,
             });

@@ -9,24 +9,17 @@ import Cash from '@/assets/icons/cash_Blank.svg?react';
 import Location from '@/assets/icons/Location_Blank.svg?react';
 import Spoon from '@/assets/icons/spoon_Blank.svg?react';
 
+type TBudgetKey = keyof typeof Budget;
+type TTotalTimeKey = keyof typeof TotalTime;
+type TMealKey = keyof typeof Meal;
+
+const isBudgetKey = (v: string): v is TBudgetKey => Object.prototype.hasOwnProperty.call(Budget, v);
+const isTotalTimeKey = (v: string): v is TTotalTimeKey => Object.prototype.hasOwnProperty.call(TotalTime, v);
+const isMealKey = (v: string): v is TMealKey => Object.prototype.hasOwnProperty.call(Meal, v);
 export default function Info({ cashTag, locationTag, timeTag, MealTag, keywordTags }: TInfo) {
-    type TBudgetKey = keyof typeof Budget;
-    type TTotalTimeKey = keyof typeof TotalTime;
-    type TMealKey = keyof typeof Meal;
-    function isBudgetKey(v: string): v is TBudgetKey {
-        return Object.prototype.hasOwnProperty.call(Budget, v);
-    }
-    function isTotalTimeKey(v: string): v is TTotalTimeKey {
-        return Object.prototype.hasOwnProperty.call(TotalTime, v);
-    }
-
-    function isMealKey(v: string): v is TMealKey {
-        return Object.prototype.hasOwnProperty.call(Meal, v);
-    }
-
     const label = isBudgetKey(cashTag) ? Budget[cashTag] : '알 수 없음';
     const totalTime = isTotalTimeKey(timeTag) ? TotalTime[timeTag] : '알 수 없음';
-    const meals = Array.isArray(MealTag) ? MealTag.filter(isMealKey).map((tag) => Meal[tag]) : [];
+    const meals = MealTag.filter(isMealKey).map((tag) => Meal[tag]);
 
     return (
         <div className="w-full gap-[24px] flex flex-col">

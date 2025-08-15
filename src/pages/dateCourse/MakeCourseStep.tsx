@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { IQuestion } from '@/types/dateCourse/dateCourse';
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
+import { SigStorage } from '@/utils/appendSignature';
 import {
     BudgetTimeValidation,
     DateTimeStartValidation,
@@ -60,51 +61,40 @@ export default function MakeCourseStep() {
         else navigate('/makeCourse');
     };
 
+    const stepFieldMap = {
+        1: 'budget',
+        2: 'datePlaces',
+        3: 'dateDurationTime',
+        4: 'mealTypes',
+        5: 'transportation',
+        6: 'userPreferredKeywords',
+        7: 'startTime',
+    } as const;
+
+    const fieldValues = {
+        budget,
+        datePlaces,
+        dateDurationTime,
+        mealTypes,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+    };
+
     const valueByStep = (idx: number): string | string[] | null => {
-        switch (idx) {
-            case 1:
-                return budget;
-            case 2:
-                return datePlaces;
-            case 3:
-                return dateDurationTime;
-            case 4:
-                return mealTypes;
-            case 5:
-                return transportation;
-            case 6:
-                return userPreferredKeywords;
-            case 7:
-                return startTime;
-            default:
-                return null;
-        }
+        const fieldName = stepFieldMap[idx as keyof typeof stepFieldMap];
+        return fieldName ? fieldValues[fieldName] : null;
     };
 
     const updateByStep = (idx: number, v: any) => {
-        switch (idx) {
-            case 1:
-                setField('budget', v ?? null);
-                break;
-            case 2:
-                setField('datePlaces', Array.isArray(v) ? v : []);
-                break;
-            case 3:
-                setField('dateDurationTime', v ?? null);
-                break;
-            case 4:
-                setField('mealTypes', Array.isArray(v) ? v : []);
-                break;
-            case 5:
-                setField('transportation', v ?? null);
-                break;
-            case 6:
-                setField('userPreferredKeywords', Array.isArray(v) ? v : []);
-                break;
-            case 7:
-                setField('startTime', v ?? null);
-                break;
+        const fieldName = stepFieldMap[idx as keyof typeof stepFieldMap];
+        if (!fieldName) return;
+
+        // 배열 필드 처리
+        if ([2, 4, 6].includes(idx) && !Array.isArray(v)) {
+            v = [];
         }
+        setField(fieldName, v ?? null);
     };
 
     const currentAnswer = valueByStep(currentStep);
@@ -138,7 +128,7 @@ export default function MakeCourseStep() {
                 transportation: transportation!,
                 userPreferredKeywords,
                 startTime: startTime!,
-                excludedCourseSignatures: [],
+                excludedCourseSignatures: SigStorage.get(),
             },
             {
                 onSuccess: (data) => {

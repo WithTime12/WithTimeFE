@@ -15,7 +15,7 @@ export type TTag = {
     code: string;
 };
 
-type TSignatureDish = {
+export type TSignatureDish = {
     ItemId: number;
     imageUrl: string;
     name: string;
@@ -125,7 +125,7 @@ export type TDatePlaces = {
     placeCategoryResponseList: TPlaceCategoryResponseList[];
 };
 
-type TPlaceCategoryResponseList = {
+export type TPlaceCategoryResponseList = {
     placeCategoryType: string;
     description: string;
     code: string;
@@ -213,6 +213,7 @@ export type TGetBookmarkedDateCourseResponse = TCommonResponse<{
     currentPage: number;
     currentSize: number;
     hasNextPage: boolean;
+    totalCount: number;
 }>;
 
 export type TCourseFilter = {

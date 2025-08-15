@@ -1,5 +1,5 @@
 // DateCourseSearchFilterModal.tsx
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
@@ -13,6 +13,7 @@ import {
     TotalTimeMealValidation,
 } from '@/utils/dateCourseValidation';
 
+import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
 import useGetCourse from '@/hooks/course/useGetCourse';
 
 import Button from '../common/Button';
@@ -65,19 +66,12 @@ function computeErrors(f: { budget: any; dateDurationTime: any; mealTypes?: any[
 }
 
 export default function DateCourseSearchFilterModal({ onClose }: TProps) {
-    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords, setField } = useFilterStore();
-    const [bookmarkedValue, setBookmarkedValue] = useState(false);
-    console.warn(bookmarkedValue);
     const location = useLocation();
-    useEffect(() => {
-        if (location.pathname === '/bookmarkedCourse') {
-            setBookmarkedValue(true);
-        } else {
-            setBookmarkedValue(false);
-        }
-    }, [location]);
-    // API 데이터 (현재 필터 기준)
-    const { data } = useGetCourse({
+    const isBookmarked = location.pathname === '/bookmarkedCourse';
+
+    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords, setField } = useFilterStore();
+
+    const commonParams = {
         budget,
         datePlaces,
         dateDurationTime,
@@ -87,9 +81,14 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         userPreferredKeywords,
         size: 5,
         page: 1,
-    });
+        isBookmarked,
+    };
 
-    // 질문 목록 (filterTitle 없는 항목 제외)
+    const { data: courseData } = useGetCourse(commonParams);
+    const { data: bookmarkedData } = useGetBookmarkedCourse(commonParams);
+
+    const data = isBookmarked ? bookmarkedData : courseData;
+
     const Questions = useMemo(
         () =>
             (Array.isArray(DateCourseQuestion) ? DateCourseQuestion.slice(0, 7) : [])
@@ -101,7 +100,6 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         [],
     );
 
-    // 인덱스 → 현재 값 매핑
     const valueByIndex = (idx: number) => {
         switch (idx) {
             case 0:
@@ -123,7 +121,6 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         }
     };
 
-    // ✅ 에러는 상태로 들고 있지 않고, 항상 파생 계산
     const errorMessages = useMemo(
         () =>
             computeErrors({
@@ -136,11 +133,8 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         [budget, dateDurationTime, mealTypes, userPreferredKeywords, startTime],
     );
 
-    // 값 갱신 (검증 호출 없음)
     const updateByIndex = (idx: number, raw: any) => {
         let v = raw;
-
-        // 배열 필드는 타입 보정
         if ([1, 3, 6].includes(idx) && !Array.isArray(v)) v = [];
 
         switch (idx) {

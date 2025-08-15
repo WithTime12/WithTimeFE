@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
 
@@ -28,6 +28,11 @@ function BookmarkedDateCourse() {
         startTime,
     });
 
+    (useEffect(() => {
+        setCurrent(1);
+    }),
+        [budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords]);
+
     return (
         <div className="w-full flex justify-center items-center flex-col h-fit">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
@@ -43,7 +48,7 @@ function BookmarkedDateCourse() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[24px] ">
-                        {data?.result.dateCourseList.map((course) => {
+                        {data?.result?.dateCourseList?.map((course) => {
                             return <DateCourse defaultOpen={false} key={course.dateCourseId} {...course} />;
                         })}
                     </div>

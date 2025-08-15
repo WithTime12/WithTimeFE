@@ -51,7 +51,7 @@ export default function Course() {
                 <div className="flex flex-col shadow-default rounding-16 px-[10px] sm:px-[40px] py-[24px]">
                     <div className="flex w-full justify-between py-[24px] gap-[12px] lg:flex-row flex-col">
                         <div className="font-heading3 sm:w-fit w-full text-center justify-center select-none">
-                            {gradeData?.result.username} 님만의 데이트 코스
+                            {gradeData?.result.username ?? '회원님의'} 님만의 데이트 코스
                         </div>
                         <div className="flex gap-[12px] justify-center items-center sm:justify-end flex-col sm:flex-row">
                             <div
@@ -64,11 +64,11 @@ export default function Course() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[24px] ">
-                        {data?.result.dateCourseList.map((course) => {
-                            return <DateCourse key={course.dateCourseId} {...course} />;
+                        {data?.result.dateCourseList.map((course, idx) => {
+                            return <DateCourse key={course.dateCourseId ?? idx} {...course} />;
                         })}
                     </div>
-                    <Navigator current={current} end={14} onClick={setCurrent} />
+                    <Navigator current={current} end={data?.result.totalPages!} onClick={setCurrent} />
                 </div>
             </div>
         </div>

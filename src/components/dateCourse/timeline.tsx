@@ -14,7 +14,11 @@ function Timeline({ end = false, image, name, placeCategoryResponseList, roadNam
     const [open, setOpen] = useState(false);
     return (
         <div className="flex w-full gap-2 flex-col">
-            <div className={`${!end && 'hover:cursor-pointer'} flex justify-center gap-2 items-center`} onClick={() => (end ? undefined : setOpen(!open))}>
+            <div
+                role="button"
+                className={`${!end && 'hover:cursor-pointer'} flex justify-center gap-2 items-center`}
+                onClick={() => (end ? undefined : setOpen(!open))}
+            >
                 <div className="flex items-center h-full font-body2 select-none">
                     {time.split(':')[0]}:{time.split(':')[1]}
                 </div>
@@ -29,7 +33,7 @@ function Timeline({ end = false, image, name, placeCategoryResponseList, roadNam
             </div>
 
             {open && (
-                <div className="flex lg:items-start self-stretch w-full gap-[9px] flex-col lg:flex-row itmes-center">
+                <div className="flex lg:items-start self-stretch w-full gap-[9px] flex-col lg:flex-row items-center">
                     <div className="flex flex-col gap-[8px] lg:w-[50%] max-h-fit justify-around items-start">
                         {signatureDish && (
                             <div className="flex w-full flex-col ">
@@ -37,7 +41,7 @@ function Timeline({ end = false, image, name, placeCategoryResponseList, roadNam
                                     <div className="flex text-center h-full">WithTime Pick</div>
                                     <CheckSuccess stroke={'#000000'} />
                                 </div>
-                                <KeywordButton tag={signatureDish.name!} />
+                                <KeywordButton tag={signatureDish.name || ''} />
                             </div>
                         )}
                         {image && <img src={image} className="w-[80%] self-start" />}
@@ -49,12 +53,12 @@ function Timeline({ end = false, image, name, placeCategoryResponseList, roadNam
                         </div>
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 items-center select-none">
                             <Cash stroke="#000000" className="min-w-[24px]" />
-                            {averagePrice}원
+                            {averagePrice != null ? `${averagePrice}원` : '가격 정보 없음'}
                         </div>
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 lg:items-start">
                             <Blub stroke="#000000" className="min-w-[24px] pt-[4px]" />
                             <div className="flex gap-[12px] flex-wrap items-center">
-                                {placeCategoryResponseList!.map((tag, idx) => {
+                                {(placeCategoryResponseList ?? []).map((tag, idx) => {
                                     return <KeywordButton key={idx} tag={tag.label} />;
                                 })}
                             </div>

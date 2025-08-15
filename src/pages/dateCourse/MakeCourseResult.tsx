@@ -11,13 +11,13 @@ import DateCourseLoading from '@/components/dateCourse/dateCourseLoading';
 import Button from '../../components/common/Button';
 
 import Reload from '@/assets/icons/arrow_spin.svg?react';
-import Logo from '@/assets/withTimeLogo//logo_Blank.svg?react';
+import Logo from '@/assets/withTimeLogo/logo_Blank.svg?react';
 import useDateCourseResultStore from '@/store/useDateCourseResultStore';
 import useFilterStore from '@/store/useFilterStore';
 
 export default function MakeCourseResult() {
     const navigate = useNavigate();
-    const { setAll, ...courseData } = useDateCourseResultStore();
+    const { setAll, resetDateCourseResultStore, ...courseData } = useDateCourseResultStore();
     const { useMakeCourse } = useCourse();
     const { budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime } = useFilterStore();
     const { mutate: makeCourseMutate, isPending } = useMakeCourse;
@@ -33,7 +33,7 @@ export default function MakeCourseResult() {
                 transportation: transportation!,
                 userPreferredKeywords,
                 startTime: startTime!,
-                excludedCourseSignatures: JSON.parse(localStorage.getItem('signature') ?? '[]'),
+                excludedCourseSignatures: SigStorage.get(),
             },
             {
                 onSuccess: (data) => {

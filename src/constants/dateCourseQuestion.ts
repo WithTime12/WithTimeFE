@@ -47,7 +47,7 @@ export const DateCourseQuestion = [
         options: ['도보', '자차', '대중교통'],
         apiRequestValue: ['WALK', 'CAR', 'PUBLICTRAN'],
         type: 'choice',
-        filterTitle: '',
+        filterTitle: '이동 수단',
     },
     {
         id: 5,

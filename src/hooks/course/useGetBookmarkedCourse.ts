@@ -8,6 +8,7 @@ import { dateCourseKeys } from '@/queryKey/queryKey';
 type TUseGetBookmarkedCourseProps = TCourseFilter & {
     size: number;
     page: number;
+    isBookmarked: boolean;
 };
 export default function useGetBookmarkedCourse({
     budget,
@@ -19,6 +20,7 @@ export default function useGetBookmarkedCourse({
     startTime,
     size,
     page,
+    isBookmarked,
 }: TUseGetBookmarkedCourseProps) {
     return useCoreQuery(
         dateCourseKeys.getBookmarkedDateCourse({
@@ -44,5 +46,8 @@ export default function useGetBookmarkedCourse({
                 size,
                 page,
             }),
+        {
+            enabled: isBookmarked,
+        },
     );
 }

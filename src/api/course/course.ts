@@ -70,6 +70,8 @@ export const getDateCourse = async ({
     mealTypes,
     transportation,
     userPreferredKeywords,
+    dateDurationTime,
+    startTime,
     page,
     size,
 }: TGetDateCourseRequest): Promise<TGetDateCourseResponse> => {
@@ -79,7 +81,9 @@ export const getDateCourse = async ({
             size,
             budget,
             datePlaces,
+            dateDurationTime,
             mealTypes,
+            startTime,
             transportation,
             userPreferredKeywords,
         },
@@ -94,17 +98,24 @@ export const getBookmarkedDateCourse = async ({
     mealTypes,
     transportation,
     userPreferredKeywords,
+    dateDurationTime,
+    startTime,
     page,
     size,
 }: TGetBookmarkedDateCourseRequest): Promise<TGetBookmarkedDateCourseResponse> => {
-    const { data } = await axiosInstance.post('/api/v1/date-courses/bookmarks/search', {
-        page,
-        size,
-        budget,
-        datePlaces,
-        mealTypes,
-        transportation,
-        userPreferredKeywords,
+    const { data } = await axiosInstance.get('/api/v1/date-courses/bookmarks/search', {
+        params: {
+            page,
+            size,
+            budget,
+            datePlaces,
+            mealTypes,
+            dateDurationTime,
+            transportation,
+            startTime,
+            userPreferredKeywords,
+        },
+        paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
     });
     return data;
 };

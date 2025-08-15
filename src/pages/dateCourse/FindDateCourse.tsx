@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useGetCourse from '@/hooks/course/useGetCourse';
@@ -17,6 +17,10 @@ function FindDateCourse() {
     const [current, setCurrent] = useState(1);
     const navigate = useNavigate();
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    useEffect(() => {
+        setCurrent(1);
+    }, [budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords]);
+
     const { data: courseData } = useGetCourse({
         page: current,
         size: 5,
