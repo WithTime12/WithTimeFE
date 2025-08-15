@@ -61,9 +61,20 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
                 console.error('dateCourseId가 없어 북마크를 생성할 수 없습니다');
                 return;
             }
-            postBookmark({
-                dateCourseId: dateCourseID!,
-            });
+            postBookmark(
+                {
+                    dateCourseId: dateCourseID!,
+                },
+                {
+                    onSuccess: (response) => {
+                        setDateCourseID(response.result.dateCourseId);
+                        setBookmarked(true);
+                    },
+                    onError: () => {
+                        console.error('북마크 도중 에러가 발생하였습니다.');
+                    },
+                },
+            );
         }
     };
 
