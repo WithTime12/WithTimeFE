@@ -44,16 +44,20 @@ axiosInstance.interceptors.response.use(
                     if (refreshError.response?.data.message === 'The token is null.') {
                         console.error('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
                         void logout();
+                        localStorage.clear();
                     } else if (refreshError.response?.data.message === 'The token is invalid.') {
                         console.error('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.');
                         void logout();
+                        localStorage.clear();
                     } else {
                         console.error('알 수 없는 오류가 발생했습니다', errors);
                         void logout();
+                        localStorage.clear();
                     }
                 } else {
                     console.error('알 수 없는 오류가 발생했습니다', errors);
                     void logout();
+                    localStorage.clear();
                 }
 
                 return Promise.reject(errors);

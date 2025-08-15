@@ -26,7 +26,7 @@ export default function SettingsModal({ onClose, defaultTab = '알람' }: ISetti
     const handleLogout = () => {
         logoutMutate(undefined, {
             onSuccess: () => {
-                localStorage.removeItem('accessToken');
+                localStorage.clear();
                 navigate('/');
             },
             onError: () => {

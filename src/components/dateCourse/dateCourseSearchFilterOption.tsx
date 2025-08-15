@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { TDateCourseSearchFilterOption, TRegion } from '@/types/dateCourse/dateCourse';
 import DATE_KEYWORD from '@/constants/dateKeywords';
@@ -12,7 +12,17 @@ import EditableInputBox from '../common/EditableInputBox';
 
 import Calendar from '@/assets/icons/calendar_Blank.svg?react';
 
-export default function DateCourseSearchFilterOption({ options, type, value, onChange, title, subTitle, errorMessage }: TDateCourseSearchFilterOption) {
+export default function DateCourseSearchFilterOption({
+    options,
+    apiRequestValue,
+    type,
+    value,
+    onChange,
+    title,
+    subTitle,
+    errorMessage,
+    autoInit,
+}: TDateCourseSearchFilterOption) {
     const now = new Date();
 
     const defaultDate = now.toISOString().split('T')[0]; // '2025-07-17'
@@ -25,8 +35,10 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
     const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
-        onChange(`${date} ${time}`);
-    }, []);
+        if (type === 'time' && autoInit && (value == null || value === '')) {
+            onChange(`${date}T${time}`);
+        }
+    }, [type, autoInit, value]);
 
     const handleDateClick = () => {
         dateInputRef.current?.showPicker?.();
@@ -37,7 +49,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
     };
 
     const handleDeletePlaceOption = (val: string) => {
-        if (Array.isArray(value)) {
+        if (Array.isArray(value) && type === 'search') {
             onChange(value.filter((v) => v !== val));
         }
     };
@@ -54,6 +66,15 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
         refetch();
     };
 
+    const items = useMemo(
+        () =>
+            options?.map((label, idx) => ({
+                label,
+                value: apiRequestValue && apiRequestValue[idx],
+            })),
+        [options, apiRequestValue],
+    );
+
     return (
         <div className="flex w-full gap-[24px] flex-col h-fit">
             <div className="flex w-full text-default-gray-700 sm:flex-row flex-col gap-[8px] sm:items-center">
@@ -63,20 +84,29 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
             <div className="font-body3 text-warning">{errorMessage}</div>
             <div className="flex w-full gap-[16px] flex-wrap sm:justify-start justify-center">
                 {type === 'choice' &&
-                    options?.map((option, idx) => (
-                        <DateCourseOptionButton key={idx} option={option} isSelected={value === option} onClick={() => onChange(option)} />
-                    ))}
-
-                {type === 'choices' &&
-                    options?.map((option, idx) => {
-                        const current = Array.isArray(value) ? value : [];
-                        const isSelected = current.includes(option);
+                    items?.map(({ label, value: apiValue }, idx) => {
                         return (
                             <DateCourseOptionButton
                                 key={idx}
-                                option={option}
+                                option={label}
+                                isSelected={value === apiValue}
+                                onClick={() => {
+                                    onChange(apiValue!);
+                                }}
+                            />
+                        );
+                    })}
+
+                {type === 'choices' &&
+                    items?.map(({ label, value: apiValue }, idx) => {
+                        const current = Array.isArray(value) ? value : [];
+                        const isSelected = current.includes(apiValue!);
+                        return (
+                            <DateCourseOptionButton
+                                key={idx}
+                                option={label}
                                 isSelected={isSelected}
-                                onClick={() => onChange(isSelected ? current.filter((v) => v !== option) : [...current, option])}
+                                onClick={() => onChange(isSelected ? current.filter((v) => v !== apiValue) : [...current, apiValue!])}
                             />
                         );
                     })}
@@ -149,7 +179,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                     onChange={(e) => {
                                         const val = e.target.value;
                                         setDate(val);
-                                        if (time) onChange(`${val} ${time}`);
+                                        if (time) onChange(`${val}T${time}:00`);
                                     }}
                                     className="absolute top-0 left-0 w-full h-full opacity-0"
                                 />
@@ -164,7 +194,7 @@ export default function DateCourseSearchFilterOption({ options, type, value, onC
                                     onChange={(e) => {
                                         const val = e.target.value;
                                         setTime(val);
-                                        if (date) onChange(`${date} ${val}`);
+                                        if (date) onChange(`${date}T${val}:00.000Z`);
                                     }}
                                     className="absolute top-0 left-0 w-full h-full opacity-0"
                                 />

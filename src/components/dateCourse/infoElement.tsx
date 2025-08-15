@@ -5,7 +5,7 @@ import KeywordButton from './keywordButton';
 type TInfoElement = {
     children: ReactElement;
     title: string;
-    tags: string[] | string;
+    tags?: string[] | string;
 };
 export default function InfoElement({ children, title, tags }: TInfoElement) {
     return (

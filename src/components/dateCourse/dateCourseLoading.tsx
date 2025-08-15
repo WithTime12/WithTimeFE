@@ -1,11 +1,14 @@
+import { useUserGrade } from '@/hooks/home/useUserGrade';
+
 import LoadingLogo from '@/assets/withTimeLogo/loadingLogo.svg?react';
 import Logo from '@/assets/withTimeLogo/logo_Blank.svg?react';
 
 export default function DateCourseLoading() {
+    const { data } = useUserGrade();
     return (
         <div className="flex flex-col z-1000 top-0 bg-default-gray-100 items-center justify-center w-[100vw] h-[100vh] absolute">
             <div className="font-heading1 text-center">
-                Madeleine님만의
+                {data?.result.username}님만의
                 <br />
                 데이트 코스 만드는 중...
             </div>

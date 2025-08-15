@@ -28,3 +28,30 @@ export const memberKeys = createQueryKeys('member', {
     memberGrade: null,
     // memberKeys안에 있는 걸 모두 초기화 하고 싶으면 alarmKeys._def로 호출하면 됩니다!
 });
+
+export const dateCourseKeys = createQueryKeys('course', {
+    all: null,
+    getBookmarkedDateCourse: ({ budget, datePlaces, mealTypes, dateDurationTime, transportation, userPreferredKeywords, startTime, size, page }) => [
+        'bookmark',
+        budget,
+        datePlaces,
+        mealTypes,
+        dateDurationTime,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+        size,
+        page,
+    ],
+    getDateCourse: ({ budget, datePlaces, mealTypes, dateDurationTime, transportation, userPreferredKeywords, startTime, size, page }) => [
+        budget,
+        datePlaces,
+        mealTypes,
+        dateDurationTime,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+        size,
+        page,
+    ],
+});
