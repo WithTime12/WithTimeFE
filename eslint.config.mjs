@@ -34,6 +34,7 @@ export default [
     {
         rules: {
             'prettier/prettier': 'warn',
+            'no-console': ['error', { allow: ['warn', 'error'] }],
         },
     },
     tsConfig,

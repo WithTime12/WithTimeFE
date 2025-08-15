@@ -33,7 +33,7 @@ export default function Modal({ isOpen = true, title, children, onClose, positio
                             <div className="font-heading2 text-default-gray-800">{title}</div>
                             <GraySvgButton type="cancle" onClick={onClose} />
                         </div>
-                        <div className="flex">{children}</div>
+                        <div className="flex px-[12px]">{children}</div>
                     </div>
                 </div>
             </div>

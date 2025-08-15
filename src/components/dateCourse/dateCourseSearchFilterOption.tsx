@@ -121,7 +121,7 @@ export default function DateCourseSearchFilterOption({
                                 mode="search"
                                 onSearchClick={handleSearch}
                                 placeholder="ex: 서울시 강남구"
-                                className="!min-w-full"
+                                className="!w-full min-w-full"
                                 value={inputValue}
                                 onChange={handleInputChange}
                             />

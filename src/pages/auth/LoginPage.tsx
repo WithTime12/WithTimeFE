@@ -55,7 +55,7 @@ export default function Login() {
                         navigate('/home');
                     },
                     onError: (err) => {
-                        console.log(err.response?.data.message);
+                        console.error(err.response?.data.message);
                         setError('잘못된 정보를 입력하였습니다.');
                     },
                 },

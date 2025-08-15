@@ -1,28 +1,32 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
 
 export const regionKeys = createQueryKeys('region', {
-    search: (keyword: string) => [keyword],
+    search: (keyword: string) => ['search', keyword],
 });
 
 export const alarmKeys = createQueryKeys('alarm', {
-    getAlarm: (size: number, cursor?: number) => [size, cursor],
+    getAlarm: (size: number, cursor?: number) => ['getAlarm', size, cursor],
+    alarmSettings: () => ['alarmSettings'],
 });
 
-export const HomeKeys = createQueryKeys('home', {
-    all: () => ['home'],
-    getUserGrade: () => ['home', 'user', 'grade'],
-    dateCourseSave: () => ['home', 'date-courses', 'saved-count'],
-    weather: (startDate, regionId) => ['home', 'weather', 'forecast', startDate, regionId],
-    rainyInfo: (startDate, regionId) => ['home', 'rainy', 'forecast', startDate, regionId],
-    keywords: () => ['home', 'keywords'],
-    dateTimes: () => ['home', 'dateTimes'],
-    monthlyPlaceStates: () => ['home', 'monthlyPlaceStates'],
-    userRegion: () => ['home', 'user', 'region'],
+export const homeKeys = createQueryKeys('home', {
+    getUserGrade: () => ['user', 'grade'],
+    dateCourseSave: () => ['date-courses', 'saved-count'],
+    weather: (startDate: string, regionId: number) => ['weather', 'forecast', startDate, regionId],
+    rainyInfo: (startDate: string, regionId: number) => ['rainy', 'forecast', startDate, regionId],
+    keywords: null,
+    dateTimes: null,
+    monthlyPlaceStates: null,
+    userRegion: () => ['user', 'region'],
 });
 
-export const NoticeKeys = createQueryKeys('notice', {
-    all: () => ['notice'],
-    getAllNotices: (page: number, size: number, noticeCategory: 'SERVICE' | 'SYSTEM') => ['notice', page, size, noticeCategory],
+export const noticeKeys = createQueryKeys('notice', {
+    getAllNotices: (page: number, size: number, noticeCategory: 'SERVICE' | 'SYSTEM') => [page, size, noticeCategory],
+});
+export const memberKeys = createQueryKeys('member', {
+    memberInfo: null,
+    memberGrade: null,
+    // memberKeys안에 있는 걸 모두 초기화 하고 싶으면 alarmKeys._def로 호출하면 됩니다!
 });
 
 export const dateCourseKeys = createQueryKeys('course', {

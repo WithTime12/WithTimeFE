@@ -8,7 +8,7 @@ import type { TUserSettingFormValues } from '@/types/auth/auth';
 import { Gender } from '@/types/auth/auth';
 
 import formatDateInput from '@/utils/formatDateInput';
-import formatInputNumber from '@/utils/formatPhoneNumber';
+import formatPhoneNumber from '@/utils/formatPhoneNumber';
 import { userSettingSchema } from '@/utils/validation';
 
 import { useAuth } from '@/hooks/auth/useAuth';
@@ -21,7 +21,6 @@ import Button from '../../components/common/Button';
 import useAuthStore from '@/store/useAuthStore';
 
 export default function User() {
-    const [error, setError] = useState('');
     const [gender, setGender] = useState(Gender.MALE);
     const [agree1, setAgree1] = useState(false);
     const [agree2, setAgree2] = useState(false);
@@ -40,6 +39,7 @@ export default function User() {
         resolver: zodResolver(userSettingSchema),
         defaultValues: {
             gender: Gender.MALE,
+            phoneNum: '010-',
         },
     });
     const { mutate: signupMutate, isPending } = useDefaultSignup;
@@ -58,12 +58,12 @@ export default function User() {
                 },
                 {
                     onSuccess: () => {
-                        setSocialId(-1);
-                        navigate('/home');
+                        setSocialId(socialId ?? -1);
+                        alert('성공적으로 회원가입되었습니다.');
+                        navigate('/');
                     },
                     onError: (err) => {
-                        console.log(err);
-                        setError(err.response?.data.message!);
+                        alert(err.response?.data.message ?? '회원가입 중 문제가 발생했습니다.');
                     },
                 },
             );
@@ -71,11 +71,11 @@ export default function User() {
     };
 
     return (
-        <div className="min-w-[280px] w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-6">
+        <div className="min-w-[280px] w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-[5px]">
             <div className="w-full flex justify-start">
                 <GraySvgButton type="backward" onClick={() => navigate('/Join')} />
             </div>
-            <form className="flex-col flex items-center justify-center w-[367px] min-w-[280px] gap-6" onSubmit={handleSubmit(onSubmit)}>
+            <form className="flex-col flex items-center justify-center w-[367px] min-w-[280px] gap-[20px]" onSubmit={handleSubmit(onSubmit)}>
                 <div className="font-heading1">회원가입</div>
                 <div className="flex flex-col gap-[32px] w-full">
                     <div className="flex w-full gap-[16px] justify-center items-center">
@@ -87,7 +87,7 @@ export default function User() {
                             children={'남자'}
                             size="big-32"
                             variant={`${gender == Gender.MALE ? 'mint' : 'white'}`}
-                            className="px-[32px] !py-[16px]"
+                            className="px-[32px] !py-[12px]"
                         />
                         <Button
                             onClick={() => {
@@ -97,7 +97,7 @@ export default function User() {
                             children={'여자'}
                             size="big-32"
                             variant={`${gender == Gender.FEMALE ? 'mint' : 'white'}`}
-                            className="px-[32px] !py-[16px]"
+                            className="px-[32px] !py-[12px]"
                         />
                     </div>
                     <Controller
@@ -134,18 +134,20 @@ export default function User() {
                                     type="phoneNum"
                                     value={value ?? ''}
                                     onChange={(e) => {
-                                        const formatted = formatInputNumber(e.target.value);
-                                        onChange({ ...e, target: { ...e.target, value: formatted } });
+                                        const formatted = formatPhoneNumber(e.target.value);
+                                        onChange(formatted);
                                     }}
                                     ref={ref}
                                     placeholder="전화번호 (010-xxxx-xxxx)"
                                     title="Phone Number"
+                                    error={!!errors.phoneNum?.message}
+                                    errorMessage={errors.phoneNum?.message}
                                 />
                             )}
                         />
                         <div
                             className={`font-caption text-default-gray-500
-                            ${(errors.phoneNum?.message || error) && 'pt-[16px]'}
+                            ${errors.phoneNum?.message && 'pt-[16px]'}
                             `}
                         >
                             전화번호는 이메일을 잊었을 때 찾기 위한 용도입니다. 정확하게 기재해주세요.
@@ -163,13 +165,12 @@ export default function User() {
                         이용약관 동의
                     </div>
                 </div>
-                <div className="flex text-warning font-body1">{error}</div>
                 <Button
                     children={'회원가입 완료'}
                     size="big-16"
                     variant="mint"
                     onClick={handleSubmit(onSubmit)}
-                    disabled={!isValid || !agree1 || !agree2 || isPending || error !== ''}
+                    disabled={!isValid || !agree1 || !agree2 || isPending}
                     className="w-full"
                 />
             </form>

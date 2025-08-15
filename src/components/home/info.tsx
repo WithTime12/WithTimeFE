@@ -1,7 +1,7 @@
 import { Navigate, useNavigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-import { useGetNotices } from '@/hooks/notices/useGetNotices';
+import { useNotice } from '@/hooks/notice/useNotice';
 
 import MainCard from './mainCard';
 
@@ -9,11 +9,14 @@ import AddCircleBlank from '@/assets/icons/add-circle_Blank.svg?react';
 
 function MainInfo() {
     const navigate = useNavigate();
-    const { data, error, isLoading } = useGetNotices({ size: 3, page: 0, noticeCategory: 'SERVICE' });
+    const { useGetNotices } = useNotice();
 
-    if (error) {
-        return <Navigate to={'/error'} replace />;
+    const { data, isError, isLoading } = useGetNotices({ size: 3, page: 0, category: 'SERVICE' });
+
+    if (isError) {
+        return <Navigate to="/error" replace />;
     }
+
     if (isLoading) {
         return (
             <MainCard>
@@ -21,7 +24,9 @@ function MainInfo() {
             </MainCard>
         );
     }
-    const notices = data?.pages.flatMap((page) => page.result.noticeList) ?? [];
+
+    const notices = data?.result?.noticeList ?? [];
+
     return (
         <MainCard>
             <div className="flex flex-col w-full sm:px-[48px] px-[20px] sm:py-[40px] py-[20px] shadow-default rounded-2xl">

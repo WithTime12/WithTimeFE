@@ -6,6 +6,9 @@ import { useUserRegion } from '@/hooks/home/useUserRegion';
 import EditableInputBox from '@/components/common/EditableInputBox';
 import Modal from '@/components/common/modal';
 
+import { queryClient } from '@/api/queryClient';
+import { homeKeys } from '@/queryKey/queryKey';
+
 interface IRegionModalProps {
     onClose: () => void;
 }
@@ -23,6 +26,7 @@ function RegionModal({ onClose }: IRegionModalProps) {
             },
             {
                 onSuccess: () => {
+                    void queryClient.invalidateQueries({ queryKey: homeKeys.userRegion().queryKey });
                     onClose();
                 },
             },

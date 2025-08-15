@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { useGetAlarmSettings, usePatchAlarmSettings } from '@/hooks/settingAlarm/useAlarms';
 
 import ToggleSwitch from '@/components/common/ToggleSwitch';
 
-// 알람 타입 정의
+import { queryClient } from '@/api/queryClient';
+import { alarmKeys } from '@/queryKey/queryKey';
+
 type TAlarmType = 'email' | 'push' | 'sms';
 
-// 알람 설정 상태 구조
 interface IAlarmSettingState {
     email: boolean;
     push: boolean;
@@ -13,36 +16,58 @@ interface IAlarmSettingState {
 }
 
 export default function AlarmSetting() {
-    // 상태 관리
+    // 서버 데이터
+    const { data: serverSettings } = useGetAlarmSettings();
+    const { mutate: patchAlarm } = usePatchAlarmSettings();
+
+    // 초기 값
     const [alarmSetting, setAlarmSetting] = useState<IAlarmSettingState>({
         email: true,
         push: true,
-        sms: false,
+        sms: true,
     });
 
-    // 토글 변경 핸들러 - 이전 값 기준으로 반전
-    const handleToggle = (type: TAlarmType) => {
-        setAlarmSetting((prev) => ({
-            ...prev,
-            [type]: !prev[type],
-        }));
-    };
+    // 서버 값 수신 -> UI 상태 매핑
+    useEffect(() => {
+        if (!serverSettings) return;
+        setAlarmSetting({
+            email: !!serverSettings.emailAlarm,
+            push: !!serverSettings.pushAlarm,
+            sms: !!serverSettings.smsAlarm,
+        });
+    }, [serverSettings]);
 
-    // UI 표시할 항목 배열
-    const alarmItems: { label: string; key: TAlarmType }[] = [
+    // 토글 핸들러
+    const handleToggle = (key: TAlarmType) => {
+        setAlarmSetting((prev) => {
+            const next = { ...prev, [key]: !prev[key] };
+            patchAlarm(
+                {
+                    emailAlarm: next.email,
+                    pushAlarm: next.push,
+                    smsAlarm: next.sms,
+                },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({ queryKey: alarmKeys.alarmSettings().queryKey });
+                    },
+                    onError: () => setAlarmSetting(prev),
+                },
+            );
+            return next;
+        });
+    };
+    const items: { label: string; key: TAlarmType }[] = [
         { label: 'Email 알람', key: 'email' },
         { label: '푸쉬 알람', key: 'push' },
         { label: 'SMS 알람', key: 'sms' },
     ];
 
     return (
-        <div className="mt-5 flex flex-col gap-10 p-8">
-            {alarmItems.map(({ label, key }) => (
-                <div key={key} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6 w-full">
-                    {/* 텍스트 */}
+        <div className="mt-5 flex flex-col gap-10">
+            {items.map(({ label, key }) => (
+                <div key={key} className="flex sm:items-center justify-between gap-3 sm:gap-6 w-full sm:px-0 px-[20px]">
                     <p className="font-heading3 text-default-gray-800 truncate overflow-hidden">{label}</p>
-
-                    {/* 토글 */}
                     <ToggleSwitch value={alarmSetting[key]} onChange={() => handleToggle(key)} onLabel="ON" offLabel="OFF" />
                 </div>
             ))}
