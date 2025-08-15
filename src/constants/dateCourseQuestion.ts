@@ -70,3 +70,24 @@ export const DateCourseQuestion = [
         filterTitle: '만날 시간',
     },
 ];
+
+export enum Budget {
+    UNDER_10K = '1만원 이하',
+    FROM_10K_TO_20K = '1-2만원',
+    FROM_20K_TO_30K = '2-3만원',
+    OVER_30K = '3만원 이상',
+}
+
+export enum TotalTime {
+    ONETOTWO = '1-2시간',
+    TWOTOTHREE = '2-3시간',
+    THREETOFOUR = '3-4시간',
+    HALFDAY = '반나절',
+    ALLDAY = '하루 종일',
+}
+
+export enum Meal {
+    BREAKFAST = '아침',
+    LUNCH = '점심',
+    DINNER = '저녁',
+}

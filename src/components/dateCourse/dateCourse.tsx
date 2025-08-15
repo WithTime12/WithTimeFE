@@ -14,7 +14,7 @@ import KeyboardArrowDown from '@/assets/icons/keyboard_arrow_down_False.svg?reac
 
 type TDateCourseProps = TDateCourse & {
     defaultOpen?: boolean;
-    isBookmarked: boolean;
+    isBookmarked: boolean | null;
     signature: string;
     make?: boolean;
     dateCourseSearchCondInfo: TDateCourseSearchCondInfo;
@@ -24,7 +24,7 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
     const [open, setOpen] = useState(defaultOpen || false);
     const [openEdit, setOpenEdit] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-    const [bookmarked, setBookmarked] = useState(isBookmarked);
+    const [bookmarked, setBookmarked] = useState<boolean | null>(isBookmarked);
     const [dateCourseID, setDateCourseID] = useState<number | undefined>(dateCourseId);
     const moreRef = useRef<HTMLDivElement>(null);
     const { usePostBookmark, usePostMakeBookmark } = useBookmark();
@@ -67,6 +67,7 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [openEdit]);
+    const lastEndTime = datePlaces[datePlaces.length - 1]?.endTime;
 
     return (
         <div className="flex flex-col h-fit w-full min-w-[250px] self-center rounding-32 border-b-[1px] border-r-[1px] border-l-[1px] border-primary-700 bg-default-gray-100">
@@ -99,19 +100,9 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
                     <div className="w-full lg:px-[48px] px-[24px] py-[40px] gap-[48px] flex justify-between h-fit lg:flex-row flex-col">
                         <div className="flex flex-col lg:w-[60%] gap-[16px]">
                             {datePlaces.map((place, idx) => {
-                                return (
-                                    <Timeline
-                                        key={idx}
-                                        title={place.name}
-                                        time={place.startTime}
-                                        address={place.roadNameAddress}
-                                        price={place.averagePrice}
-                                        tags={['감성 카페', '디저트 맛집']}
-                                        menu={place.information}
-                                    />
-                                );
+                                return <Timeline key={idx} time={place.startTime} tags={['감성 카페', '디저트 맛집']} {...place} />;
                             })}
-                            <Timeline end={true} time="14:00" />
+                            <Timeline end={true} time={lastEndTime} />
                         </div>
                         <div className="border-[0.5px] border-default-gray-700 w-full lg:w-[1px]" />
                         <div className="flex flex-col lg:w-[50%]">
@@ -119,7 +110,7 @@ function DateCourse({ defaultOpen = false, name, make, dateCourseId, isBookmarke
                                 cashTag={dateCourseSearchCondInfo?.budget}
                                 locationTag={dateCourseSearchCondInfo?.datePlaces}
                                 timeTag={dateCourseSearchCondInfo?.dateDurationTime}
-                                MealTag={dateCourseSearchCondInfo?.mealPlan}
+                                MealTag={dateCourseSearchCondInfo?.mealTypes}
                                 keywordTags={dateCourseSearchCondInfo?.userPreferredKeywords}
                             />
                         </div>

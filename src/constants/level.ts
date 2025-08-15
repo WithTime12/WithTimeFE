@@ -11,8 +11,8 @@ const gradeTable: TGradeInfo[] = [
     { name: 'JOURNEYMAN', point: 500 },
     { name: 'TRAILBLAZER', point: 800 },
     { name: 'TIMEKEEPER', point: 1200 },
-    { name: 'ROMANTIC NOMAD', point: 1700 },
-    { name: 'MASTER OF MOMENTS', point: 2300 },
+    { name: 'ROMANTIC_NOMAD', point: 1700 },
+    { name: 'MASTER_OF_MOMENTS', point: 2300 },
     { name: 'WITHTIME', point: 3000 },
 ];
 

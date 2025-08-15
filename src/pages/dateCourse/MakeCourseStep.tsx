@@ -14,10 +14,14 @@ import {
     TotalTimeMealValidation,
 } from '@/utils/dateCourseValidation';
 
+import { useCourse } from '@/hooks/course/useCourse';
+
 import Button from '@/components/common/Button';
 import GraySvgButton from '@/components/common/graySvgButton';
+import DateCourseLoading from '@/components/dateCourse/dateCourseLoading';
 import DateCourseSearchFilterOption from '@/components/dateCourse/dateCourseSearchFilterOption';
 
+import useDateCourseResultStore from '@/store/useDateCourseResultStore';
 import useFilterStore from '@/store/useFilterStore';
 
 const TOTAL_QUESTIONS = 8;
@@ -42,23 +46,14 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
 export default function MakeCourseStep() {
     const { step } = useParams<{ step: string }>();
     const navigate = useNavigate();
-
-    // 전역 필터 + setter
     const { budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime, setField } = useFilterStore();
 
     const [errorMessage, setErrorMessage] = useState<string>('');
-
+    const { useMakeCourse } = useCourse();
+    const { mutate: makeCourseMutate, isPending } = useMakeCourse;
     const currentStep = Number(step);
     const question = Questions[currentStep - 1];
-
-    useEffect(() => {
-        if (!step) navigate('/makeCourse/1', { replace: true });
-    }, []);
-
-    useEffect(() => {
-        document.documentElement.scrollTo({ top: 0 });
-        document.body.scrollTo({ top: 0 });
-    }, [currentStep, errorMessage]);
+    const { setAll } = useDateCourseResultStore();
 
     const handlePrev = () => {
         if (currentStep > 1) navigate(`/makeCourse/${currentStep - 1}`);
@@ -130,10 +125,41 @@ export default function MakeCourseStep() {
 
         if (currentStep < TOTAL_QUESTIONS - 1) {
             navigate(`/makeCourse/${currentStep + 1}`);
-        } else {
-            navigate('/makeCourse/result');
         }
     };
+
+    const handleSubmit = () => {
+        makeCourseMutate(
+            {
+                budget: budget!,
+                dateDurationTime: dateDurationTime!,
+                datePlaces: datePlaces,
+                mealTypes: mealTypes,
+                transportation: transportation!,
+                userPreferredKeywords,
+                startTime: startTime!,
+                excludedCourseSignatures: [],
+            },
+            {
+                onSuccess: (data) => {
+                    setAll(data.result);
+                    navigate('/makeCourse/result');
+                },
+                onError: () => {
+                    navigate('/makeCourse');
+                },
+            },
+        );
+    };
+
+    useEffect(() => {
+        if (!step) navigate('/makeCourse/1', { replace: true });
+    }, []);
+
+    useEffect(() => {
+        document.documentElement.scrollTo({ top: 0 });
+        document.body.scrollTo({ top: 0 });
+    }, [currentStep, errorMessage]);
 
     useEffect(() => {
         let msg = '';
@@ -157,10 +183,11 @@ export default function MakeCourseStep() {
         }
         setErrorMessage(msg);
     }, [currentStep, budget, dateDurationTime, mealTypes, userPreferredKeywords, startTime]);
-    useEffect(() => {
-        console.log(budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime);
-    }, [budget, dateDurationTime, mealTypes, userPreferredKeywords, startTime, transportation]);
+
     if (!question) return <div>질문을 불러올 수 없습니다.</div>;
+    if (isPending) {
+        return <DateCourseLoading />;
+    }
 
     return (
         <div className="flex flex-col px-6 max-w-[90vw] w-[1000px] mx-auto pt-[50px] pb-[150px] gap-[10px] min-h-[90vh] h-fit">
@@ -190,9 +217,15 @@ export default function MakeCourseStep() {
                 />
 
                 <div className="mt-[120px] flex w-full items-center justify-center">
-                    <Button className="w-fit px-[100px] items-center self-center" onClick={handleNext} variant="mint" size="big-16" disabled={isDisabled}>
-                        {currentStep === TOTAL_QUESTIONS ? '결과 보기' : '다음'}
-                    </Button>
+                    {currentStep === TOTAL_QUESTIONS - 1 ? (
+                        <Button className="w-fit px-[100px] items-center self-center" onClick={handleSubmit} variant="mint" size="big-16" disabled={isDisabled}>
+                            결과보기
+                        </Button>
+                    ) : (
+                        <Button className="w-fit px-[100px] items-center self-center" onClick={handleNext} variant="mint" size="big-16" disabled={isDisabled}>
+                            다음
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

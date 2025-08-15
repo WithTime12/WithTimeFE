@@ -20,7 +20,7 @@ function FindDateCourse() {
         size: 5,
         budget,
         dateDurationTime,
-        datePlaces: ['서울 종로구 인사동'],
+        datePlaces: datePlaces,
         mealTypes,
         transportation,
         userPreferredKeywords,

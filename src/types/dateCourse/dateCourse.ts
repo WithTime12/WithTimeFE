@@ -2,26 +2,24 @@ import type { Dispatch, SetStateAction } from 'react';
 
 import type { TCommonResponse } from '@/types/common/common';
 
-export type TTimeline = {
-    end?: boolean;
-    title?: string;
-    time: string;
-    address?: string;
-    price?: number;
-    tags?: string[];
-    menu?: string;
-};
 export type TInfo = {
-    cashTag?: string;
-    locationTag?: string[];
-    timeTag?: string;
-    MealTag?: string[];
-    keywordTags?: string[];
+    cashTag: string;
+    locationTag: string[];
+    timeTag: string;
+    MealTag: string[];
+    keywordTags: string[];
 };
 export type TTag = {
     id: number;
     label: string;
     code: string;
+};
+
+type TSignatureDish = {
+    ItemId: number;
+    imageUrl: string;
+    name: string;
+    price: string;
 };
 
 export type TTags = TTag[];
@@ -98,7 +96,7 @@ export type TDateCourseSearchCondInfo = {
     budget: string;
     datePlaces: string[];
     dateDurationTime: string;
-    mealPlan: string[];
+    mealTypes: string[];
     transportation: string;
     userPreferredKeywords: string[];
     startTime: string;
@@ -123,13 +121,37 @@ export type TDatePlaces = {
     roadNameAddress: string;
     lotNumberAddress: string;
     placeType: string;
+    signatureDish: TSignatureDish | null;
 };
+
+export type TTimeline = {
+    name?: string;
+    dateCourseId?: number;
+    datePlaceId?: number;
+    startTime?: string;
+    endTime?: string;
+    image?: string | null;
+    tel?: string;
+    averagePrice?: number;
+    information?: string;
+    latitude?: number;
+    longitude?: number;
+    roadNameAddress?: string;
+    lotNumberAddress?: string;
+    placeType?: string;
+    signatureDish?: TSignatureDish | null;
+    defaultOpen?: boolean;
+    time: string;
+    end?: boolean;
+    tags?: string[];
+};
+
 export type TDateCourse = {
     name: string;
     dateCourseId?: number;
     datePlaces: TDatePlaces[];
     dateCourseSearchCondInfo: TDateCourseSearchCondInfo;
-    isBookmarked: boolean;
+    isBookmarked: boolean | null;
     signature: string;
 };
 

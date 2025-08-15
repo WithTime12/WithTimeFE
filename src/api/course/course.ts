@@ -31,7 +31,7 @@ export const searchRegion = async ({ keyword }: TSearchRegionValues): Promise<TS
 export const postDateCourse = async ({
     budget,
     datePlaces,
-    mealPlan,
+    mealTypes,
     dateDurationTime,
     transportation,
     userPreferredKeywords,
@@ -42,7 +42,7 @@ export const postDateCourse = async ({
         budget,
         datePlaces,
         dateDurationTime,
-        mealPlan,
+        mealPlan: mealTypes,
         transportation,
         userPreferredKeywords,
         startTime,
