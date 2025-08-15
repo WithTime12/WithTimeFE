@@ -122,6 +122,14 @@ export type TDatePlaces = {
     lotNumberAddress: string;
     placeType: string;
     signatureDish: TSignatureDish | null;
+    placeCategoryResponseList: TPlaceCategoryResponseList[];
+};
+
+type TPlaceCategoryResponseList = {
+    placeCategoryType: string;
+    description: string;
+    code: string;
+    label: string;
 };
 
 export type TTimeline = {
@@ -143,7 +151,7 @@ export type TTimeline = {
     defaultOpen?: boolean;
     time: string;
     end?: boolean;
-    tags?: string[];
+    placeCategoryResponseList?: TPlaceCategoryResponseList[];
 };
 
 export type TDateCourse = {

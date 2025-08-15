@@ -44,20 +44,24 @@ axiosInstance.interceptors.response.use(
                     const refreshError = error as AxiosError<IRefreshResponse>;
                     if (refreshError.response?.data.message === 'The token is null.') {
                         console.log('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
+                        localStorage.clear();
                     } else if (refreshError.response?.data.message === 'The token is invalid.') {
                         console.log('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.');
                         logout();
+                        localStorage.clear();
                     } else {
                         if (refreshError.response?.data.message === 'Incorrect password.') {
                             alert('Your email or password is incorrect.');
                         } else {
                             console.log('알 수 없는 오류가 발생했습니다', errors);
                             logout();
+                            localStorage.clear();
                         }
                     }
                 } else {
                     console.log('알 수 없는 오류가 발생했습니다', errors);
                     logout();
+                    localStorage.clear();
                 }
 
                 return Promise.reject(errors);

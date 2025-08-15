@@ -10,7 +10,7 @@ import Cash from '@/assets/icons/cash_Blank.svg?react';
 import CheckSuccess from '@/assets/icons/Check-Success-Blank.svg?react';
 import Location from '@/assets/icons/Location_Blank.svg?react';
 
-function Timeline({ end = false, image, name, tags, roadNameAddress, averagePrice, time, signatureDish }: TTimeline) {
+function Timeline({ end = false, image, name, placeCategoryResponseList, roadNameAddress, averagePrice, time, signatureDish }: TTimeline) {
     const [open, setOpen] = useState(false);
     return (
         <div className="flex w-full gap-2 flex-col">
@@ -30,9 +30,9 @@ function Timeline({ end = false, image, name, tags, roadNameAddress, averagePric
 
             {open && (
                 <div className="flex lg:items-start self-stretch w-full gap-[9px] flex-col lg:flex-row itmes-center">
-                    <div className="flex flex-col gap-[8px] lg:w-[50%] h-full justify-center items-center">
+                    <div className="flex flex-col gap-[8px] lg:w-[50%] max-h-fit justify-around items-start">
                         {signatureDish && (
-                            <div>
+                            <div className="flex w-full flex-col ">
                                 <div className="flex gap-[8px] font-body1 select-none text-center items-center h-[24px] w-full">
                                     <div className="flex text-center h-full">WithTime Pick</div>
                                     <CheckSuccess stroke={'#000000'} />
@@ -40,7 +40,7 @@ function Timeline({ end = false, image, name, tags, roadNameAddress, averagePric
                                 <KeywordButton tag={signatureDish.name!} />
                             </div>
                         )}
-                        {image && <img src={image} className="w-[80%] self-center" />}
+                        {image && <img src={image} className="w-[80%] self-start" />}
                     </div>
                     <div className="flex flex-col h-full lg:w-[50%] gap-[16px]">
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 break-keep lg:items-start items-center">
@@ -53,9 +53,9 @@ function Timeline({ end = false, image, name, tags, roadNameAddress, averagePric
                         </div>
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 lg:items-start">
                             <Blub stroke="#000000" className="min-w-[24px] pt-[4px]" />
-                            <div className="flex gap-[16px] flex-wrap items-center">
-                                {tags!.map((tag, idx) => {
-                                    return <KeywordButton key={idx} tag={tag} />;
+                            <div className="flex gap-[12px] flex-wrap items-center">
+                                {placeCategoryResponseList!.map((tag, idx) => {
+                                    return <KeywordButton key={idx} tag={tag.label} />;
                                 })}
                             </div>
                         </div>

@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '@/hooks/auth/useAuth';
 
 import AlarmSetting from '@/components/settingTab/AlarmSetting';
 import InfoSetting from '@/components/settingTab/InfoSetting';
@@ -15,6 +18,20 @@ interface ISettingsModalProps {
 
 export default function SettingsModal({ onClose, defaultTab = '알람' }: ISettingsModalProps) {
     const [activeTab, setActiveTab] = useState<'알람' | '멤버십' | '정보'>(defaultTab);
+    const navigate = useNavigate();
+    const { useLogout } = useAuth();
+    const { mutate: logoutMutate } = useLogout;
+    const handleLogout = () => {
+        logoutMutate(
+            {},
+            {
+                onSuccess: () => {
+                    localStorage.clear();
+                    navigate('/');
+                },
+            },
+        );
+    };
 
     useEffect(() => {
         setActiveTab(defaultTab);
@@ -38,7 +55,7 @@ export default function SettingsModal({ onClose, defaultTab = '알람' }: ISetti
                 </div>
 
                 {/* 로그아웃 */}
-                <div className="font-body2 text-default-gray-800 cursor-pointer flex items-center space-x-2 mt-6">
+                <div className="font-body2 text-default-gray-800 cursor-pointer flex items-center space-x-2 mt-6" onClick={() => handleLogout()}>
                     <LogoutSvg className="w-4 h-4" fill="none" stroke="CurrentColor" />
                     <span>로그아웃</span>
                 </div>
