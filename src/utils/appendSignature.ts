@@ -26,8 +26,6 @@ export const SigStorage = {
             const list = this.get();
             list.push(sig);
             localStorage.setItem(this.key, JSON.stringify(list));
-            // 디버그 확인
-            console.log('[SigStorage] after append:', localStorage.getItem(this.key));
         } catch (e) {
             console.error('[SigStorage] append failed:', e);
         }
@@ -41,7 +39,6 @@ export const SigStorage = {
                 list.push(sig);
                 localStorage.setItem(this.key, JSON.stringify(list));
             }
-            console.log('[SigStorage] after appendUnique:', localStorage.getItem(this.key));
         } catch (e) {
             console.error('[SigStorage] appendUnique failed:', e);
         }
