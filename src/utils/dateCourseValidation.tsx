@@ -1,13 +1,20 @@
 export const timeMap: Record<string, number> = {
-    '1-2시간': 1.5,
-    '3-4시간': 3.5,
-    '반나절': 5.0,
-    '하루 종일': 8.0,
+    ONETOTWO: 1.5,
+    TWOTOTHREE: 2.5,
+    THREETOFOUR: 3.5,
+    HALFDAY: 5.0,
+    ALLDAY: 8.0,
 };
 export const mealTimeRanges: Record<string, [string, string]> = {
-    아침: ['05:00', '10:00'],
-    점심: ['10:30', '14:00'],
-    저녁: ['17:30', '20:30'],
+    BREAKFAST: ['05:00', '10:00'],
+    LUNCH: ['10:30', '14:00'],
+    DINNER: ['17:30', '20:30'],
+};
+
+export const mealTimeKorean: Record<string, string> = {
+    BREAKFAST: '아침',
+    LUNCH: '점심',
+    DINNER: '저녁',
 };
 
 const keywordGroups: Record<string, string[]> = {
@@ -20,12 +27,12 @@ export const mealKeyword = ['양식', '한식', '중식', '이자카야/펍', '�
 
 export function MealTimeValidation({ meal, time, totalTime }: { meal: string[]; time: string; totalTime: string }): string | null {
     if (!time || meal.length === 0 || !totalTime) return null;
+    const timeStr = time.split('T')[1]; // 'HH:mm'
     const toMinutes = (t: string) => {
         const [h, m] = t.split(':').map(Number);
         return h * 60 + m;
     };
 
-    const timeStr = time.split(' ')[1]; // 'HH:mm'
     const start = toMinutes(timeStr); // 데이트 시작 시간
     const duration = timeMap[totalTime]; // 소요 시간(시간 단위)
     const end = start + duration * 60; // 종료 시간 (분)
@@ -61,7 +68,8 @@ export function MealTimeValidation({ meal, time, totalTime }: { meal: string[]; 
     // 아무것도 안겹치면 첫 번째 식사를 기준으로 안내
     const first = meal[0];
     const [mealStartStr, mealEndStr] = mealTimeRanges[first];
-    return `선택하신 시간에는 ${first} 식사를 하기 어려워요. (가능 시간: ${mealStartStr}~${mealEndStr})`;
+
+    return `선택하신 시간에는 ${mealTimeKorean[first]} 식사를 하기 어려워요. (가능 시간: ${mealStartStr}~${mealEndStr})`;
 }
 
 type TDateTimeStartValidationInput = {
@@ -71,11 +79,10 @@ type TDateTimeStartValidationInput = {
 
 export function DateTimeStartValidation({ totalTime, time }: TDateTimeStartValidationInput): string | null {
     if (!totalTime || !time) return null;
-
     const duration = timeMap[totalTime];
     if (duration == null) return null;
+    const timeStr = time.split('T')[1];
 
-    const timeStr = time.split(' ')[1]; // 'HH:mm'
     const [startH, startM] = timeStr.split(':').map(Number);
     const startMinutes = startH * 60 + startM;
 
@@ -91,11 +98,11 @@ export function DateTimeStartValidation({ totalTime, time }: TDateTimeStartValid
 
 export function TotalTimeMealValidation({ totalTime, meal }: { totalTime: string; meal: string[] | null }) {
     if (!meal) return null;
-    if (totalTime === '1-2시간') {
+    if (totalTime === 'ONETOTWO') {
         if (meal.length > 1) return `선택하신 시간에는 ${meal.length}가지 식사를 모두 포함하기 어려워요. 꼭 포함하고 싶은 식사만 선택해 주세요!`;
-    } else if (totalTime === '3-4시간') {
+    } else if (totalTime === 'THREETOFOUR') {
         if (meal.length > 1) return `선택하신 시간에는 ${meal.length}가지 식사를 모두 포함하기 어려워요. 꼭 포함하고 싶은 식사만 선택해 주세요!`;
-    } else if (totalTime === '반나절') {
+    } else if (totalTime === 'HALFDAY') {
         if (meal.length > 2) return `선택하신 시간에는 ${meal.length}가지 식사를 모두 포함하기 어려워요. 꼭 포함하고 싶은 식사만 선택해 주세요!`;
     }
     return null;
@@ -124,9 +131,9 @@ export function KeywordGroupOverValidation({ keywords }: { keywords: string[] })
 
 export function BudgetTimeValidation({ budget, totalTime }: { budget: string; totalTime: string }): string | null {
     const warningTable: Record<string, string[]> = {
-        '3-4시간': ['1만원 이하'],
-        '반나절': ['1만원 이하', '1-2만원'],
-        '하루 종일': ['1만원 이하', '1-2만원', '2-3만원'],
+        THREETOFOUR: ['UNDER_10K'],
+        HALFDAY: ['UNDER_10K', 'FROM_10K_TO_20K'],
+        ALLDAY: ['UNDER_10K', 'FROM_10K_TO_20K', 'FROM_20K_TO_30K'],
     };
 
     const warnings = warningTable[totalTime];
@@ -136,5 +143,3 @@ export function BudgetTimeValidation({ budget, totalTime }: { budget: string; to
 
     return null;
 }
-
-// 유효성 검사 9 -> 추후 API 나오면 제작 예정

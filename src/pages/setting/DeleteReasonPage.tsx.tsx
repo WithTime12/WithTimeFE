@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import ReasonButton from '@/components/common/ReansonButton';
-import Header from '@/components/layout/Header';
 
 import ArrowLeftCircle from '@/assets/icons/Arrow_left_circle.svg?react';
 
@@ -23,13 +22,11 @@ export default function DeleteReasonPage() {
 
     return (
         <>
-            <Header mode="minimal" />
-
             <div className="flex items-center justify-center px-4 text-default-gray-800 font-body1">
                 <div className="mt-15 w-full max-w-[530px]">
                     {/* 뒤로가기 */}
                     <div className="mb-5">
-                        <button onClick={() => navigate('/setting', { state: { openSettingTab: '정보' } })}>
+                        <button onClick={() => navigate('/home')}>
                             <ArrowLeftCircle className="fill-current text-default-gray-500" />
                         </button>
                     </div>

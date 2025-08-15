@@ -34,30 +34,30 @@ axiosInstance.interceptors.response.use(
                 const refreshResponse = await refresh();
 
                 if (refreshResponse.code === '200') {
-                    console.log('refreshToken이 재발급 되었습니다');
                     isRedirecting = false;
 
                     return axiosInstance(error.config);
                 }
             } catch (errors) {
                 if (axios.isAxiosError(errors)) {
-                    const refreshError = error as AxiosError<IRefreshResponse>;
+                    const refreshError = errors as AxiosError<IRefreshResponse>;
                     if (refreshError.response?.data.message === 'The token is null.') {
-                        console.log('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
+                        console.error('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
+                        void logout();
+                        localStorage.clear();
                     } else if (refreshError.response?.data.message === 'The token is invalid.') {
-                        console.log('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.');
-                        logout();
+                        console.error('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                        void logout();
+                        localStorage.clear();
                     } else {
-                        if (refreshError.response?.data.message === 'Incorrect password.') {
-                            alert('Your email or password is incorrect.');
-                        } else {
-                            console.log('알 수 없는 오류가 발생했습니다', errors);
-                            logout();
-                        }
+                        console.error('알 수 없는 오류가 발생했습니다', errors);
+                        void logout();
+                        localStorage.clear();
                     }
                 } else {
-                    console.log('알 수 없는 오류가 발생했습니다', errors);
-                    logout();
+                    console.error('알 수 없는 오류가 발생했습니다', errors);
+                    void logout();
+                    localStorage.clear();
                 }
 
                 return Promise.reject(errors);

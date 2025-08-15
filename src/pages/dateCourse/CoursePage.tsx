@@ -1,18 +1,37 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
+import { useUserGrade } from '@/hooks/home/useUserGrade';
+
 import { MODAL_TYPES } from '@/components/common/modalProvider';
 import Navigator from '@/components/common/navigator';
 import DateCourse from '@/components/dateCourse/dateCourse';
 
-import FileTray from '@/assets/icons/file_tray_empty_Fill.svg?react';
 import Filter from '@/assets/icons/filter_Blank.svg?react';
+import useFilterStore from '@/store/useFilterStore';
 import useModalStore from '@/store/useModalStore';
 
 export default function Course() {
     const navigate = useNavigate();
     const { openModal } = useModalStore();
     const [current, setCurrent] = useState(1);
+
+    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    // 수정 예정
+    const { data } = useGetBookmarkedCourse({
+        page: current,
+        size: 5,
+        budget,
+        dateDurationTime,
+        datePlaces,
+        mealTypes,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+        isBookmarked: true,
+    });
+    const { data: gradeData } = useUserGrade();
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
@@ -32,15 +51,10 @@ export default function Course() {
                 </div>
                 <div className="flex flex-col shadow-default rounding-16 px-[10px] sm:px-[40px] py-[24px]">
                     <div className="flex w-full justify-between py-[24px] gap-[12px] lg:flex-row flex-col">
-                        <div className="font-heading3 sm:w-fit w-full text-center justify-center select-none">Madeleine 님만의 데이트 코스</div>
+                        <div className="font-heading3 sm:w-fit w-full text-center justify-center select-none">
+                            {gradeData?.result.username ?? '회원님의'} 님만의 데이트 코스
+                        </div>
                         <div className="flex gap-[12px] justify-center items-center sm:justify-end flex-col sm:flex-row">
-                            <div
-                                onClick={() => navigate('/bookmarkedCourse')}
-                                className="hover:cursor-pointer select-none px-[16px] py-[8px] text-body2 rounding-16 flex gap-[4px] w-fit rounding-16 border-[1px] border-default-gray-700  text-default-gray-700"
-                            >
-                                <FileTray fill="#616161" />
-                                저장된 코스 보기
-                            </div>
                             <div
                                 className="hover:cursor-pointer select-none px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
                                 onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}
@@ -51,13 +65,11 @@ export default function Course() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[24px] ">
-                        <DateCourse />
-                        <DateCourse />
-                        <DateCourse />
-                        <DateCourse />
-                        <DateCourse />
+                        {data?.result.dateCourseList.map((course, idx) => {
+                            return <DateCourse key={course.dateCourseId ?? idx} {...course} />;
+                        })}
                     </div>
-                    <Navigator current={current} end={14} onClick={setCurrent} />
+                    <Navigator current={current} end={data?.result.totalPages!} onClick={setCurrent} />
                 </div>
             </div>
         </div>

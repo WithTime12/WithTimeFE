@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -55,7 +55,7 @@ export default function Login() {
                         navigate('/home');
                     },
                     onError: (err) => {
-                        console.log(err.response?.data.message);
+                        console.error(err.response?.data.message);
                         setError('잘못된 정보를 입력하였습니다.');
                     },
                 },
@@ -67,6 +67,10 @@ export default function Login() {
         const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/${platform}`;
         window.location.href = `${baseUrl}`;
     };
+
+    useEffect(() => {
+        setError('');
+    }, [watchedEmail, watchedPassword]);
 
     return (
         <div className="min-w-[280px] w-[450px] max-w-[96vw] h-screen flex flex-col items-center justify-center gap-10">

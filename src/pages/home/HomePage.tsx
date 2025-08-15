@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-import { useDeviceToken } from '@/hooks/alarm/useDeviceToken';
+import { useAccount } from '@/hooks/auth/useAccount';
 import { useUserGrade } from '@/hooks/home/useUserGrade';
 
 import Banner from '@/components/home/banner';
@@ -13,10 +14,28 @@ import MainInfo from '@/components/home/info';
 import Level from '@/components/home/level';
 import WordCloudCard from '@/components/home/wordCloud';
 
+import { useDeviceTokenContext } from '@/providers/deviceTokenProvider';
+
 function Home() {
-    useDeviceToken();
+    const { requestAndRegister } = useDeviceTokenContext();
+
+    useEffect(() => {
+        const fire = () => {
+            requestAndRegister().catch((err) => {
+                console.error('Device token 등록 실패:', err);
+            });
+        };
+
+        window.addEventListener('pointerdown', fire, { once: true });
+        return () => {
+            window.removeEventListener('pointerdown', fire);
+        };
+    }, [requestAndRegister]);
 
     const { data: gradeData, isLoading, error } = useUserGrade();
+    const { useGetMemberInfo } = useAccount();
+    const { data: memberInfo } = useGetMemberInfo();
+
     if (error) return <Navigate to="/error" replace />;
     if (isLoading) {
         return (
@@ -25,13 +44,14 @@ function Home() {
             </div>
         );
     }
+
     return (
         <div className="bg-default-gray-100 min-h-screen mb-[40px]">
             <Banner />
             <section className="flex flex-col sm:px-10 px-5 gap-[120px] mt-20">
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <span className="font-heading2">{gradeData?.result.username}</span>
+                        <span className="font-heading2">{memberInfo?.result?.username}</span>
                         <span className="font-heading3">님의 WithTime</span>
                     </div>
                     <div className="max-w-9xl mt-10 grid grid-cols-1 xl:grid-cols-2 gap-6">

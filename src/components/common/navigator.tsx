@@ -9,35 +9,39 @@ type TNavigatorProps = {
 
 export default function Navigator({ current, end, onClick }: TNavigatorProps) {
     const groupSize = 5; // 한 번에 보여줄 페이지 수
-    const groupStart = Math.floor((current - 1) / groupSize) * groupSize + 1;
-    const groupEnd = Math.min(groupStart + groupSize - 1, end);
 
-    const pages = [];
-    for (let i = groupStart; i <= groupEnd; i++) {
-        pages.push(i);
+    const total = Math.max(1, end);
+    const normalizedCurrent = Math.min(Math.max(1, current), total);
+    const groupStart = Math.floor((normalizedCurrent - 1) / groupSize) * groupSize + 1;
+    const groupEnd = Math.min(groupStart + groupSize - 1, total);
+
+    const isFirstGroup = groupStart <= 1;
+    const isLastGroup = groupEnd >= total;
+    const pageCount = Math.max(0, groupEnd - groupStart + 1);
+    const pages = pageCount > 0 ? Array.from({ length: pageCount }, (_, i) => groupStart + i) : [1];
+    if (pages.length === 0) {
+        pages.push(1);
     }
-
     return (
         <div className="flex gap-2 justify-center items-center mt-4">
-            {groupStart > 1 && (
-                <button onClick={() => onClick(groupStart - 1)} className="px-2">
-                    <ArrowBack stroke="#212121" />
-                </button>
-            )}
+            <button type="button" onClick={() => onClick(groupStart - 1)} className="px-2 disabled:!cursor-not-allowed" disabled={isFirstGroup}>
+                <ArrowBack stroke={`${isFirstGroup ? '#c3c3c3' : '#212121'}`} />
+            </button>
+
             {pages.map((page) => (
                 <button
                     key={page}
+                    type="button"
                     onClick={() => onClick(page)}
                     className={`px-3 py-1 select-none rounded ${current === page ? 'text-default-gray-800' : 'text-default-gray-500'}`}
                 >
                     {page}
                 </button>
             ))}
-            {groupEnd < end && (
-                <button onClick={() => onClick(groupEnd + 1)} className="px-2">
-                    <ArrowForward stroke="#212121" />
-                </button>
-            )}
+
+            <button type="button" onClick={() => onClick(groupEnd + 1)} className="px-2 disabled:!cursor-not-allowed" disabled={isLastGroup}>
+                <ArrowForward stroke={isLastGroup ? '#c3c3c3' : '#212121'} />
+            </button>
         </div>
     );
 }
