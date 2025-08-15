@@ -170,7 +170,7 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
 
     return (
         <Modal onClose={onClose} title="검색 필터">
-            <div className="flex flex-col w-full max-w-[80vw] px-[10%] gap-10 py-10">
+            <div className="flex flex-col w-full max-w-[80vw] px-[8%] gap-10 py-10">
                 {Questions.map((q, idx) => (
                     <DateCourseSearchFilterOption
                         key={q.id}

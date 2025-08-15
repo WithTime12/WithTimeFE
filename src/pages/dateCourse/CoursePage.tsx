@@ -8,7 +8,6 @@ import { MODAL_TYPES } from '@/components/common/modalProvider';
 import Navigator from '@/components/common/navigator';
 import DateCourse from '@/components/dateCourse/dateCourse';
 
-import FileTray from '@/assets/icons/file_tray_empty_Fill.svg?react';
 import Filter from '@/assets/icons/filter_Blank.svg?react';
 import useFilterStore from '@/store/useFilterStore';
 import useModalStore from '@/store/useModalStore';
@@ -55,13 +54,6 @@ export default function Course() {
                             {gradeData?.result.username} 님만의 데이트 코스
                         </div>
                         <div className="flex gap-[12px] justify-center items-center sm:justify-end flex-col sm:flex-row">
-                            <div
-                                onClick={() => navigate('/bookmarkedCourse')}
-                                className="hover:cursor-pointer select-none px-[16px] py-[8px] text-body2 rounding-16 flex gap-[4px] w-fit rounding-16 border-[1px] border-default-gray-700  text-default-gray-700"
-                            >
-                                <FileTray fill="#616161" />
-                                저장된 코스 보기
-                            </div>
                             <div
                                 className="hover:cursor-pointer select-none px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
                                 onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}

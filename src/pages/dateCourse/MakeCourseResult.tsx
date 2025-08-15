@@ -58,7 +58,15 @@ export default function MakeCourseResult() {
                     <Logo className="w-[41px] h-[36px] sm:flex hidden" />
                 </div>
                 <div className="flex flex-col gap-[24px] ">
-                    {courseData.datePlaces && courseData.datePlaces?.length > 0 ? <DateCourse make={true} defaultOpen={true} {...courseData} /> : <div />}
+                    {courseData.datePlaces && courseData.datePlaces?.length > 0 ? (
+                        <DateCourse make={true} defaultOpen={true} {...courseData} />
+                    ) : (
+                        <div className="flex flex-col w-full gap-2 justify-center py-14 text-center font-heading3">
+                            입력하신 조건을 만족하는 데이트 코스 제작에 실패하였습니다.
+                            <br />
+                            <span className="font-body1">다른 조건으로 재시도 해보세요</span>
+                        </div>
+                    )}
                 </div>
                 <Button size="big-16" variant="mint" className="flex mt-[40px] self-center px-[32px] items-center gap-[8px]">
                     <Reload />
