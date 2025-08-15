@@ -67,7 +67,7 @@ function computeErrors(f: { budget: any; dateDurationTime: any; mealTypes?: any[
 export default function DateCourseSearchFilterModal({ onClose }: TProps) {
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords, setField } = useFilterStore();
     const [bookmarkedValue, setBookmarkedValue] = useState(false);
-
+    console.warn(bookmarkedValue);
     const location = useLocation();
     useEffect(() => {
         if (location.pathname === '/bookmarkedCourse') {
