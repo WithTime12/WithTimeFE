@@ -18,7 +18,7 @@ let isRedirecting = false;
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
-        if (error.response?.data.error === 'Unauthorized') {
+        if (error.status === 401) {
             if (isRedirecting) {
                 return Promise.reject(error);
             }
@@ -35,18 +35,17 @@ axiosInstance.interceptors.response.use(
 
                 if (refreshResponse.code === '200') {
                     isRedirecting = false;
-
                     return axiosInstance(error.config);
                 }
             } catch (errors) {
                 if (axios.isAxiosError(errors)) {
                     const refreshError = errors as AxiosError<IRefreshResponse>;
-                    if (refreshError.response?.data.message === 'The token is null.') {
+                    if (refreshError.status === 401) {
                         console.error('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
                         void logout();
                         localStorage.clear();
-                    } else if (refreshError.response?.data.message === 'The token is invalid.') {
-                        console.error('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                    } else if (refreshError.status === 404) {
+                        console.error('사용자 정보를 찾지 못했습니다. 로그인 페이지로 이동합니다.');
                         void logout();
                         localStorage.clear();
                     } else {

@@ -7,7 +7,7 @@ export default function Footer() {
                 {/* 상단 */}
                 <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-caption text-default-gray-800">
                     <li>
-                        <Link to="/">개인정보 처리방침</Link>
+                        <div onClick={() => alert('아직 지원하지 않는 기능이에요')}>개인정보 처리방침</div>
                     </li>
                     <span>|</span>
                     <li>
@@ -20,7 +20,7 @@ export default function Footer() {
                     </li>
                     <span>|</span>
                     <li>
-                        <Link to="/">고객문의</Link>
+                        <div onClick={() => alert('아직 지원하지 않는 기능이에요')}>고객문의</div>
                     </li>
                 </ul>
 
