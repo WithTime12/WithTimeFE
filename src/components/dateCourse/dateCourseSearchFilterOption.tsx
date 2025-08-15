@@ -36,7 +36,7 @@ export default function DateCourseSearchFilterOption({
 
     useEffect(() => {
         if (type === 'time' && autoInit && (value == null || value === '')) {
-            onChange(`${date} ${time}`);
+            onChange(`${date}T${time}`);
         }
     }, [type, autoInit, value]);
 

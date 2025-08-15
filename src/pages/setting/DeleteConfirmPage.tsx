@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAccount } from '@/hooks/auth/useAccount';
 
 import CommonAuthInput from '@/components/auth/commonAuthInput';
-import Header from '@/components/layout/Header';
 
 import { queryClient } from '@/api/queryClient';
 import ArrowLeftCircle from '@/assets/icons/Arrow_left_circle.svg?react';
@@ -71,7 +70,6 @@ export default function DeleteConfirmPage() {
 
     return (
         <>
-            <Header mode="minimal" />
             <div className="flex items-center justify-center px-4 text-default-gray-800 font-body1">
                 <div className="mt-15 w-full max-w-[530px]">
                     {/* 뒤로가기 */}
