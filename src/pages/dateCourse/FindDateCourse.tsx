@@ -23,7 +23,7 @@ function FindDateCourse() {
     }, [budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords]);
 
     const { data, isLoading, error } = useGetCourse({
-        page: current,
+        page: current - 1,
         size: 5,
         budget,
         dateDurationTime,
@@ -67,7 +67,7 @@ function FindDateCourse() {
                                     return <DateCourse key={course.dateCourseId ?? idx} {...course} />;
                                 })}
                             </div>
-                            <Navigator current={current + 1} end={data?.result?.totalPages!} onClick={setCurrent} />
+                            <Navigator current={current} end={data?.result?.totalPages!} onClick={setCurrent} />
                         </>
                     )}
                 </div>

@@ -21,7 +21,7 @@ export default function Course() {
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
 
     const { data, isLoading, error } = useGetBookmarkedCourse({
-        page: current,
+        page: current - 1,
         size: 5,
         budget,
         dateDurationTime,
@@ -82,7 +82,7 @@ export default function Course() {
                                     return <DateCourse key={course.dateCourseId ?? idx} {...course} />;
                                 })}
                             </div>
-                            <Navigator current={current + 1} end={data?.result.totalPages!} onClick={setCurrent} />
+                            <Navigator current={current} end={data?.result.totalPages!} onClick={setCurrent} />
                         </>
                     )}
                 </div>
