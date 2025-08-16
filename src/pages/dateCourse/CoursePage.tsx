@@ -16,7 +16,7 @@ import useModalStore from '@/store/useModalStore';
 export default function Course() {
     const navigate = useNavigate();
     const { openModal } = useModalStore();
-    const [current, setCurrent] = useState(0);
+    const [current, setCurrent] = useState(1);
 
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
 
