@@ -12,6 +12,9 @@ import Location from '@/assets/icons/Location_Blank.svg?react';
 
 function Timeline({ end = false, image, name, placeCategoryResponseList, roadNameAddress, averagePrice, time, signatureDish }: TTimeline) {
     const [open, setOpen] = useState(false);
+    const editTime = time != null ? time.split(':')[0] : '00';
+    const editMin = time != null ? time.split(':')[1] : '00';
+
     return (
         <div className="flex w-full gap-2 flex-col">
             <div
@@ -20,7 +23,7 @@ function Timeline({ end = false, image, name, placeCategoryResponseList, roadNam
                 onClick={() => (end ? undefined : setOpen(!open))}
             >
                 <div className="flex items-center h-full font-body2 select-none">
-                    {time.split(':')[0]}:{time.split(':')[1]}
+                    {editTime}:{editMin}
                 </div>
                 <div className="flex flex-1 h-full justify-center items-center">
                     <div className="rounded-full w-[5px] h-[5px] bg-default-gray-700" />
