@@ -47,7 +47,7 @@ export type TDateCourseOptionButtonProps = {
 export type TDateCourseSearchFilterOption = {
     options?: string[] | null;
     value: string | string[] | null;
-    onChange: (value: string | string[]) => void;
+    onChange: (value: string | string[] | null) => void;
     title: string;
     subTitle?: string | null;
     type: 'choice' | 'search' | 'time' | 'choices' | 'keyword';
