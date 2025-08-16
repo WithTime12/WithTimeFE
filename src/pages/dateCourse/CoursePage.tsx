@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
 import { useUserGrade } from '@/hooks/home/useUserGrade';
@@ -15,11 +16,11 @@ import useModalStore from '@/store/useModalStore';
 export default function Course() {
     const navigate = useNavigate();
     const { openModal } = useModalStore();
-    const [current, setCurrent] = useState(1);
+    const [current, setCurrent] = useState(0);
 
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
-    // 수정 예정
-    const { data } = useGetBookmarkedCourse({
+
+    const { data, isLoading, error } = useGetBookmarkedCourse({
         page: current,
         size: 5,
         budget,
@@ -31,7 +32,13 @@ export default function Course() {
         startTime,
         isBookmarked: true,
     });
+
     const { data: gradeData } = useUserGrade();
+
+    if (error) {
+        return <Navigate to="/error" replace={true} />;
+    }
+
     return (
         <div className="flex flex-col justify-center items-center w-full">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
@@ -64,12 +71,20 @@ export default function Course() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-[24px] ">
-                        {data?.result.dateCourseList.map((course, idx) => {
-                            return <DateCourse key={course.dateCourseId ?? idx} {...course} />;
-                        })}
-                    </div>
-                    <Navigator current={current} end={data?.result.totalPages!} onClick={setCurrent} />
+                    {isLoading ? (
+                        <div className="w-full justify-center flex">
+                            <ClipLoader />
+                        </div>
+                    ) : (
+                        <>
+                            <div className="flex flex-col gap-[24px] ">
+                                {data?.result.dateCourseList.map((course, idx) => {
+                                    return <DateCourse key={course.dateCourseId ?? idx} {...course} />;
+                                })}
+                            </div>
+                            <Navigator current={current + 1} end={data?.result.totalPages!} onClick={setCurrent} />
+                        </>
+                    )}
                 </div>
             </div>
         </div>

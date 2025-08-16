@@ -20,6 +20,7 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         if (error.status === 401) {
             if (isRedirecting) {
+                window.location.href = '/';
                 return Promise.reject(error);
             }
 
@@ -44,19 +45,23 @@ axiosInstance.interceptors.response.use(
                         console.error('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
                         void logout();
                         localStorage.clear();
+                        window.location.href = '/';
                     } else if (refreshError.status === 404) {
                         console.error('사용자 정보를 찾지 못했습니다. 로그인 페이지로 이동합니다.');
                         void logout();
                         localStorage.clear();
+                        window.location.href = '/';
                     } else {
                         console.error('알 수 없는 오류가 발생했습니다', errors);
                         void logout();
                         localStorage.clear();
+                        window.location.href = '/';
                     }
                 } else {
                     console.error('알 수 없는 오류가 발생했습니다', errors);
                     void logout();
                     localStorage.clear();
+                    window.location.href = '/';
                 }
 
                 return Promise.reject(errors);
