@@ -1,6 +1,6 @@
-// DateCourseSearchFilterModal.tsx
 import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
@@ -80,12 +80,12 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         transportation,
         userPreferredKeywords,
         size: 5,
-        page: 1,
+        page: 0,
         isBookmarked,
     };
 
-    const { data: courseData } = useGetCourse(commonParams);
-    const { data: bookmarkedData } = useGetBookmarkedCourse(commonParams);
+    const { data: courseData, isLoading: courseDataLoading, error: courseDataError } = useGetCourse(commonParams);
+    const { data: bookmarkedData, isLoading: bookmarkDataLoading, error: bookmarkDataError } = useGetBookmarkedCourse(commonParams);
 
     const data = isBookmarked ? bookmarkedData : courseData;
 
@@ -162,6 +162,10 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         }
     };
 
+    if (bookmarkDataError || courseDataError) {
+        return <Navigate to="/error" replace={true} />;
+    }
+
     return (
         <Modal onClose={onClose} title="검색 필터">
             <div className="flex flex-col w-full max-w-[80vw] px-[8%] gap-10 py-10">
@@ -180,9 +184,13 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
                 ))}
 
                 <div className="flex w-full justify-end">
-                    <Button size="big-16" variant="mint" className="w-fit text-center px-[30px] font-body1" onClick={onClose}>
-                        데이트 코스 {data?.result.totalCount ?? 0}개 보기
-                    </Button>
+                    {bookmarkDataLoading || courseDataLoading ? (
+                        <ClipLoader />
+                    ) : (
+                        <Button size="big-16" variant="mint" className="w-fit text-center px-[30px] font-body1" onClick={onClose}>
+                            데이트 코스 {data?.result.totalCount ?? 0}개 보기
+                        </Button>
+                    )}
                 </div>
             </div>
         </Modal>
