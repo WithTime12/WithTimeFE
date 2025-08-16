@@ -18,7 +18,7 @@ export default function Course() {
     const { openModal } = useModalStore();
     const [current, setCurrent] = useState(1);
 
-    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords, reset } = useFilterStore();
 
     const { data, isLoading, error } = useGetBookmarkedCourse({
         page: current - 1,
@@ -62,6 +62,12 @@ export default function Course() {
                             {gradeData?.result.username ?? '회원님의'} 님만의 데이트 코스
                         </div>
                         <div className="flex gap-[12px] justify-center items-center sm:justify-end flex-col sm:flex-row">
+                            <div
+                                className="hover:cursor-pointer select-none px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
+                                onClick={() => reset()}
+                            >
+                                필터 초기화
+                            </div>
                             <div
                                 className="hover:cursor-pointer select-none px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
                                 onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}

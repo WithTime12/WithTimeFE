@@ -15,9 +15,9 @@ import useModalStore from '@/store/useModalStore';
 
 function FindDateCourse() {
     const { openModal } = useModalStore();
-    const [current, setCurrent] = useState(0);
+    const [current, setCurrent] = useState(1);
     const navigate = useNavigate();
-    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
+    const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords, reset } = useFilterStore();
     useEffect(() => {
         setCurrent(1);
     }, [budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords]);
@@ -48,12 +48,20 @@ function FindDateCourse() {
                 <div className="flex flex-col shadow-default rounding-16 px-[40px] py-[24px]">
                     <div className="flex w-full gap-[16px] flex-col items-center py-[24px] sm:flex-row sm:justify-between sm:items-center">
                         <div className="font-heading3 select-none flex">직접 데이트 코스 찾아보기</div>
-                        <div
-                            className="w-fit ml-auto px-[16px] flex-nowrap select-none py-[8px] rounding-16 flex rounding-16 border-[1px] border-default-gray-700 text-default-gray-700"
-                            onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}
-                        >
-                            <Filter stroke="#616161" />
-                            검색 필터
+                        <div className="flex gap-2">
+                            <div
+                                className="hover:cursor-pointer select-none px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
+                                onClick={() => reset()}
+                            >
+                                필터 초기화
+                            </div>
+                            <div
+                                className="w-fit ml-auto px-[16px] flex-nowrap select-none py-[8px] rounding-16 flex rounding-16 border-[1px] border-default-gray-700 text-default-gray-700"
+                                onClick={() => openModal({ modalType: MODAL_TYPES.DateCourseSearchFilterModal })}
+                            >
+                                <Filter stroke="#616161" />
+                                검색 필터
+                            </div>
                         </div>
                     </div>
                     {isLoading ? (
