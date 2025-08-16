@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import useGetCourse from '@/hooks/course/useGetCourse';
 
@@ -14,14 +15,14 @@ import useModalStore from '@/store/useModalStore';
 
 function FindDateCourse() {
     const { openModal } = useModalStore();
-    const [current, setCurrent] = useState(1);
+    const [current, setCurrent] = useState(0);
     const navigate = useNavigate();
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords } = useFilterStore();
     useEffect(() => {
         setCurrent(1);
     }, [budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords]);
 
-    const { data: courseData } = useGetCourse({
+    const { data, isLoading, error } = useGetCourse({
         page: current,
         size: 5,
         budget,
@@ -33,6 +34,10 @@ function FindDateCourse() {
         startTime,
         isBookmarked: false,
     });
+
+    if (error) {
+        return <Navigate to="/error" replace={true} />;
+    }
 
     return (
         <div className="w-full flex justify-center items-center flex-col h-fit">
@@ -51,12 +56,20 @@ function FindDateCourse() {
                             검색 필터
                         </div>
                     </div>
-                    <div className="flex flex-col gap-[24px] ">
-                        {courseData?.result.dateCourseList.map((course) => {
-                            return <DateCourse key={course.dateCourseId} {...course} />;
-                        })}
-                    </div>
-                    <Navigator current={current} end={courseData?.result.totalPages!} onClick={setCurrent} />
+                    {isLoading ? (
+                        <div className="w-full justify-center flex">
+                            <ClipLoader />
+                        </div>
+                    ) : (
+                        <>
+                            <div className="flex flex-col gap-[24px] ">
+                                {data?.result?.dateCourseList.map((course, idx) => {
+                                    return <DateCourse key={course.dateCourseId ?? idx} {...course} />;
+                                })}
+                            </div>
+                            <Navigator current={current + 1} end={data?.result?.totalPages!} onClick={setCurrent} />
+                        </>
+                    )}
                 </div>
             </div>
         </div>
