@@ -85,13 +85,15 @@ export default function DateCourseSearchFilterOption({
             <div className="flex w-full gap-[16px] flex-wrap sm:justify-start justify-center">
                 {type === 'choice' &&
                     items?.map(({ label, value: apiValue }, idx) => {
+                        const isSelected = value === apiValue; // 단일 선택 비교
                         return (
                             <DateCourseOptionButton
                                 key={idx}
                                 option={label}
-                                isSelected={value === apiValue}
+                                isSelected={isSelected}
                                 onClick={() => {
-                                    onChange(apiValue!);
+                                    // ✅ 이미 선택되어 있으면 해제(null), 아니면 선택
+                                    onChange(isSelected ? null : apiValue!);
                                 }}
                             />
                         );
