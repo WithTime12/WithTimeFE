@@ -179,7 +179,7 @@ export default function DateCourseSearchFilterOption({
                                     onChange={(e) => {
                                         const val = e.target.value;
                                         setDate(val);
-                                        if (time) onChange(`${val}T${time}:00`);
+                                        if (time) onChange(`${val}T${time}:00.000Z`);
                                     }}
                                     className="absolute top-0 left-0 w-full h-full opacity-0"
                                 />

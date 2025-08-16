@@ -37,19 +37,20 @@ function Timeline({ end = false, image, name, placeCategoryResponseList, roadNam
 
             {open && (
                 <div className="flex lg:items-start self-stretch w-full gap-[9px] flex-col lg:flex-row items-center">
-                    <div className="flex flex-col gap-[8px] lg:w-[50%] max-h-fit justify-around items-start">
-                        {signatureDish && (
-                            <div className="flex w-full flex-col ">
-                                <div className="flex gap-[8px] font-body1 select-none text-center items-center h-[24px] w-full">
-                                    <div className="flex text-center h-full">WithTime Pick</div>
+                    {signatureDish && (
+                        <div className="flex flex-col gap-[8px] lg:w-[50%] w-full max-h-fit justify-around items-start">
+                            <div className="flex w-full flex-row self-start lg:flex-col h-fit lg:gap-0 gap-[8px]">
+                                <div className="flex gap-[8px] font-body1 select-none text-center items-center h-[35.6px] lg:w-full">
+                                    <div className="flex text-center h-full items-center">WithTime Pick</div>
                                     <CheckSuccess stroke={'#000000'} />
                                 </div>
                                 <KeywordButton tag={signatureDish.name || ''} />
                             </div>
-                        )}
-                        {image && <img src={image} className="w-[80%] self-start" />}
-                    </div>
-                    <div className="flex flex-col h-full lg:w-[50%] gap-[16px]">
+
+                            {image && <img src={image} className="w-[80%] self-center  lg:self-start" />}
+                        </div>
+                    )}
+                    <div className={`flex flex-col h-full gap-[16px] self-start ${signatureDish == null ? 'w-full' : 'lg:w-[50%]'}`}>
                         <div className="flex gap-[16px] font-body2 text-default-gray-800 break-keep lg:items-start items-center">
                             <Location stroke="#000000" className="min-w-[24px]" />
                             {roadNameAddress}

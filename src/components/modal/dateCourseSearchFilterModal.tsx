@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
+import type { IQuestion } from '@/types/dateCourse/dateCourse';
 import { DateCourseQuestion } from '@/constants/dateCourseQuestion';
 
 import {
@@ -64,6 +65,13 @@ function computeErrors(f: { budget: any; dateDurationTime: any; mealTypes?: any[
 
     return e;
 }
+const TOTAL_QUESTIONS = 8;
+const Questions: IQuestion[] = Array.isArray(DateCourseQuestion)
+    ? DateCourseQuestion.slice(0, TOTAL_QUESTIONS - 1).map((q) => ({
+          ...q,
+          type: q.type as IQuestion['type'],
+      }))
+    : [];
 
 export default function DateCourseSearchFilterModal({ onClose }: TProps) {
     const location = useLocation();
@@ -89,36 +97,41 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
 
     const data = isBookmarked ? bookmarkedData : courseData;
 
-    const Questions = useMemo(
-        () =>
-            (Array.isArray(DateCourseQuestion) ? DateCourseQuestion.slice(0, 7) : [])
-                .map((q) => ({
-                    ...q,
-                    type: q.type as 'choice' | 'search' | 'time' | 'choices' | 'keyword',
-                }))
-                .filter((q) => q.filterTitle !== ''),
-        [],
-    );
+    const stepFieldMap = {
+        0: 'budget',
+        1: 'datePlaces',
+        2: 'dateDurationTime',
+        3: 'mealTypes',
+        4: 'transportation',
+        5: 'userPreferredKeywords',
+        6: 'startTime',
+    } as const;
 
-    const valueByIndex = (idx: number) => {
-        switch (idx) {
-            case 0:
-                return budget;
-            case 1:
-                return datePlaces;
-            case 2:
-                return dateDurationTime;
-            case 3:
-                return mealTypes;
-            case 4:
-                return transportation;
-            case 5:
-                return startTime;
-            case 6:
-                return userPreferredKeywords;
-            default:
-                return null;
+    const fieldValues = {
+        budget,
+        datePlaces,
+        dateDurationTime,
+        mealTypes,
+        transportation,
+        userPreferredKeywords,
+        startTime,
+    };
+
+    const valueByStep = (idx: number): string | string[] | null => {
+        const step = idx; // ★ 중요
+        const fieldName = stepFieldMap[step as keyof typeof stepFieldMap];
+        return fieldName ? fieldValues[fieldName] : null;
+    };
+
+    const updateByStep = (idx: number, v: any) => {
+        const step = idx; // ★ 중요
+        const fieldName = stepFieldMap[step as keyof typeof stepFieldMap];
+        if (!fieldName) return;
+
+        if ([1, 3, 5].includes(step) && !Array.isArray(v)) {
+            v = [];
         }
+        setField(fieldName, v ?? null);
     };
 
     const errorMessages = useMemo(
@@ -133,35 +146,6 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
         [budget, dateDurationTime, mealTypes, userPreferredKeywords, startTime],
     );
 
-    const updateByIndex = (idx: number, raw: any) => {
-        let v = raw;
-        if ([1, 3, 6].includes(idx) && !Array.isArray(v)) v = [];
-
-        switch (idx) {
-            case 0:
-                setField('budget', v ?? null);
-                break;
-            case 1:
-                setField('datePlaces', v);
-                break;
-            case 2:
-                setField('dateDurationTime', v ?? null);
-                break;
-            case 3:
-                setField('mealTypes', v);
-                break;
-            case 4:
-                setField('transportation', v ?? null);
-                break;
-            case 5:
-                setField('startTime', v ?? null);
-                break;
-            case 6:
-                setField('userPreferredKeywords', v);
-                break;
-        }
-    };
-
     if (bookmarkDataError || courseDataError) {
         return <Navigate to="/error" replace={true} />;
     }
@@ -172,14 +156,15 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
                 {Questions.map((q, idx) => (
                     <DateCourseSearchFilterOption
                         key={q.id}
-                        title={q.filterTitle}
+                        title={q.title}
                         subTitle={q.subTitle}
                         options={q.options}
-                        value={valueByIndex(idx)}
-                        onChange={(v) => updateByIndex(idx, v)}
+                        value={valueByStep(idx)}
+                        onChange={(v) => updateByStep(idx, v)}
                         type={q.type}
                         apiRequestValue={q.apiRequestValue}
                         errorMessage={errorMessages[idx] ?? ''}
+                        autoInit={q.type === 'time' && idx === 7}
                     />
                 ))}
 

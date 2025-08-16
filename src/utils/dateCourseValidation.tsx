@@ -26,17 +26,15 @@ const keywordGroups: Record<string, string[]> = {
 export const mealKeyword = ['양식', '한식', '중식', '이자카야/펍', '퓨전 음식점', '브런치 카페', '디저트 카페', '루프탑 카페'];
 
 export function MealTimeValidation({ meal, time, totalTime }: { meal: string[]; time: string; totalTime: string }): string | null {
-    if (!time || meal.length === 0 || !totalTime) return null;
+    if (!time || meal.length === 0 || !totalTime || time == null) return null;
     const timeStr = time.split('T')[1]; // 'HH:mm'
     const toMinutes = (t: string) => {
         const [h, m] = t.split(':').map(Number);
         return h * 60 + m;
     };
-
     const start = toMinutes(timeStr); // 데이트 시작 시간
     const duration = timeMap[totalTime]; // 소요 시간(시간 단위)
     const end = start + duration * 60; // 종료 시간 (분)
-
     const isOverlapping = (start1: number, end1: number, start2: number, end2: number) => {
         if (start1 < start2) {
             // 데이트 시작시간이 식사 시작시간보다 빠를 경우
@@ -50,13 +48,10 @@ export function MealTimeValidation({ meal, time, totalTime }: { meal: string[]; 
             return false;
         }
     };
-
     // 선택한 식사 중 하나라도 겹치면 통과
     for (const m of meal) {
         const mealRange = mealTimeRanges[m];
-
         if (!mealRange) continue; // 존재하지 않으면 skip
-
         const [mealStartStr, mealEndStr] = mealRange;
         const mealStart = toMinutes(mealStartStr);
         const mealEnd = toMinutes(mealEndStr);
@@ -64,11 +59,9 @@ export function MealTimeValidation({ meal, time, totalTime }: { meal: string[]; 
             return null;
         }
     }
-
     // 아무것도 안겹치면 첫 번째 식사를 기준으로 안내
     const first = meal[0];
     const [mealStartStr, mealEndStr] = mealTimeRanges[first];
-
     return `선택하신 시간에는 ${mealTimeKorean[first]} 식사를 하기 어려워요. (가능 시간: ${mealStartStr}~${mealEndStr})`;
 }
 
@@ -78,7 +71,7 @@ type TDateTimeStartValidationInput = {
 };
 
 export function DateTimeStartValidation({ totalTime, time }: TDateTimeStartValidationInput): string | null {
-    if (!totalTime || !time) return null;
+    if (!totalTime || !time || time == null) return null;
     const duration = timeMap[totalTime];
     if (duration == null) return null;
     const timeStr = time.split('T')[1];
