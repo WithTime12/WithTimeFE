@@ -19,33 +19,35 @@ export default function MakeCourseResult() {
     const navigate = useNavigate();
     const { setAll, ...courseData } = useDateCourseResultStore();
     const { useMakeCourse } = useCourse();
-    const { budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime } = useFilterStore();
+    const { budget, datePlaces, dateDurationTime, mealTypes, transportation, userPreferredKeywords, startTime, reset } = useFilterStore();
     const { mutate: makeCourseMutate, isPending } = useMakeCourse;
     const { data: gradeData } = useUserGrade();
 
     const handleSubmit = () => {
-        makeCourseMutate(
-            {
-                budget: budget!,
-                dateDurationTime: dateDurationTime!,
-                datePlaces: datePlaces,
-                mealTypes: mealTypes,
-                transportation: transportation!,
-                userPreferredKeywords,
-                startTime: startTime!,
-                excludedCourseSignatures: SigStorage.get(),
-            },
-            {
-                onSuccess: (data) => {
-                    SigStorage.append(data.result.signature);
-                    setAll(data.result);
-                    navigate('/makeCourse/result');
-                },
-                onError: () => {
-                    navigate('/makeCourse');
-                },
-            },
-        );
+        courseData.datePlaces && courseData.datePlaces?.length > 0
+            ? makeCourseMutate(
+                  {
+                      budget: budget!,
+                      dateDurationTime: dateDurationTime!,
+                      datePlaces: datePlaces,
+                      mealTypes: mealTypes,
+                      transportation: transportation!,
+                      userPreferredKeywords,
+                      startTime: startTime!,
+                      excludedCourseSignatures: SigStorage.get(),
+                  },
+                  {
+                      onSuccess: (data) => {
+                          SigStorage.append(data.result.signature);
+                          setAll(data.result);
+                          navigate('/makeCourse/result');
+                      },
+                      onError: () => {
+                          navigate('/makeCourse');
+                      },
+                  },
+              )
+            : (navigate('/makeCourse'), reset());
     };
     if (isPending) {
         return <DateCourseLoading />;
@@ -64,12 +66,16 @@ export default function MakeCourseResult() {
                         <div className="flex flex-col w-full gap-2 justify-center py-14 text-center font-heading3">
                             입력하신 조건을 만족하는 데이트 코스 제작에 실패하였습니다.
                             <br />
+                            <br />
                             <span className="font-body1">다른 조건으로 재시도 해보세요</span>
+                            <span className="font-body1">
+                                (현재 운영 초기 단계로 데이터가 많지 않아 '서울시 종로구 인사동'으로 데이트 코스 생성하는 것을 권장드립니다.)
+                            </span>
                         </div>
                     )}
                 </div>
-                <Button size="big-16" variant="mint" className="flex mt-[40px] self-center px-[32px] items-center gap-[8px]">
-                    <Reload />
+                <Button size="big-16" variant="mint" className="flex mt-[40px] self-center px-[32px] items-center gap-[8px] group">
+                    <Reload className="fill-white group-hover:fill-primary-900 transition-colors" />
                     <div className="flex flex-col items-center justify-center">
                         <div className="font-heading3 select-none" onClick={handleSubmit}>
                             다시 만들기

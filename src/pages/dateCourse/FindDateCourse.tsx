@@ -51,7 +51,10 @@ function FindDateCourse() {
                         <div className="flex gap-2">
                             <div
                                 className="hover:cursor-pointer select-none px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
-                                onClick={() => reset()}
+                                onClick={() => {
+                                    alert('필터가 초기화 되었습니다');
+                                    reset();
+                                }}
                             >
                                 필터 초기화
                             </div>

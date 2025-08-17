@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -78,6 +78,14 @@ export default function DateCourseSearchFilterModal({ onClose }: TProps) {
     const isBookmarked = location.pathname === '/bookmarkedCourse';
 
     const { budget, datePlaces, dateDurationTime, startTime, mealTypes, transportation, userPreferredKeywords, setField } = useFilterStore();
+    useEffect(() => {
+        if (!startTime) {
+            const now = new Date();
+            const defaultDate = now.toISOString().slice(0, 10);
+            const defaultTime = now.toTimeString().slice(0, 5);
+            setField('startTime', `${defaultDate}T${defaultTime}`);
+        }
+    }, [startTime, setField]);
 
     const commonParams = {
         budget,
