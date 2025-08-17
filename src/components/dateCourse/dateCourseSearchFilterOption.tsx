@@ -125,8 +125,9 @@ export default function DateCourseSearchFilterOption({
                                 onChange={handleInputChange}
                             />
                         </div>
-                        {regionList && regionList.result.regions.length > 0 && (
+                        {regionList && (
                             <ul className="mt-2 w-full border border-primary-500 rounding-16 shadow-default bg-white max-h-[200px] overflow-auto">
+                                {regionList?.result.regions.length === 0 && <div className="text-center py-8 text-default-gray-500">검색 결과가 없습니다</div>}
                                 {regionList.result.regions.map((region: TRegion, idx: number) => (
                                     <li
                                         key={idx}

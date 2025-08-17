@@ -5,6 +5,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import useGetBookmarkedCourse from '@/hooks/course/useGetBookmarkedCourse';
 import { useUserGrade } from '@/hooks/home/useUserGrade';
 
+import Button from '@/components/common/Button';
 import { MODAL_TYPES } from '@/components/common/modalProvider';
 import Navigator from '@/components/common/navigator';
 import DateCourse from '@/components/dateCourse/dateCourse';
@@ -43,18 +44,12 @@ export default function Course() {
         <div className="flex flex-col justify-center items-center w-full">
             <div className="flex w-[1000px] max-w-[80vw] flex-col py-[24px] gap-[64px]">
                 <div className="flex flex-col gap-[22px]">
-                    <button
-                        className="bg-primary-500 py-[20px] rounding-16 text-default-gray-100 font-heading3 select-none"
-                        onClick={() => navigate('/makeCourse')}
-                    >
+                    <Button size="big-16" variant="mint" onClick={() => navigate('/makeCourse')}>
                         AI 기반 데이트 코스 만들기
-                    </button>
-                    <button
-                        className="bg-primary-500 py-[20px] rounding-16 text-default-gray-100 font-heading3 select-none"
-                        onClick={() => navigate('/findCourse')}
-                    >
+                    </Button>
+                    <Button size="big-16" variant="mint" onClick={() => navigate('/findCourse')}>
                         직접 데이트 코스 찾아보기
-                    </button>
+                    </Button>
                 </div>
                 <div className="flex flex-col shadow-default rounding-16 px-[10px] sm:px-[40px] py-[24px]">
                     <div className="flex w-full justify-between py-[24px] gap-[12px] lg:flex-row flex-col">
@@ -64,7 +59,10 @@ export default function Course() {
                         <div className="flex gap-[12px] justify-center items-center sm:justify-end flex-col sm:flex-row">
                             <div
                                 className="hover:cursor-pointer select-none px-[16px] py-[8px] gap-[4px] text-body2 rounding-16 flex rounding-16 w-fit border-[1px] border-default-gray-700  text-default-gray-700"
-                                onClick={() => reset()}
+                                onClick={() => {
+                                    alert('필터가 초기화 되었습니다');
+                                    reset();
+                                }}
                             >
                                 필터 초기화
                             </div>
